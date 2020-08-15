@@ -32,7 +32,7 @@ public class Crafting {
 		NamespacedKey key = new NamespacedKey(Generator.getInstance(), "oreGenerator");
 		ShapedRecipe genRecipe = new ShapedRecipe(key, generator);
 		
-		genRecipe.shape("% "," % ","  %");
+		genRecipe.shape("%  "," % ","  %");
 		genRecipe.setIngredient('%', Material.DIRT);
 		
 		Generator.getInstance().getServer().addRecipe(genRecipe);

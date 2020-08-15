@@ -17,6 +17,7 @@ public class DataManager {
 	
 	public DataManager() {
 		generators = new ArrayList<GeneratorObject>();
+		instance = this;
 	}
 	
 	public void savingRoutine() {
@@ -85,7 +86,7 @@ public class DataManager {
 	
 	public static DataManager getInstance() {
 		if(instance == null)
-			instance = new DataManager();
+			new DataManager();
 		return instance;
 	}
 }

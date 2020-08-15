@@ -28,28 +28,30 @@ public class BlockFormListener implements Listener {
 		
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
-        	event.setCancelled(true);
-        	setRandomOres(to.getLocation());
+            if(setRandomOres(to.getLocation())) {
+            	event.setCancelled(true);
+            }
             return;
         } else {
             BlockFace[] nesw = {BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
             for (BlockFace face : nesw) {
                 if (generates(event.getBlock(), to.getRelative(face))) {
-                    event.setCancelled(true);
-                    setRandomOres(to.getLocation());
+                    if(setRandomOres(to.getLocation())) {
+                    	event.setCancelled(true);
+                    }
                     return;
                 }
             }
         }
 	}
 	
-	public void setRandomOres(Location loc) {
+	public boolean setRandomOres(Location loc) {
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
 		}
 		GeneratorObject g = seemsGeneratorNear(loc);
-		if(g == null) return;
+		if(g == null) return false;
 		
 		Material m = calcOres(g.getLevel(), d);
 		
@@ -58,7 +60,9 @@ public class BlockFormListener implements Listener {
         
         if(!generateEvent.isCancelled()) {
     		loc.getWorld().getBlockAt(loc).setType(m);
+    		return true;
         }
+        return false;
 	}
 	
 	private Material calcOres(int level, Dimension d) {
@@ -92,9 +96,9 @@ public class BlockFormListener implements Listener {
 	
 	//TODO fix return
 	public GeneratorObject isGeneratorNear(Location loc) {
-		BlastFurnace b = (BlastFurnace) loc.getBlock();
+		BlastFurnace b = (BlastFurnace) loc.getBlock().getState();
 		if(b == null) return null;
-		if(b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_CODENAME)) {
+		if(b.getCustomName() != null && b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_CODENAME)) {
 			return null;
 			//TODO Database Check and return level
 		}
