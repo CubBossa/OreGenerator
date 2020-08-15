@@ -1,9 +1,12 @@
 package de.bossascrew.generator;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.bossascrew.generator.crafting.Crafting;
 import de.bossascrew.generator.data.DataManager;
 
 public class Generator extends JavaPlugin {
@@ -12,10 +15,11 @@ public class Generator extends JavaPlugin {
 	
 	EventManager events;
 	
+	public final static ItemStack GENERATOR_ITEM = new ItemStack(Material.BLAST_FURNACE);
 	public final static String PREFIX = "§6Jeff §>";
-	public final static String GENERATOR_NAME = "akskfp19e7askd"; //"verschlüsselt"
+	public final static String GENERATOR_NAME = "§fErze-Generator";
+	public final static String GENERATOR_CODENAME = "akskfp19e7askd"; //"verschlüsselt"
 	public final static String USE_GUI_TO_DROP = PREFIX + " §7Benutze das Menü des Generators, um ihn zu droppen!";
-	
 	public final static int USE_GUI_TO_DROP_DELAY = 5;
 	
 	@Override
@@ -23,6 +27,7 @@ public class Generator extends JavaPlugin {
 		instance = this;
 		printToConsole("Plugin geladen");
 		
+		Crafting.registerGeneratorCrafting();
 		events = new EventManager();
 	}
 	

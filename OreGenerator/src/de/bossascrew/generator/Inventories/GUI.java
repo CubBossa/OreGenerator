@@ -1,27 +1,42 @@
 package de.bossascrew.generator.Inventories;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+
+import de.bossascrew.generator.utils.Level;
 
 public class GUI {
 
 	
 	public Inventory getInventory() {
 		
-	}
-	
-	
-	
-	public void open(Player p, Location loc) {
+		//TODO Items setzen
+		
+		for(Level level : Level.values()) {
+			
+			
+		}
+		
+		//Drop picke
 		
 	}
 	
-	public void refresh() {
+	private List<String> getLore(Level level, boolean unlocked) {
+		if(unlocked) {
+			
+		} else {
+			
+		}
+	}
+	
+	private List<String> getPropabilities(Level level) {
 		
 	}
 	
-	private void setLore() {
+	private List<String> getRequirements(Level level) {
 		
 	}
 }

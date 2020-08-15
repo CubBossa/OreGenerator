@@ -81,7 +81,7 @@ public class BlockFormListener implements Listener {
 	public int isGeneratorNear(Location loc) {
 		BlastFurnace b = (BlastFurnace) loc.getBlock();
 		if(b == null) return 0;
-		if(b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_NAME)) {
+		if(b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_CODENAME)) {
 			return 1;
 			//TODO Database Check and return level
 		}

@@ -6,13 +6,12 @@ import org.bukkit.block.BlastFurnace;
 
 public class GeneratorObject {
 
-	int id;
+	int id = 0;
 	UUID ownerUUID;
 	BlastFurnace furnace;
 	boolean isPlaced = false;
 	
-	public GeneratorObject(int id, UUID ownerUUID, BlastFurnace furnace) {
-		this.id = id;
+	public GeneratorObject(UUID ownerUUID, BlastFurnace furnace) {
 		this.ownerUUID = ownerUUID;
 		this.furnace = furnace;
 	}

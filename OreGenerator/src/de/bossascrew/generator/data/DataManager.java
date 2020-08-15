@@ -34,6 +34,13 @@ public class DataManager {
         thread.start();
 	}
 	
+	public GeneratorObject createGenerator(UUID uuid) {
+		GeneratorObject go = new GeneratorObject(uuid, null);
+		MySQLManager.getInstance().saveGenerator(go);
+		generators.add(go);
+		return go;
+	}
+	
 	public void loadPlayer(UUID uuid) {
 		for(GeneratorObject g : MySQLManager.getInstance().loadGenerators(uuid)) {
 			generators.add(g);
