@@ -1,7 +1,10 @@
 package de.bossascrew.generator;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import de.bossascrew.generator.data.DataManager;
 
 public class Generator extends JavaPlugin {
 
@@ -25,6 +28,11 @@ public class Generator extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			DataManager.getInstance().savePlayer(p.getUniqueId());
+		}
+		
 		printToConsole("Plugin heruntergefahren");
 	}
 	

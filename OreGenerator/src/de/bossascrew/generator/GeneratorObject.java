@@ -2,20 +2,33 @@ package de.bossascrew.generator;
 
 import java.util.UUID;
 
-import org.bukkit.Location;
+import org.bukkit.block.BlastFurnace;
 
 public class GeneratorObject {
 
 	int id;
 	UUID ownerUUID;
-	Location loc;
+	BlastFurnace furnace;
+	boolean isPlaced = false;
 	
-	public GeneratorObject(int id, UUID ownerUUID, Location loc) {
+	public GeneratorObject(int id, UUID ownerUUID, BlastFurnace furnace) {
 		this.id = id;
 		this.ownerUUID = ownerUUID;
-		this.loc = loc;
+		this.furnace = furnace;
 	}
 
+	public boolean isPlaced() {
+		return isPlaced;
+	}
+	
+	public void place() {
+		this.isPlaced = true;
+	}
+	
+	public void drop() {
+		this.isPlaced = false;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -30,10 +43,10 @@ public class GeneratorObject {
 		this.ownerUUID = ownerUUID;
 	}
 	
-	public Location getLoc() {
-		return loc;
+	public BlastFurnace getLoc() {
+		return furnace;
 	}
-	public void setLoc(Location loc) {
-		this.loc = loc;
+	public void setLoc(BlastFurnace furnace) {
+		this.furnace = furnace;
 	}
 }
