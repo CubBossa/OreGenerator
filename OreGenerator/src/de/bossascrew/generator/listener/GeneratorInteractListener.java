@@ -14,6 +14,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.bossascrew.generator.Generator;
+import de.bossascrew.generator.GeneratorObject;
+import de.bossascrew.generator.data.DataManager;
 
 public class GeneratorInteractListener implements Listener {
 
@@ -29,7 +31,8 @@ public class GeneratorInteractListener implements Listener {
 					event.setCancelled(true);
 					Player p = event.getPlayer();
 					if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-						//TODO openGUI
+						GeneratorObject g = DataManager.getInstance().getGenerator(p, bf.getLocation());
+						g.open();
 					} else {
 						informPlayerOnDrop(p);
 					}

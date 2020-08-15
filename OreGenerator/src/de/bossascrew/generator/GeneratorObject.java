@@ -29,6 +29,10 @@ public class GeneratorObject {
 		this.isPlaced = false;
 	}
 	
+	public void open() {
+		
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -49,4 +53,5 @@ public class GeneratorObject {
 	public void setLoc(BlastFurnace furnace) {
 		this.furnace = furnace;
 	}
+
 }
