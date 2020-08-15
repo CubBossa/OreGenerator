@@ -3,6 +3,9 @@ package de.bossascrew.generator;
 import java.util.UUID;
 
 import org.bukkit.block.BlastFurnace;
+import org.bukkit.entity.Player;
+
+import de.bossascrew.generator.Inventories.GUI;
 
 public class GeneratorObject {
 
@@ -10,26 +13,39 @@ public class GeneratorObject {
 	UUID ownerUUID;
 	BlastFurnace furnace;
 	boolean isPlaced = false;
+	int level;
+	GUI gui;
 	
-	public GeneratorObject(UUID ownerUUID, BlastFurnace furnace) {
+	public GeneratorObject(UUID ownerUUID, BlastFurnace furnace, int level) {
 		this.ownerUUID = ownerUUID;
 		this.furnace = furnace;
+		gui = new GUI(level);
 	}
 
 	public boolean isPlaced() {
 		return isPlaced;
 	}
 	
-	public void place() {
+	public void place(BlastFurnace furnace) {
+		this.furnace = furnace;
 		this.isPlaced = true;
 	}
 	
 	public void drop() {
+		this.furnace = null;
 		this.isPlaced = false;
 	}
 	
-	public void open() {
-		
+	public void open(Player p) {
+		p.closeInventory();
+		p.openInventory(gui.getInventory());
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
 	}
 	
 	public int getId() {
@@ -46,7 +62,7 @@ public class GeneratorObject {
 		this.ownerUUID = ownerUUID;
 	}
 	
-	public BlastFurnace getLoc() {
+	public BlastFurnace getFurnace() {
 		return furnace;
 	}
 	public void setLoc(BlastFurnace furnace) {

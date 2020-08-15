@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
 import de.bossascrew.generator.Generator;
+import de.bossascrew.generator.GeneratorObject;
+import de.bossascrew.generator.events.OreGenerationEvent;
 import de.bossascrew.generator.utils.Dimension;
 import de.bossascrew.generator.utils.RandomDistribution;
 import de.bossascrew.generator.utils.Level;
@@ -39,7 +41,6 @@ public class BlockFormListener implements Listener {
                 }
             }
         }
-		
 	}
 	
 	public void setRandomOres(Location loc) {
@@ -47,7 +48,17 @@ public class BlockFormListener implements Listener {
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
 		}
-		loc.getWorld().getBlockAt(loc).setType(calcOres(seemsGeneratorNear(loc), d));
+		GeneratorObject g = seemsGeneratorNear(loc);
+		if(g == null) return;
+		
+		Material m = calcOres(g.getLevel(), d);
+		
+        OreGenerationEvent generateEvent = new OreGenerationEvent(g.getFurnace().getLocation(), m, g);
+        Generator.getInstance().getServer().getPluginManager().callEvent(generateEvent);
+        
+        if(!generateEvent.isCancelled()) {
+    		loc.getWorld().getBlockAt(loc).setType(m);
+        }
 	}
 	
 	private Material calcOres(int level, Dimension d) {
@@ -65,27 +76,29 @@ public class BlockFormListener implements Listener {
 		return randGen.getDistributedRandomNumber();
 	}
 	
-	public int seemsGeneratorNear(Location loc) {
+	public GeneratorObject seemsGeneratorNear(Location loc) {
 		for(int x = -1; x < 2; x++) {
 			for(int y = -1; y < 2; y++) {
 				for(int z = -1; z < 2; z++) {
 					if(loc.clone().add(x, y, z).getBlock().getType() == Material.BLAST_FURNACE) {
-						return isGeneratorNear(loc.clone().add(x,y,z));
+						GeneratorObject g = isGeneratorNear(loc.clone().add(x,y,z));
+	                    return g;
 					}
 				}
 			}
 		}
-		return 0;
+		return null;
 	}
 	
-	public int isGeneratorNear(Location loc) {
+	//TODO fix return
+	public GeneratorObject isGeneratorNear(Location loc) {
 		BlastFurnace b = (BlastFurnace) loc.getBlock();
-		if(b == null) return 0;
+		if(b == null) return null;
 		if(b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_CODENAME)) {
-			return 1;
+			return null;
 			//TODO Database Check and return level
 		}
-		return 0;
+		return null;
 	}
 	
 	

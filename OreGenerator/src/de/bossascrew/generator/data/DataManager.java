@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 
 import de.bossascrew.generator.GeneratorObject;
@@ -34,11 +35,15 @@ public class DataManager {
         thread.start();
 	}
 	
-	public GeneratorObject createGenerator(UUID uuid) {
-		GeneratorObject go = new GeneratorObject(uuid, null);
+	public GeneratorObject createGenerator(UUID uuid, BlastFurnace bf, int level) {
+		GeneratorObject go = new GeneratorObject(uuid, bf, level);
 		MySQLManager.getInstance().saveGenerator(go);
-		generators.add(go);
-		return go;
+		
+		GeneratorObject ret = MySQLManager.getInstance().loadGenerator(uuid, bf.getLocation());
+		//TODO Debug
+		if(ret == null) System.out.println("FEHLERRRRR");
+		generators.add(ret);
+		return ret;
 	}
 	
 	public void loadPlayer(UUID uuid) {
@@ -67,7 +72,7 @@ public class DataManager {
 	
 	public GeneratorObject getGenerator(Player p, Location loc) {
 		for(GeneratorObject g : generators) {
-			if(g.getOwnerUUID().equals(p.getUniqueId()) && g.getLoc().getLocation().equals(loc)) {
+			if(g.getOwnerUUID().equals(p.getUniqueId()) && g.getFurnace().getLocation().equals(loc)) {
 				if(g.isPlaced()) {
 					return g;
 				} else {

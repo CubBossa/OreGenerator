@@ -3,6 +3,8 @@ package de.bossascrew.generator.data;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Location;
+
 import de.bossascrew.generator.GeneratorObject;
 
 public class MySQLManager {
@@ -19,6 +21,10 @@ public class MySQLManager {
 	}
 
 	public List<GeneratorObject> loadGenerators(UUID uuid) {
+		return null;
+	}
+	
+	public GeneratorObject loadGenerator(UUID uuid, Location loc) {
 		return null;
 	}
 	

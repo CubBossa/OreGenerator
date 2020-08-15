@@ -7,6 +7,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.bossascrew.generator.Generator;
+import de.tr7zw.nbtapi.NBTItem;
 
 public class Crafting {
 
@@ -16,10 +17,13 @@ public class Crafting {
 		ItemStack generator = new ItemStack(Material.BLAST_FURNACE);
 		ItemMeta genMeta = generator.getItemMeta();
 		genMeta.setDisplayName(Generator.GENERATOR_NAME);
-
-		
 		generator.setItemMeta(genMeta);
-		return generator;
+		
+		NBTItem nbt = new NBTItem(generator);
+		nbt.setString("customname", Generator.GENERATOR_CODENAME);
+		nbt.setString("level", "-1");
+		
+		return nbt.getItem();
 	}
 	
 	public static void registerGeneratorCrafting() {
