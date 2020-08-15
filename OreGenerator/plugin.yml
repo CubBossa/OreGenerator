@@ -1,0 +1,12 @@
+name: OreGenerator
+author: CubBossa and qpray
+version: 1.0
+main: de.bossascrew.generator.Generator
+
+api-version: 1.16
+
+#permissions:
+#  basisskyblock.flugschuhe:
+#    description: fliegen mit diamantschuhen aktiviert
+#  basisskyblock.flugschuhe.matrosenspeed:
+#    description: noch schneller fliegen
