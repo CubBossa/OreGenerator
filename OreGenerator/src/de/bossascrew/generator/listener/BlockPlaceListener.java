@@ -31,9 +31,9 @@ public class BlockPlaceListener implements Listener {
 			} else {
 				go = DataManager.getInstance().getGenerator(event.getPlayer(), event.getBlockPlaced().getLocation());
 			}
-			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced();
+			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced().getState();
 			bf.setCustomName(Generator.GENERATOR_CODENAME);
-			go.place((BlastFurnace) event.getBlockPlaced());
+			go.place((BlastFurnace) event.getBlockPlaced().getState());
 		}
 	}
 }

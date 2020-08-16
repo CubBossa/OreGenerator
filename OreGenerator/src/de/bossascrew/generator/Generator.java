@@ -1,7 +1,6 @@
 package de.bossascrew.generator;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,7 +14,7 @@ public class Generator extends JavaPlugin {
 	
 	EventManager events;
 	
-	public final static ItemStack GENERATOR_ITEM = new ItemStack(Material.BLAST_FURNACE);
+	public final static ItemStack GENERATOR_ITEM = Crafting.getGeneratorItem();
 	public final static String PREFIX = "§6Jeff §>";
 	public final static String GENERATOR_NAME = "§fErze-Generator";
 	public final static String GENERATOR_CODENAME = "akskfp19e7askd"; //"verschlüsselt"

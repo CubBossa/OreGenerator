@@ -1,9 +1,18 @@
 package de.bossascrew.generator.data;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlastFurnace;
 
 import de.bossascrew.generator.GeneratorObject;
 
@@ -11,25 +20,177 @@ public class MySQLManager {
 
 	static MySQLManager instance;
 	
+	String host;
+	String port;
+	String database;
+	String username;
+	String password;
+	
+	public static String TABLE_NAME = "";
 	
 	public MySQLManager() {
 		instance = this;
 	}
 	
+	public void setData(String host, String port, String database, String username, String password) {
+		this.host = host;
+		this.port = port;
+		this.database = database;
+		this.username = username;
+		this.password = password;
+	}
+	
+	public boolean createTable() {
+		Connection con = connect();
+		boolean ret = false;
+		if(con == null) return ret;
+		try {
+			String statement = "CREATE TABLE IF NOT EXISTS `voteextension`.`new_table` (`id` INT NOT NULL AUTO_INCREMENT," + 
+					" `uuid` VARCHAR(36) NULL," + 
+					" `level` INT NULL DEFAULT 0," + 
+					" `isPlaced` TINYINT NULL," + 
+					" `world` VARCHAR(45) NULL," + 
+					" `x` INT NULL," + 
+					" `y` INT NULL," + 
+					"  `z` INT NULL," + 
+					" PRIMARY KEY (`id`)," + 
+					" UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);";
+			PreparedStatement ps = con.prepareStatement(statement);
+			ps.executeUpdate();
+			ps.close();
+			ret = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public boolean createGenerator(GeneratorObject g) {
+		Connection con = connect();
+		boolean ret = false;
+		if(con == null) return ret;
+		
+		try {
+			String statement = "INSERT INTO VoteExtension (uuid, level, isPlaced, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement ps = con.prepareStatement(statement);
+
+			ps.setString(1, g.getOwnerUUID().toString());
+			ps.setInt(2, g.getLevel());
+			ps.setBoolean(3, g.isPlaced());
+			ps.setString(4, g.getFurnace().getLocation().getWorld().getName());
+			ps.setInt(5, g.getFurnace().getLocation().getBlockX());
+			ps.setInt(6, g.getFurnace().getLocation().getBlockY());
+			ps.setInt(7, g.getFurnace().getLocation().getBlockZ());
+			
+			ps.executeUpdate();
+			ps.close();
+			ret = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
 	public boolean saveGenerator(GeneratorObject g) {
-		return true;
+		Connection con = connect();
+		boolean ret = false;
+		if(con == null) return ret;
+		
+		try {
+			String statement = "UPDATE " + TABLE_NAME + " SET level = ?, isPlaced = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
+			PreparedStatement ps = con.prepareStatement(statement);
+			
+			ps.setInt(1, g.getLevel());
+			ps.setBoolean(2, g.isPlaced());
+			ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
+			ps.setInt(4, g.getFurnace().getLocation().getBlockX());
+			ps.setInt(5, g.getFurnace().getLocation().getBlockY());
+			ps.setInt(6, g.getFurnace().getLocation().getBlockZ());
+			ps.setString(7, g.getOwnerUUID().toString());
+			ps.setInt(8, g.getId());
+			
+			ps.executeUpdate();
+			ps.close();
+			ret = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
 	public List<GeneratorObject> loadGenerators(UUID uuid) {
-		return null;
+		Connection con = connect();
+		if(con == null) return null;
+		List<GeneratorObject> ret = new ArrayList<GeneratorObject>();
+		try { //id, uuid, level, isPlaced, world, x, y, z,
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE UUID = ?");
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				
+				boolean placed = result.getBoolean("isPlaced");
+				Location loc;
+				BlastFurnace furnace = null;
+				if(placed) {
+					loc = new Location(Bukkit.getWorld(result.getString("world")), result.getInt("x"), result.getInt("y"), result.getInt("z"));
+					if(loc.getBlock().getType() == Material.BLAST_FURNACE) {
+						furnace = (BlastFurnace) loc.getBlock().getState();
+					}
+				}
+				GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
+				go.setId(result.getInt("id"));
+				ret.add(go);
+			}
+			result.close();
+			ps.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 	
 	public GeneratorObject loadGenerator(UUID uuid, Location loc) {
+		for(GeneratorObject go : loadGenerators(uuid)) {
+			if(go.getFurnace().getLocation().equals(loc)) {
+				return go;
+			}
+		}
 		return null;
 	}
 	
 	public static MySQLManager getInstance() {
 		if(instance == null) instance = new MySQLManager();
 		return instance;
+	}
+	
+	public Connection connect() {
+		try {
+			 return DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false", username, password);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return null;
+		}
 	}
 }
