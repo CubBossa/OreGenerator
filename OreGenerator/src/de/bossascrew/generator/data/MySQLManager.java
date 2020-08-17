@@ -229,10 +229,11 @@ public class MySQLManager {
 	
 	public Connection connect() {
 		try {
-			 return DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE + "?useSSL=false", USERNAME, PASSWORD);
+			return DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE + "?useSSL=false", USERNAME, PASSWORD);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
 		}
+		
 	}
 }

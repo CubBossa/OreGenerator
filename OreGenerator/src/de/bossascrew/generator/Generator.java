@@ -29,9 +29,9 @@ public class Generator extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
-		config = new ConfigFile(getDataFolder().getPath(), "config.yml");
-		
 		instance = this;
+		config = new ConfigFile(instance.getDataFolder().getPath(), "config.yml", "config.yml");
+		
 		printToConsole("Plugin geladen");
 		
 		Crafting.registerGeneratorCrafting();
@@ -43,6 +43,7 @@ public class Generator extends JavaPlugin {
 				config.getCfg().getString("database.username"),
 				config.getCfg().getString("database.password"),
 				config.getCfg().getString("database.tablename"));
+		MySQLManager.getInstance().createTable();
 		
 		if(!databaseSetup) {
 			printToConsole("§4Datenkbankwerte nicht korrekt gesetzt!");

@@ -14,9 +14,9 @@ public class ConfigFile {
 	File file;
 	FileConfiguration cfg;
 	
-	public ConfigFile(String path, String fileResource) {
+	public ConfigFile(String path, String name, String fileResource) {
 		this.fileResource = fileResource;
-		this.file = new File(path, "config.yml");
+		this.file = new File(path, name);
 		this.cfg = YamlConfiguration.loadConfiguration(file);
 
 		if(file != null)

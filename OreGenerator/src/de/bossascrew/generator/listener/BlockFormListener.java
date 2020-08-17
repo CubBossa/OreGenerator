@@ -52,10 +52,12 @@ public class BlockFormListener implements Listener {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
 		}
 		GeneratorObject g = seemsGeneratorNear(loc);
-		if(g == null) return false;
-		
-		Material m = calcOres(g.getLevel(), d);
-		
+		Material m = Material.STONE;
+		if(g == null) {
+			m = calcOres(0, d);
+		} else {
+			m = calcOres(g.getLevel(), d);
+		}
         OreGenerationEvent generateEvent = new OreGenerationEvent(g.getFurnace().getLocation(), m, g);
         Generator.getInstance().getServer().getPluginManager().callEvent(generateEvent);
         

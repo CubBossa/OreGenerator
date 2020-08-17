@@ -27,7 +27,7 @@ public class BlockPlaceListener implements Listener {
 			String level = nbt.getString("level");
 			GeneratorObject go;
 			if(level == "-1") {
-				go = DataManager.getInstance().createGenerator(event.getPlayer().getUniqueId(), (BlastFurnace) event.getBlockPlaced(), 0);
+				go = DataManager.getInstance().createGenerator(event.getPlayer().getUniqueId(), (BlastFurnace) event.getBlockPlaced().getState(), 0);
 			} else {
 				go = DataManager.getInstance().getGenerator(event.getPlayer(), event.getBlockPlaced().getLocation());
 			}
