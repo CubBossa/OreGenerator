@@ -58,6 +58,7 @@ public class GUI {
 		lore.add("Klick hier zu dropp");
 		lore.add("Zeile 2");
 		m.setLore(lore);
+		i.setItemMeta(m);
 		NBTItem inbt = new NBTItem(i);
 		inbt.setString(Generator.NBT_ACTION_KEY, Generator.NBT_ACTION_VALUE_DROP);
 		inbt.setInteger(Generator.NBT_GENERATORID_KEY, generator.getId());
@@ -76,6 +77,7 @@ public class GUI {
 		} else {
 			i = glowItem(i);
 		}
+		i.setItemMeta(meta);
 		NBTItem inbt = new NBTItem(i);
 		inbt.setString(Generator.NBT_ACTION_KEY, Generator.NBT_ACTION_VALUE_LEVELINFO);
 		inbt.setInteger(Generator.NBT_LEVEL_KEY, level.getLevel());
@@ -88,9 +90,6 @@ public class GUI {
 		
 		boolean accessed = false;
 		boolean oneAbove = false;
-		
-		System.out.println(generator.getLevel());
-		System.out.println(level.getLevel());
 		
 		if(level.getLevel() <= generator.getLevel()) accessed = true;
 		else if(level.getLevel() == generator.getLevel()+1) oneAbove = true;
@@ -105,6 +104,7 @@ public class GUI {
 			lore.add("§8Level frei!");
 			meta.setLore(lore);
 		}
+		i.setItemMeta(meta);
 		NBTItem inbt = new NBTItem(i);
 		inbt.setString(Generator.NBT_ACTION_KEY, Generator.NBT_ACTION_VALUE_LEVELINFO);
 		inbt.setInteger(Generator.NBT_LEVEL_KEY, level.getLevel());
