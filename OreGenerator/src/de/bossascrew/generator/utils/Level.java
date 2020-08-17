@@ -7,11 +7,12 @@ import org.bukkit.Material;
 
 public enum Level {
 
-	ZERO(0, 0.004f, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+	ZERO(0, 0.004f, 0.009f, 0, 0, 0, 0, 0, 0, 0, 0),
 	ONE(1, 0.0033f, 0.0111f, 0.01f, 0, 0, 0, 0, 0, 0.001f, 0),
-	TWO(2, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0);
-	
-	
+	TWO(2, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
+	THREE(3, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
+	FOUR(4, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
+	FIVE(5, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0);
 	
 	int level;
 	
@@ -33,16 +34,16 @@ public enum Level {
 		this.level = level;
 		
 		ores = new ArrayList<Ore>();
-		ores.add(new Ore(silverfish, Material.INFESTED_STONE));
-		ores.add(new Ore(coal, Material.COAL_ORE));
-		ores.add(new Ore(iron, Material.IRON_ORE));
-		ores.add(new Ore(redstone, Material.REDSTONE_ORE));
-		ores.add(new Ore(lapis, Material.LAPIS_ORE));
-		ores.add(new Ore(gold, Material.GOLD_ORE));
-		ores.add(new Ore(diamond, Material.DIAMOND_ORE));
-		ores.add(new Ore(emerald, Material.EMERALD_ORE));
-		ores.add(new Ore(netherore, Material.GILDED_BLACKSTONE, Dimension.NETHER));
-		ores.add(new Ore(debris, Material.ANCIENT_DEBRIS, Dimension.NETHER));
+		ores.add(new Ore(silverfish, "Infizierter Stein", Material.INFESTED_STONE));
+		ores.add(new Ore(coal, "Kohle", Material.COAL_ORE));
+		ores.add(new Ore(iron, "Eisen", Material.IRON_ORE));
+		ores.add(new Ore(redstone, "Redstone", Material.REDSTONE_ORE));
+		ores.add(new Ore(lapis, "Lapislazuli", Material.LAPIS_ORE));
+		ores.add(new Ore(gold, "Gold", Material.GOLD_ORE));
+		ores.add(new Ore(diamond, "Diamant", Material.DIAMOND_ORE));
+		ores.add(new Ore(emerald, "Smaragd", Material.EMERALD_ORE));
+		ores.add(new Ore(netherore, "Goldreicher Schwarzstein", Material.GILDED_BLACKSTONE, Dimension.NETHER));
+		ores.add(new Ore(debris, "Antiker Schrott", Material.ANCIENT_DEBRIS, Dimension.NETHER));
 	}
 	
 	public List<Ore> getOres(Dimension d) {
@@ -56,10 +57,10 @@ public enum Level {
 		}
 		switch (d) {
 		case OVERWORLD:
-			ores.add(new Ore(1f-current, Material.STONE));
+			ores.add(new Ore(1f-current, "Stein", Material.STONE));
 			break;
 		case NETHER:
-			ores.add(new Ore(1f-current, Material.BLACKSTONE));
+			ores.add(new Ore(1f-current, "Schwarzstein", Material.BLACKSTONE, Dimension.NETHER));
 			break;
 		}
 		return ret;		
@@ -67,5 +68,12 @@ public enum Level {
 
 	public int getLevel() {
 		return level;
+	}
+	
+	public static Level fromInt(int level) {
+		for(Level l : Level.values()) {
+			if(l.getLevel() == level) return l;
+		}
+		return null;
 	}
 }

@@ -1,0 +1,12 @@
+#
+# ____Erzgenerator____
+#       Config
+#
+
+database:
+  host: localhost
+  port: 3306
+  database: minecraft
+  username: root
+  password: supersafe1234
+  tablename: oregenerators
