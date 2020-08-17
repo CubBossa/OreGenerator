@@ -57,10 +57,10 @@ public enum Level {
 		}
 		switch (d) {
 		case OVERWORLD:
-			ores.add(new Ore(1f-current, "Stein", Material.STONE));
+			ret.add(new Ore(1f-current, "Stein", Material.STONE));
 			break;
 		case NETHER:
-			ores.add(new Ore(1f-current, "Schwarzstein", Material.BLACKSTONE, Dimension.NETHER));
+			ret.add(new Ore(1f-current, "Schwarzstein", Material.BLACKSTONE, Dimension.NETHER));
 			break;
 		}
 		return ret;		

@@ -3,10 +3,12 @@ package de.bossascrew.generator;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 
 import de.bossascrew.generator.Inventories.GUI;
+import de.bossascrew.generator.crafting.Crafting;
 import de.bossascrew.generator.utils.LevelRequirements;
 
 public class GeneratorObject {
@@ -61,8 +63,12 @@ public class GeneratorObject {
 	}
 	
 	public void drop() {
+		//TODO Sound & Partikel
+		
 		Bukkit.getPlayer(ownerUUID).closeInventory();
+		this.furnace.getBlock().setType(Material.AIR);
 		this.furnace = null;
+		Bukkit.getPlayer(ownerUUID).getInventory().addItem(Crafting.getGeneratorItem(ownerUUID.toString(), level));
 		this.isPlaced = false;
 	}
 	

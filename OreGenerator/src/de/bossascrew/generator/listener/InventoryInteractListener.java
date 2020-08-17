@@ -18,6 +18,8 @@ public class InventoryInteractListener implements Listener {
 		if(e.getCurrentItem() == null) return;
 		if(e.getView().getTitle() != null && !e.getView().getTitle().equals(Generator.GUI_TITLE)) return;
 		
+		e.setCancelled(true);
+		
 		NBTItem item = new NBTItem(e.getCurrentItem());
 		int generatorId = item.getInteger(Generator.NBT_GENERATORID_KEY);
 		GeneratorObject g = DataManager.getInstance().getGenerator(generatorId);

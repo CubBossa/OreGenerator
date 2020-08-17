@@ -117,12 +117,12 @@ public class GUI {
 		List<String> ret = new ArrayList<String>();
 		ret.add("§7Oberwelt:");
 		for(Ore o : level.getOres(Dimension.OVERWORLD)) {
-			ret.add("§8- " + o.mat + ": §7" + o.prob * 100 + "%");
+			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.prob * 100 + "§7%");
 		}
 		ret.add("");
 		ret.add("§7Im Nether:");
 		for(Ore o : level.getOres(Dimension.NETHER)) {
-			ret.add("§8- " + o.mat + ": §7" + o.prob * 100 + "%");
+			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.prob * 100 + "§7%");
 		}
 		return ret;
 	}
@@ -132,7 +132,7 @@ public class GUI {
 		List<String> ret = new ArrayList<String>();
 		LevelRequirements lr = LevelRequirements.fromLevel(level.getLevel());
 		for(ItemStack i : lr.getRequirememts()) {
-			ret.add("§8- " + i.getType() + ", §7" + i.getAmount() + "x");
+			ret.add("§7- §f" + i.getType() + "§7, §a" + i.getAmount() + "x");
 		}
 		return ret;
 	}
