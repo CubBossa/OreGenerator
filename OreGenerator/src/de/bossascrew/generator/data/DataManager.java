@@ -71,6 +71,15 @@ public class DataManager {
 		return ret;
 	}
 	
+	public GeneratorObject getGenerator(int id) {
+		for(GeneratorObject g : generators) {
+			if(g.getId() == id) {
+				return g;
+			}
+		}
+		return null;
+	}
+	
 	public GeneratorObject getGenerator(Player p, Location loc) {
 		for(GeneratorObject g : generators) {
 			if(g.getOwnerUUID().equals(p.getUniqueId()) && g.getFurnace().getLocation().equals(loc)) {

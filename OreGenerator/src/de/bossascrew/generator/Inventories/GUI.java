@@ -10,11 +10,11 @@ import de.bossascrew.generator.utils.Level;
 
 public class GUI {
 
+	int generatorID;
 	Inventory inv;
-	int level;
 	
-	public GUI(int level) {
-		this.level = level;
+	public GUI(int generatorID) {
+		this.generatorID = generatorID;
 		inv = Bukkit.createInventory(null, 3 * 9, Generator.GUI_TITLE);
 	}
 	
@@ -24,6 +24,7 @@ public class GUI {
 	
 	public void refresh() {
 		//TODO Items setzen
+		//TODO bei jedem item die generatorid mitsetzen
 		
 		for(Level level : Level.values()) {
 			

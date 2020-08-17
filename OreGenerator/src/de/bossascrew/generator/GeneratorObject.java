@@ -2,10 +2,12 @@ package de.bossascrew.generator;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 
 import de.bossascrew.generator.Inventories.GUI;
+import de.bossascrew.generator.utils.LevelRequirements;
 
 public class GeneratorObject {
 
@@ -22,6 +24,23 @@ public class GeneratorObject {
 		gui = new GUI(level);
 	}
 
+	public void tryUpgrade(int level) {
+		if(canUpgrade(level)) {
+			LevelRequirements lr = LevelRequirements.fromLevel(level);
+			
+			
+		}
+	}
+	
+	private boolean canUpgrade(int level) {
+		boolean ret = false;
+		LevelRequirements lr = LevelRequirements.fromLevel(level);
+		if(lr.canBuy(Bukkit.getPlayer(ownerUUID).getInventory())) {
+			ret = true;
+		}
+		return ret;
+	}
+	
 	public boolean isPlaced() {
 		return isPlaced;
 	}
@@ -68,5 +87,4 @@ public class GeneratorObject {
 	public void setLoc(BlastFurnace furnace) {
 		this.furnace = furnace;
 	}
-
 }
