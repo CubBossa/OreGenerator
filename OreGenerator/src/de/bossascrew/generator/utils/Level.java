@@ -59,7 +59,7 @@ public enum Level {
 			ores.add(new Ore(1f-current, "Stein", Material.STONE));
 			break;
 		case NETHER:
-			ores.add(new Ore(1f-current, "Schwarzstein", Material.BLACKSTONE));
+			ores.add(new Ore(1f-current, "Schwarzstein", Material.BLACKSTONE, Dimension.NETHER));
 			break;
 		}
 		return ret;		

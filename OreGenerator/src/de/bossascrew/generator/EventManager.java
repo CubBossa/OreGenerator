@@ -2,6 +2,7 @@ package de.bossascrew.generator;
 
 import org.bukkit.Bukkit;
 
+import de.bossascrew.generator.listener.BlockBreakListener;
 import de.bossascrew.generator.listener.BlockFormListener;
 import de.bossascrew.generator.listener.BlockPlaceListener;
 import de.bossascrew.generator.listener.GeneratorInteractListener;
@@ -24,5 +25,6 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), Generator.getInstance());
         Bukkit.getPluginManager().registerEvents(new BlockPlaceListener(), Generator.getInstance());
         Bukkit.getPluginManager().registerEvents(new PrepareItemCraftListener(), Generator.getInstance());
+        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), Generator.getInstance());
     }
 }

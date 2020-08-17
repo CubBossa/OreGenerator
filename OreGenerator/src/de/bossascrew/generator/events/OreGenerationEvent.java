@@ -22,6 +22,7 @@ public class OreGenerationEvent extends Event implements Cancellable {
 		this.type = type;
 		this.generator = generator;
 		
+		//System.out.println("Erzgeneration level " + generator == null ? 0 : generator.getLevel());
 		isCancelled = false;
 	}
 	
