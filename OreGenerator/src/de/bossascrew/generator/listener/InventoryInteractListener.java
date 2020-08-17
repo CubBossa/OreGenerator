@@ -19,7 +19,7 @@ public class InventoryInteractListener implements Listener {
 		if(e.getView().getTitle() != null && !e.getView().getTitle().equals(Generator.GUI_TITLE)) return;
 		
 		NBTItem item = new NBTItem(e.getCurrentItem());
-		int generatorId = item.getInteger("generatorid");
+		int generatorId = item.getInteger(Generator.NBT_GENERATORID_KEY);
 		GeneratorObject g = DataManager.getInstance().getGenerator(generatorId);
 		
 		String action = item.getString(Generator.NBT_ACTION_KEY);
@@ -27,7 +27,9 @@ public class InventoryInteractListener implements Listener {
 		switch (action) {
 		case Generator.NBT_ACTION_VALUE_LEVELINFO:
 			if(clickedLevel+1 == g.getLevel()) {
-				g.tryUpgrade(clickedLevel);
+				if(g.tryUpgrade(clickedLevel)) {
+					g.refreshGUI();
+				}
 			}
 			break;
 		case Generator.NBT_ACTION_VALUE_DROP:

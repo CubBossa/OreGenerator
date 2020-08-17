@@ -68,4 +68,11 @@ public enum Level {
 	public int getLevel() {
 		return level;
 	}
+	
+	public static Level fromInt(int level) {
+		for(Level l : Level.values()) {
+			if(l.getLevel() == level) return l;
+		}
+		return null;
+	}
 }

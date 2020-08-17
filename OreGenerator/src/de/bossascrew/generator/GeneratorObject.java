@@ -21,15 +21,17 @@ public class GeneratorObject {
 	public GeneratorObject(UUID ownerUUID, BlastFurnace furnace, int level) {
 		this.ownerUUID = ownerUUID;
 		this.furnace = furnace;
-		gui = new GUI(level);
+		gui = new GUI(this);
 	}
 
-	public void tryUpgrade(int level) {
+	public boolean tryUpgrade(int level) {
 		if(canUpgrade(level)) {
 			LevelRequirements lr = LevelRequirements.fromLevel(level);
 			
 			//TODO items removen und Upgraden
+			return true;
 		}
+		return false;
 	}
 	
 	private boolean canUpgrade(int level) {
@@ -39,6 +41,10 @@ public class GeneratorObject {
 			ret = true;
 		}
 		return ret;
+	}
+	
+	public void refreshGUI() {
+		this.gui.refresh();
 	}
 	
 	public boolean isPlaced() {
@@ -51,6 +57,7 @@ public class GeneratorObject {
 	}
 	
 	public void drop() {
+		Bukkit.getPlayer(ownerUUID).closeInventory();
 		this.furnace = null;
 		this.isPlaced = false;
 	}

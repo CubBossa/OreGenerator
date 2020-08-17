@@ -15,6 +15,7 @@ import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
 import de.bossascrew.generator.utils.Dimension;
 import de.bossascrew.generator.utils.Level;
+import de.bossascrew.generator.utils.LevelRequirements;
 import de.bossascrew.generator.utils.Ore;
 import de.tr7zw.nbtapi.NBTItem;
 
@@ -23,6 +24,7 @@ public class GUI {
 	public static final Material ITEM_REQ = Material.NAME_TAG;
 	public static final Material ITEM_PROB = Material.MAP;
 	public static final Material ITEM_DROP = Material.HOPPER;
+	public static final Integer[] LEVEL_SLOTS = {0,1,2,3,4,5};
 	
 	GeneratorObject generator;
 	Inventory inv;
@@ -37,16 +39,14 @@ public class GUI {
 	}
 	
 	public void refresh() {
-		//TODO Items setzen
-		//TODO bei jedem item die generatorid mitsetzen
-		
-		for(Level level : Level.values()) {
-			
-			
+		for(int i : LEVEL_SLOTS) {
+			inv.setItem(i+9, getLevelItemProb(Level.fromInt(i)));
+			if(i >= 1) {
+				inv.setItem(i, getLevelItemReq(Level.fromInt(i)));
+			}
 		}
-		//Drop picke
+		inv.setItem(7+9, getDropItem());
 	}
-	
 	
 	private ItemStack getDropItem() {
 		ItemStack i = new ItemStack(ITEM_DROP);
@@ -59,6 +59,7 @@ public class GUI {
 		m.setLore(lore);
 		NBTItem inbt = new NBTItem(i);
 		inbt.setString(Generator.NBT_ACTION_KEY, Generator.NBT_ACTION_VALUE_DROP);
+		inbt.setInteger(Generator.NBT_GENERATORID_KEY, generator.getId());
 		return inbt.getItem();
 	}
 	
@@ -77,6 +78,7 @@ public class GUI {
 		NBTItem inbt = new NBTItem(i);
 		inbt.setString(Generator.NBT_ACTION_KEY, Generator.NBT_ACTION_VALUE_LEVELINFO);
 		inbt.setInteger(Generator.NBT_LEVEL_KEY, level.getLevel());
+		inbt.setInteger(Generator.NBT_GENERATORID_KEY, generator.getId());
 		return inbt.getItem();
 	}
 	
@@ -101,10 +103,12 @@ public class GUI {
 		NBTItem inbt = new NBTItem(i);
 		inbt.setString(Generator.NBT_ACTION_KEY, Generator.NBT_ACTION_VALUE_LEVELINFO);
 		inbt.setInteger(Generator.NBT_LEVEL_KEY, level.getLevel());
+		inbt.setInteger(Generator.NBT_GENERATORID_KEY, generator.getId());
 		return inbt.getItem();
 	}
 	
 	private List<String> getPropabilities(Level level) {
+		//TODO Farbsetup, evtl auch als Message format auslagern
 		List<String> ret = new ArrayList<String>();
 		ret.add("§7Oberwelt:");
 		for(Ore o : level.getOres(Dimension.OVERWORLD)) {
@@ -119,7 +123,13 @@ public class GUI {
 	}
 	
 	private List<String> getRequirements(Level level) {
-		return null;
+		//TODO auch farbsetup
+		List<String> ret = new ArrayList<String>();
+		LevelRequirements lr = LevelRequirements.fromLevel(level.getLevel());
+		for(ItemStack i : lr.getRequirememts()) {
+			ret.add("§8- " + i.getType() + ", §7" + i.getAmount() + "x");
+		}
+		return ret;
 	}
 	
     public ItemStack glowItem(ItemStack i) {

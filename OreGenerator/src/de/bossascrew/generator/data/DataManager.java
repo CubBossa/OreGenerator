@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.block.BlastFurnace;
-import org.bukkit.entity.Player;
 
 import de.bossascrew.generator.GeneratorObject;
 
