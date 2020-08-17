@@ -27,7 +27,7 @@ public class GeneratorInteractListener implements Listener {
 		if(event.getClickedBlock() != null) {
 			if(event.getClickedBlock().getType() == Material.BLAST_FURNACE) {
 				BlastFurnace bf = (BlastFurnace) event.getClickedBlock().getState();
-				if(bf.getCustomName() != null && bf.getCustomName().equals(Generator.GENERATOR_CODENAME)) {
+				if(bf.getCustomName() != null && bf.getCustomName().equals(Generator.NBT_GENERATOR_CODENAME)) {
 					event.setCancelled(true);
 					Player p = event.getPlayer();
 					if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {

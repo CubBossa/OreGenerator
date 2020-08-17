@@ -19,10 +19,15 @@ public class Generator extends JavaPlugin {
 	public final static ItemStack GENERATOR_ITEM = Crafting.getGeneratorItem();
 	public final static String PREFIX = "§6Jeff §>";
 	public final static String GENERATOR_NAME = "§fErze-Generator";
-	public final static String GENERATOR_CODENAME = "akskfp19e7askd"; //"verschlüsselt"
+	public final static String NBT_GENERATOR_CODENAME = "akskfp19e7askd"; //"verschlüsselt"
 	public final static String GUI_TITLE = "§9Erze Generator";
 	public final static String USE_GUI_TO_DROP = PREFIX + " §7Benutze das Menü des Generators, um ihn zu droppen!";
 	public final static int USE_GUI_TO_DROP_DELAY = 5;
+	
+	public final static String NBT_LEVEL_KEY = "level";
+	public final static String NBT_ACTION_KEY = "action";
+	public final static String NBT_ACTION_VALUE_DROP = "drop";
+	public static final String NBT_ACTION_VALUE_LEVELINFO = "levelinform";
 	
 	ConfigFile config;
 	

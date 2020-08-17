@@ -20,7 +20,7 @@ public class Crafting {
 		generator.setItemMeta(genMeta);
 		
 		NBTItem nbt = new NBTItem(generator);
-		nbt.setString("customname", Generator.GENERATOR_CODENAME);
+		nbt.setString("customname", Generator.NBT_GENERATOR_CODENAME);
 		nbt.setString("level", "-1");
 		
 		return nbt.getItem();

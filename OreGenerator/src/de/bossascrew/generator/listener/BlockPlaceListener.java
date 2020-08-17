@@ -22,7 +22,7 @@ public class BlockPlaceListener implements Listener {
 		if(event.getBlock().getType() == Material.BLAST_FURNACE) {
 			
 			NBTItem nbt = new NBTItem(event.getItemInHand());
-			if(!nbt.getString("customname").equals(Generator.GENERATOR_CODENAME)) return;
+			if(!nbt.getString("customname").equals(Generator.NBT_GENERATOR_CODENAME)) return;
 
 			String level = nbt.getString("level");
 			GeneratorObject go;
@@ -34,7 +34,7 @@ public class BlockPlaceListener implements Listener {
 			}
 			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced().getState();
 			System.out.println("bf: " + bf);
-			bf.setCustomName(Generator.GENERATOR_CODENAME);
+			bf.setCustomName(Generator.NBT_GENERATOR_CODENAME);
 			go.place(bf);
 		}
 	}

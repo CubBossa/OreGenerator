@@ -22,15 +22,15 @@ public class InventoryInteractListener implements Listener {
 		int generatorId = item.getInteger("generatorid");
 		GeneratorObject g = DataManager.getInstance().getGenerator(generatorId);
 		
-		String action = item.getString("action");
-		int clickedLevel = item.getInteger("level");
+		String action = item.getString(Generator.NBT_ACTION_KEY);
+		int clickedLevel = item.getInteger(Generator.NBT_LEVEL_KEY);
 		switch (action) {
-		case "level":
+		case Generator.NBT_ACTION_VALUE_LEVELINFO:
 			if(clickedLevel+1 == g.getLevel()) {
 				g.tryUpgrade(clickedLevel);
 			}
 			break;
-		case "drop":
+		case Generator.NBT_ACTION_VALUE_DROP:
 			g.drop();
 			break;
 		}
