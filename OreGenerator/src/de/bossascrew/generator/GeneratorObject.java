@@ -28,7 +28,7 @@ public class GeneratorObject {
 		if(canUpgrade(level)) {
 			LevelRequirements lr = LevelRequirements.fromLevel(level);
 			
-			
+			//TODO items removen und Upgraden
 		}
 	}
 	

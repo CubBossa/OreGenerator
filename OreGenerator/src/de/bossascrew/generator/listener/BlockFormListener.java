@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
+import de.bossascrew.generator.data.DataManager;
 import de.bossascrew.generator.events.OreGenerationEvent;
 import de.bossascrew.generator.utils.Dimension;
 import de.bossascrew.generator.utils.RandomDistribution;
@@ -85,7 +86,7 @@ public class BlockFormListener implements Listener {
 			for(int y = -1; y < 2; y++) {
 				for(int z = -1; z < 2; z++) {
 					if(loc.clone().add(x, y, z).getBlock().getType() == Material.BLAST_FURNACE) {
-						GeneratorObject g = isGeneratorNear(loc.clone().add(x,y,z));
+						GeneratorObject g = isGenerator(loc.clone().add(x,y,z));
 	                    return g;
 					}
 				}
@@ -93,18 +94,20 @@ public class BlockFormListener implements Listener {
 		}
 		return null;
 	}
-	
-	//TODO fix return
-	public GeneratorObject isGeneratorNear(Location loc) {
+
+	/**
+	 * 
+	 * @param loc
+	 * @return null if is no generator, else the generator at given location
+	 */
+	public GeneratorObject isGenerator(Location loc) {
 		BlastFurnace b = (BlastFurnace) loc.getBlock().getState();
 		if(b == null) return null;
 		if(b.getCustomName() != null && b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_CODENAME)) {
-			return null;
-			//TODO Database Check and return level
+			return DataManager.getInstance().getGenerator(loc);
 		}
 		return null;
 	}
-	
 	
 	public boolean generates(Block from, Block to) {
         if (!to.isLiquid()) return false;

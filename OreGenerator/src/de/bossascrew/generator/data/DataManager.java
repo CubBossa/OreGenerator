@@ -80,6 +80,17 @@ public class DataManager {
 		return null;
 	}
 	
+	public GeneratorObject getGenerator(Location loc) {
+		GeneratorObject g = null;
+		for(GeneratorObject go : generators) {
+			if(go.getFurnace().getLocation() == loc) {
+				g = go;
+			}
+		}
+		if(g == null) g = MySQLManager.getInstance().loadGenerator(loc);
+		return g;
+	}
+	
 	public GeneratorObject getGenerator(Player p, Location loc) {
 		for(GeneratorObject g : generators) {
 			if(g.getOwnerUUID().equals(p.getUniqueId()) && g.getFurnace().getLocation().equals(loc)) {

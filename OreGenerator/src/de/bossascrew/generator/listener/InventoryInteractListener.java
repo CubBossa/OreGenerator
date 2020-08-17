@@ -14,9 +14,6 @@ public class InventoryInteractListener implements Listener {
 	@EventHandler
 	public void invClick(InventoryClickEvent e) {
 
-		//TODO prüfen ob NBT tag plugin:oregenerator
-		//TODO prüfen, in welchem GUI man sich gerade befindet
-		//TODO nbt guiitem
 		if(e.getCurrentItem() == null) return;
 		NBTItem item = new NBTItem(e.getCurrentItem());
 		int generatorId = item.getInteger("generatorid");

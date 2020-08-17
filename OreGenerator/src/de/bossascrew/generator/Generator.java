@@ -6,7 +6,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bossascrew.generator.crafting.Crafting;
+import de.bossascrew.generator.data.ConfigFile;
 import de.bossascrew.generator.data.DataManager;
+import de.bossascrew.generator.data.MySQLManager;
 
 public class Generator extends JavaPlugin {
 
@@ -22,13 +24,32 @@ public class Generator extends JavaPlugin {
 	public final static String USE_GUI_TO_DROP = PREFIX + " §7Benutze das Menü des Generators, um ihn zu droppen!";
 	public final static int USE_GUI_TO_DROP_DELAY = 5;
 	
+	ConfigFile config;
+	
 	@Override
 	public void onEnable() {
+		
+		config = new ConfigFile(getDataFolder().getPath(), "config.yml");
+		
 		instance = this;
 		printToConsole("Plugin geladen");
 		
 		Crafting.registerGeneratorCrafting();
 		events = new EventManager();
+		
+		boolean databaseSetup = MySQLManager.getInstance().setData(config.getCfg().getString("database.host"),
+				config.getCfg().getString("database.port"),
+				config.getCfg().getString("database.database"),
+				config.getCfg().getString("database.username"),
+				config.getCfg().getString("database.password"),
+				config.getCfg().getString("database.tablename"));
+		
+		if(!databaseSetup) {
+			printToConsole("§4Datenkbankwerte nicht korrekt gesetzt!");
+			getPluginLoader().disablePlugin(this);
+		}
+		
+		DataManager.getInstance().savingRoutine();
 	}
 	
 	@Override
