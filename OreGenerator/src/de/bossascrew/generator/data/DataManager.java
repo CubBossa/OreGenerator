@@ -38,18 +38,23 @@ public class DataManager {
 	
 	public GeneratorObject createGenerator(UUID uuid, BlastFurnace bf, int level) {
 		GeneratorObject go = new GeneratorObject(uuid, bf, level);
-		MySQLManager.getInstance().saveGenerator(go);
+		System.out.println("generator wird gespeichert: " + go);
+		MySQLManager.getInstance().registerGenerator(go);
 		
-		GeneratorObject ret = MySQLManager.getInstance().loadGenerator(uuid, bf.getLocation());
-		//TODO Debug
-		if(ret == null) System.out.println("FEHLERRRRR");
-		generators.add(ret);
-		return ret;
+		loadPlayer(uuid);
+		return getGenerator(uuid, bf.getLocation());
 	}
 	
 	public void loadPlayer(UUID uuid) {
 		for(GeneratorObject g : MySQLManager.getInstance().loadGenerators(uuid)) {
-			generators.add(g);
+			boolean isSet = false;
+			for(GeneratorObject gg : generators) {
+				if(g.getId() == gg.getId()) {
+					isSet = true;
+				}
+			}
+			if(!isSet)
+				generators.add(g);
 		}
 	}
 	
@@ -91,9 +96,9 @@ public class DataManager {
 		return g;
 	}
 	
-	public GeneratorObject getGenerator(Player p, Location loc) {
+	public GeneratorObject getGenerator(UUID uuid, Location loc) {
 		for(GeneratorObject g : generators) {
-			if(g.getOwnerUUID().equals(p.getUniqueId()) && g.getFurnace().getLocation().equals(loc)) {
+			if(g.getOwnerUUID().equals(uuid) && g.getFurnace().getLocation().equals(loc)) {
 				if(g.isPlaced()) {
 					return g;
 				} else {

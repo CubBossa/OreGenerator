@@ -58,7 +58,7 @@ public class BlockFormListener implements Listener {
 		} else {
 			m = calcOres(g.getLevel(), d);
 		}
-        OreGenerationEvent generateEvent = new OreGenerationEvent(g.getFurnace().getLocation(), m, g);
+        OreGenerationEvent generateEvent = new OreGenerationEvent(g == null ? null : g.getFurnace().getLocation(), m, g);
         Generator.getInstance().getServer().getPluginManager().callEvent(generateEvent);
         
         if(!generateEvent.isCancelled()) {

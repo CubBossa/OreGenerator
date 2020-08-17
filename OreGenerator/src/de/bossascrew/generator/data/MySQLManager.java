@@ -107,6 +107,39 @@ public class MySQLManager {
 		return ret;
 	}
 	
+	public boolean registerGenerator(GeneratorObject g) {
+		Connection con = connect();
+		boolean ret = false;
+		if(con == null) return ret;
+		
+		try {
+			String statement = "INSERT INTO " + TABLE_NAME + " (uuid, level, isPlaced, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement ps = con.prepareStatement(statement);
+			System.out.println("INSTERT Generator: " + g);
+			ps.setString(1, g.getOwnerUUID().toString());
+			ps.setInt(2, g.getLevel());
+			ps.setBoolean(3, g.isPlaced());
+			ps.setString(4, g.getFurnace().getLocation().getWorld().getName());
+			ps.setInt(5, g.getFurnace().getLocation().getBlockX());
+			ps.setInt(6, g.getFurnace().getLocation().getBlockY());
+			ps.setInt(7, g.getFurnace().getLocation().getBlockZ());
+			
+			ps.executeUpdate();
+			ps.close();
+			ret = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	
 	public boolean saveGenerator(GeneratorObject g) {
 		Connection con = connect();
 		boolean ret = false;
@@ -211,15 +244,6 @@ public class MySQLManager {
 			e.printStackTrace();
 		}
 		return ret;
-	}
-	
-	public GeneratorObject loadGenerator(UUID uuid, Location loc) {
-		for(GeneratorObject go : loadGenerators(uuid)) {
-			if(go.getFurnace().getLocation().equals(loc)) {
-				return go;
-			}
-		}
-		return null;
 	}
 	
 	public static MySQLManager getInstance() {

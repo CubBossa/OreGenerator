@@ -23,7 +23,6 @@ public class PrepareItemCraftListener implements Listener {
 		if(event.getInventory().contains(new ItemStack(Material.DIRT))) {
 			event.getRecipe().getResult().setItemMeta(Generator.GENERATOR_ITEM.getItemMeta());
 		}
-		
 		//TODO vom vercraften abhalten
 	}
 }

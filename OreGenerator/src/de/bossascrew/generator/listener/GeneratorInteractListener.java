@@ -31,7 +31,7 @@ public class GeneratorInteractListener implements Listener {
 					event.setCancelled(true);
 					Player p = event.getPlayer();
 					if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-						GeneratorObject g = DataManager.getInstance().getGenerator(p, bf.getLocation());
+						GeneratorObject g = DataManager.getInstance().getGenerator(p.getUniqueId(), bf.getLocation());
 						g.open(p);
 					} else {
 						informPlayerOnDrop(p);

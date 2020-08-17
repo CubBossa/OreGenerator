@@ -28,12 +28,14 @@ public class BlockPlaceListener implements Listener {
 			GeneratorObject go;
 			if(level == "-1") {
 				go = DataManager.getInstance().createGenerator(event.getPlayer().getUniqueId(), (BlastFurnace) event.getBlockPlaced().getState(), 0);
+				System.out.println(go);
 			} else {
-				go = DataManager.getInstance().getGenerator(event.getPlayer(), event.getBlockPlaced().getLocation());
+				go = DataManager.getInstance().getGenerator(event.getPlayer().getUniqueId(), event.getBlockPlaced().getLocation());
 			}
 			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced().getState();
+			System.out.println("bf: " + bf);
 			bf.setCustomName(Generator.GENERATOR_CODENAME);
-			go.place((BlastFurnace) event.getBlockPlaced().getState());
+			go.place(bf);
 		}
 	}
 }
