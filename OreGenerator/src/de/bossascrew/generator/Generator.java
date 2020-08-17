@@ -18,8 +18,7 @@ public class Generator extends JavaPlugin {
 	
 	public static final ItemStack GENERATOR_ITEM = Crafting.getGeneratorItem();
 	public static final String PREFIX = "§6Jeff §>";
-	public static final String GENERATOR_NAME = "§fErze-Generator";
-	public static final String NBT_GENERATOR_CODENAME = "akskfp19e7askd"; //"verschlüsselt"
+	public static final String GENERATOR_NAME = "§a§f§g§fErze-Generator";
 	public static final String GUI_TITLE = "§9Erze Generator";
 	public static final String USE_GUI_TO_DROP = PREFIX + " §7Benutze das Menü des Generators, um ihn zu droppen!";
 	public static final int USE_GUI_TO_DROP_DELAY = 5;
@@ -56,6 +55,10 @@ public class Generator extends JavaPlugin {
 			getPluginLoader().disablePlugin(this);
 		}
 		
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			DataManager.getInstance().loadPlayer(p.getUniqueId());
+		}
+		
 		DataManager.getInstance().savingRoutine();
 	}
 	
@@ -65,7 +68,6 @@ public class Generator extends JavaPlugin {
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			DataManager.getInstance().savePlayer(p.getUniqueId());
 		}
-		
 		printToConsole("Plugin heruntergefahren");
 	}
 	

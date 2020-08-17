@@ -115,7 +115,6 @@ public class MySQLManager {
 		try {
 			String statement = "INSERT INTO " + TABLE_NAME + " (uuid, level, isPlaced, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = con.prepareStatement(statement);
-			System.out.println("INSTERT Generator: " + g);
 			ps.setString(1, g.getOwnerUUID().toString());
 			ps.setInt(2, g.getLevel());
 			ps.setBoolean(3, g.isPlaced());
@@ -151,10 +150,17 @@ public class MySQLManager {
 			
 			ps.setInt(1, g.getLevel());
 			ps.setBoolean(2, g.isPlaced());
-			ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
-			ps.setInt(4, g.getFurnace().getLocation().getBlockX());
-			ps.setInt(5, g.getFurnace().getLocation().getBlockY());
-			ps.setInt(6, g.getFurnace().getLocation().getBlockZ());
+			if(g.isPlaced()) {
+				ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
+				ps.setInt(4, g.getFurnace().getLocation().getBlockX());
+				ps.setInt(5, g.getFurnace().getLocation().getBlockY());
+				ps.setInt(6, g.getFurnace().getLocation().getBlockZ());				
+			} else {
+				ps.setString(3, null);
+				ps.setInt(4, 0);
+				ps.setInt(5, 0);
+				ps.setInt(6, 0);
+			}
 			ps.setString(7, g.getOwnerUUID().toString());
 			ps.setInt(8, g.getId());
 			

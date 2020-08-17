@@ -105,7 +105,7 @@ public class BlockFormListener implements Listener {
 	public GeneratorObject isGenerator(Location loc) {
 		BlastFurnace b = (BlastFurnace) loc.getBlock().getState();
 		if(b == null) return null;
-		if(b.getCustomName() != null && b.getCustomName().equalsIgnoreCase(Generator.NBT_GENERATOR_CODENAME)) {
+		if(b.getCustomName() != null && b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_NAME)) {
 			return DataManager.getInstance().getGenerator(loc);
 		}
 		return null;

@@ -37,7 +37,7 @@ public class DataManager {
 	
 	public GeneratorObject createGenerator(UUID uuid, BlastFurnace bf, int level) {
 		GeneratorObject go = new GeneratorObject(uuid, bf, level);
-		System.out.println("generator wird gespeichert: " + go);
+		go.setPlaced(true);
 		MySQLManager.getInstance().registerGenerator(go);
 		
 		loadPlayer(uuid);
@@ -52,8 +52,9 @@ public class DataManager {
 					isSet = true;
 				}
 			}
-			if(!isSet)
+			if(!isSet) {
 				generators.add(g);
+			}
 		}
 	}
 	
@@ -97,7 +98,9 @@ public class DataManager {
 	
 	public GeneratorObject getGenerator(UUID uuid, Location loc) {
 		for(GeneratorObject g : generators) {
-			if(g.getOwnerUUID().equals(uuid) && g.getFurnace().getLocation().equals(loc)) {
+			System.out.println("Wir suchen generator. Furnace: " + g.getFurnace());
+			
+			if(g.getOwnerUUID().equals(uuid) && g.getFurnace() != null && g.getFurnace().getLocation().equals(loc)) {
 				if(g.isPlaced()) {
 					return g;
 				} else {

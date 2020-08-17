@@ -14,7 +14,7 @@ public class BlockBreakListener implements Listener {
 	public void onBreak(BlockBreakEvent e) {
 		
 		if(e.getBlock() != null && e.getBlock().getType() == Material.BLAST_FURNACE) {
-			if(((BlastFurnace) e.getBlock().getState()).getCustomName().equals(Generator.NBT_GENERATOR_CODENAME)) {
+			if(((BlastFurnace) e.getBlock().getState()).getCustomName().equals(Generator.GENERATOR_NAME)) {
 				e.setCancelled(true);
 			}
 		}

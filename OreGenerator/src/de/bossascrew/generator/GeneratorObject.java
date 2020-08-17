@@ -3,6 +3,8 @@ package de.bossascrew.generator;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 
@@ -51,9 +53,16 @@ public class GeneratorObject {
 		return isPlaced;
 	}
 	
+	public void setPlaced(boolean placed) {
+		this.isPlaced = placed;
+	}
+	
 	public void place(BlastFurnace furnace) {
 		this.furnace = furnace;
 		this.isPlaced = true;
+		
+		Player p = Bukkit.getPlayer(ownerUUID);
+
 	}
 	
 	public void drop() {
