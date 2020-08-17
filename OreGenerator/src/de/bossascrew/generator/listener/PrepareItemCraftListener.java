@@ -1,13 +1,14 @@
 package de.bossascrew.generator.listener;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-import de.bossascrew.generator.Generator;
+import de.bossascrew.generator.crafting.Crafting;
 
 public class PrepareItemCraftListener implements Listener {
 
@@ -21,7 +22,10 @@ public class PrepareItemCraftListener implements Listener {
 		if(r.getResult().getType() != Material.BLAST_FURNACE) return;
 		
 		if(event.getInventory().contains(new ItemStack(Material.DIRT))) {
-			event.getRecipe().getResult().setItemMeta(Generator.GENERATOR_ITEM.getItemMeta());
+			if(event.getView().getPlayer() instanceof Player) {
+				Player p = (Player) event.getView().getPlayer();
+				event.getRecipe().getResult().setItemMeta(Crafting.getGeneratorItem(p.getUniqueId()).getItemMeta());
+			}
 		}
 		//TODO vom vercraften abhalten
 	}

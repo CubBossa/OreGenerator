@@ -3,8 +3,6 @@ package de.bossascrew.generator;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 
@@ -23,7 +21,6 @@ public class GeneratorObject {
 	public GeneratorObject(UUID ownerUUID, BlastFurnace furnace, int level) {
 		this.ownerUUID = ownerUUID;
 		this.furnace = furnace;
-		gui = new GUI(this);
 	}
 
 	public boolean tryUpgrade(int level) {
@@ -46,6 +43,7 @@ public class GeneratorObject {
 	}
 	
 	public void refreshGUI() {
+		gui = new GUI(id);
 		this.gui.refresh();
 	}
 	
@@ -60,9 +58,6 @@ public class GeneratorObject {
 	public void place(BlastFurnace furnace) {
 		this.furnace = furnace;
 		this.isPlaced = true;
-		
-		Player p = Bukkit.getPlayer(ownerUUID);
-
 	}
 	
 	public void drop() {
@@ -73,6 +68,8 @@ public class GeneratorObject {
 	
 	public void open(Player p) {
 		p.closeInventory();
+		gui = new GUI(id);
+		gui.refresh();
 		p.openInventory(gui.getInventory());
 	}
 	

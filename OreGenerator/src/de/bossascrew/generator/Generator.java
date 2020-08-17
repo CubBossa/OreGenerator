@@ -2,7 +2,6 @@ package de.bossascrew.generator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bossascrew.generator.crafting.Crafting;
@@ -16,7 +15,6 @@ public class Generator extends JavaPlugin {
 	
 	EventManager events;
 	
-	public static final ItemStack GENERATOR_ITEM = Crafting.getGeneratorItem();
 	public static final String PREFIX = "§6Jeff §>";
 	public static final String GENERATOR_NAME = "§a§f§g§fErze-Generator";
 	public static final String GUI_TITLE = "§9Erze Generator";
@@ -25,6 +23,8 @@ public class Generator extends JavaPlugin {
 	
 	public static final String NBT_GENERATORID_KEY = "generatorID";
 	public static final String NBT_LEVEL_KEY = "level";
+	public static final String NBT_OWNER_UUID_KEY = "ownerUUID";
+	public static final String NBT_OWNER_NONE_VALUE = "none";
 	public static final String NBT_ACTION_KEY = "action";
 	public static final String NBT_ACTION_VALUE_DROP = "drop";
 	public static final String NBT_ACTION_VALUE_LEVELINFO = "levelinform";

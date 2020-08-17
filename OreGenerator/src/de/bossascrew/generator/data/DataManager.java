@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlastFurnace;
 
+import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
 
 public class DataManager {
@@ -20,28 +22,23 @@ public class DataManager {
 	}
 	
 	public void savingRoutine() {
-        Thread thread = new Thread(() -> {
-            try {
-                while (true) {
-                    Thread.sleep(1000 * 60 * 1); // this routine runs every 1 minutes
-                    for(GeneratorObject g : generators) {
-                    	MySQLManager.getInstance().saveGenerator(g);
-                    }
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(Generator.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+                for(GeneratorObject g : generators) {
+                	MySQLManager.getInstance().saveGenerator(g);
                 }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        });
-        thread.start();
+			}
+		}, 20, 1*60*20);
 	}
 	
-	public GeneratorObject createGenerator(UUID uuid, BlastFurnace bf, int level) {
-		GeneratorObject go = new GeneratorObject(uuid, bf, level);
+	public GeneratorObject createGenerator(UUID uuid, Location loc, int level) {
+		GeneratorObject go = new GeneratorObject(uuid, (BlastFurnace) loc.getBlock().getState(), level);
 		go.setPlaced(true);
 		MySQLManager.getInstance().registerGenerator(go);
 		
 		loadPlayer(uuid);
-		return getGenerator(uuid, bf.getLocation());
+		return getGenerator(uuid, loc);
 	}
 	
 	public void loadPlayer(UUID uuid) {
@@ -98,14 +95,12 @@ public class DataManager {
 	
 	public GeneratorObject getGenerator(UUID uuid, Location loc) {
 		for(GeneratorObject g : generators) {
-			System.out.println("Wir suchen generator. Furnace: " + g.getFurnace());
-			
 			if(g.getOwnerUUID().equals(uuid) && g.getFurnace() != null && g.getFurnace().getLocation().equals(loc)) {
-				if(g.isPlaced()) {
+				//if(g.isPlaced()) {
 					return g;
-				} else {
-					return null;
-				}
+				//} else {
+					//return null;
+				//}
 			}
 		}
 		return null;

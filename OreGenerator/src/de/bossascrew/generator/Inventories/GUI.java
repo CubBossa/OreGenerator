@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
+import de.bossascrew.generator.data.DataManager;
 import de.bossascrew.generator.utils.Dimension;
 import de.bossascrew.generator.utils.Level;
 import de.bossascrew.generator.utils.LevelRequirements;
@@ -29,8 +30,8 @@ public class GUI {
 	GeneratorObject generator;
 	Inventory inv;
 	
-	public GUI(GeneratorObject generator) {
-		this.generator = generator;
+	public GUI(int generatorID) {
+		this.generator = DataManager.getInstance().getGenerator(generatorID);
 		inv = Bukkit.createInventory(null, 3 * 9, Generator.GUI_TITLE);
 	}
 	
@@ -87,6 +88,10 @@ public class GUI {
 		
 		boolean accessed = false;
 		boolean oneAbove = false;
+		
+		System.out.println(generator.getLevel());
+		System.out.println(level.getLevel());
+		
 		if(level.getLevel() <= generator.getLevel()) accessed = true;
 		else if(level.getLevel() == generator.getLevel()+1) oneAbove = true;
 		
