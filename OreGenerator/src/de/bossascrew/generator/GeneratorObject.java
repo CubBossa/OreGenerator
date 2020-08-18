@@ -47,24 +47,20 @@ public class GeneratorObject {
 		for(ItemStack req : lr.getRequirememts()) {
 			int counter = 0;
 			List<Integer> slotsToClear = new ArrayList<Integer>();
-			System.out.println("Der check beginnt");
 			for(int x = 0; x < p.getInventory().getSize(); x++) {
 				ItemStack given = p.getInventory().getItem(x);
 				if(given != null && given.getType() == req.getType()) {
 					if(given.getAmount() > req.getAmount()) {
 						given.setAmount(given.getAmount() - req.getAmount());
 						ret = true;
-						System.out.println(given.getAmount() + " > " + req.getAmount());
 						break;
 					} else if(given.getAmount() == req.getAmount()) {
 						p.getInventory().setItem(x, null);
 						ret = true;
-						System.out.println(given.getAmount() + " = " + req.getAmount());
 						break;
 					} else {
 						counter += given.getAmount();
 						slotsToClear.add(x);
-						System.out.println(given.getAmount() + " < " + req.getAmount());
 						if(counter > req.getAmount()) break;
 					}
 				}

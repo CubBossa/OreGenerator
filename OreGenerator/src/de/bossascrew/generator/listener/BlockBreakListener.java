@@ -30,11 +30,6 @@ public class BlockBreakListener implements Listener {
 					informPlayerOnDrop(e.getPlayer());
 				}
 			}
-		} else {
-			for(GeneratorObject g : DataManager.getInstance().getGenerators(e.getPlayer().getUniqueId())) {
-				System.out.println(g.getFurnace() + ", id: " + g.getId());
-				System.out.println("Isplaced: " + g.isPlaced());
-			}
 		}
 	}
 	

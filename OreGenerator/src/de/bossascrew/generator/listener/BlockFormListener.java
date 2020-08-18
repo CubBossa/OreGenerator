@@ -27,9 +27,11 @@ public class BlockFormListener implements Listener {
 		if(event.isCancelled()) return;
 		if(!event.getBlock().isLiquid()) return;
 		
+		boolean lava = event.getBlock().getType() == Material.LAVA;
+		
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
-            if(setRandomOres(to.getLocation())) {
+            if(setRandomOres(lava ? event.getBlock().getLocation() : to.getLocation())) {
             	event.setCancelled(true);
             }
             return;
@@ -46,6 +48,15 @@ public class BlockFormListener implements Listener {
         }
 	}
 	
+	public boolean generates(Block from, Block to) {
+        if (!to.isLiquid()) return false;
+        return generates(from.getType(), to.getType());
+	}
+
+    private boolean generates(Material from, Material to) {
+        return from != to;
+    }
+    
 	public boolean setRandomOres(Location loc) {
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
@@ -110,13 +121,4 @@ public class BlockFormListener implements Listener {
 		}
 		return null;
 	}
-	
-	public boolean generates(Block from, Block to) {
-        if (!to.isLiquid()) return false;
-        return generates(from.getType(), to.getType());
-	}
-
-    private boolean generates(Material from, Material to) {
-        return from != to;
-    }
 }

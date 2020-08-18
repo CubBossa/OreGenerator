@@ -149,7 +149,6 @@ public class MySQLManager {
 			PreparedStatement ps = con.prepareStatement(statement);
 			
 			ps.setInt(1, g.getLevel());
-			System.out.println("Das hier ist der scheinbar faule wert: " + g.isPlaced());
 			ps.setInt(2, g.isPlaced() ? 1 : 0);
 			if(g.isPlaced()) {
 				ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
@@ -201,6 +200,7 @@ public class MySQLManager {
 				}
 				GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
 				go.setId(result.getInt("id"));
+				go.setPlaced(placed);
 				ret.add(go);
 			}
 			result.close();
