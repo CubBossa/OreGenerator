@@ -85,7 +85,7 @@ public class DataManager {
 	public GeneratorObject getGenerator(Location loc) {
 		GeneratorObject g = null;
 		for(GeneratorObject go : generators) {
-			if(go.getFurnace().getLocation() == loc) {
+			if(go.getFurnace().getLocation().equals(loc)) {
 				g = go;
 			}
 		}

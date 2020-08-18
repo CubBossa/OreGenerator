@@ -1,11 +1,15 @@
 package de.bossascrew.generator;
 
+import java.beans.ParameterDescriptor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import de.bossascrew.generator.Inventories.GUI;
 import de.bossascrew.generator.crafting.Crafting;
@@ -28,9 +32,46 @@ public class GeneratorObject {
 	public boolean tryUpgrade(int level) {
 		if(canUpgrade(level)) {
 			LevelRequirements lr = LevelRequirements.fromLevel(level);
-			
-			//TODO items removen und Upgraden
-			return true;
+			//TODO upgrade sound
+			//TODO partikel
+			Player p = Bukkit.getPlayer(ownerUUID);
+			boolean ret = false;
+			for(ItemStack req : lr.getRequirememts()) {
+				if(p.getInventory().contains(req)) {
+					int counter = 0;
+					List<ItemStack> slotsToClear = new ArrayList<ItemStack>();
+					for(ItemStack given : p.getInventory()) {
+						if(given != null && given.getType() == req.getType()) {
+							if(given.getAmount() > req.getAmount()) {
+								given.setAmount(given.getAmount() - req.getAmount());
+								ret = true;
+								break;
+							} else if(given.getAmount() == req.getAmount()) {
+								given.setType(Material.AIR);
+								ret = true;
+								break;
+							} else {
+								counter += given.getAmount();
+								slotsToClear.add(given);
+								if(counter > req.getAmount()) break;
+							}
+						}
+					}
+					if(counter > req.getAmount()) {
+						for(int i = 0; i < slotsToClear.size()-1; i++) {
+							slotsToClear.get(i).setType(Material.AIR);
+						}
+						slotsToClear.get(slotsToClear.size()-1).setAmount(counter-req.getAmount());
+						ret = true;
+					} else if(counter == req.getAmount()) {
+						for(ItemStack i : slotsToClear) {
+							i.setType(Material.AIR);
+						}
+						ret = true;
+					}
+				}
+			}
+			return ret;
 		}
 		return false;
 	}
@@ -68,7 +109,7 @@ public class GeneratorObject {
 		Bukkit.getPlayer(ownerUUID).closeInventory();
 		this.furnace.getBlock().setType(Material.AIR);
 		this.furnace = null;
-		Bukkit.getPlayer(ownerUUID).getInventory().addItem(Crafting.getGeneratorItem(ownerUUID.toString(), level));
+		Bukkit.getPlayer(ownerUUID).getInventory().addItem(Crafting.getGeneratorItem(id, ownerUUID.toString(), level));
 		this.isPlaced = false;
 	}
 	

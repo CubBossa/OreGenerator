@@ -50,7 +50,9 @@ public class BlockPlaceListener implements Listener {
 				go = DataManager.getInstance().createGenerator(event.getPlayer().getUniqueId(), event.getBlock().getLocation(), 0);
 				System.out.println(go);
 			} else {
-				go = DataManager.getInstance().getGenerator(event.getPlayer().getUniqueId(), event.getBlockPlaced().getLocation());
+				NBTItem i = new NBTItem(event.getItemInHand());
+				int id = i.getInteger(Generator.NBT_GENERATORID_KEY);
+				go = DataManager.getInstance().getGenerator(id);
 			}
 			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced().getState();
 			bf.setCustomName(Generator.GENERATOR_NAME);

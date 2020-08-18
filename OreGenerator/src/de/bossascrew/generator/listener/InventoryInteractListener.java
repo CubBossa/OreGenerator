@@ -28,9 +28,18 @@ public class InventoryInteractListener implements Listener {
 		int clickedLevel = item.getInteger(Generator.NBT_LEVEL_KEY);
 		switch (action) {
 		case Generator.NBT_ACTION_VALUE_LEVELINFO:
-			if(clickedLevel+1 == g.getLevel()) {
-				if(g.tryUpgrade(clickedLevel)) {
-					g.refreshGUI();
+			if(clickedLevel > g.getLevel()) {
+				if(clickedLevel == g.getLevel()+1) {
+					if(g.tryUpgrade(clickedLevel)) {
+						System.out.println("Sind wir also hier?");
+						g.refreshGUI();
+					} else {
+						//TODO Villager sound
+						e.getView().getPlayer().sendMessage(Generator.CANT_AFFORD_LEVEL);
+					}
+				} else {
+					//TODO Villager sound
+					e.getView().getPlayer().sendMessage(Generator.CANT_AFFORD_LEVEL);
 				}
 			}
 			break;

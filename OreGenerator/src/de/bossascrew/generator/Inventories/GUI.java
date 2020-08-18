@@ -23,7 +23,8 @@ import de.tr7zw.nbtapi.NBTItem;
 public class GUI {
 
 	public static final Material ITEM_REQ = Material.NAME_TAG;
-	public static final Material ITEM_PROB = Material.MAP;
+	public static final Material ITEM_PROB_ACCESSED = Material.MAP;
+	public static final Material ITEM_PROB_UNACCESSED = Material.PAPER;
 	public static final Material ITEM_DROP = Material.HOPPER;
 	public static final Integer[] LEVEL_SLOTS = {0,1,2,3,4,5};
 	
@@ -86,7 +87,7 @@ public class GUI {
 	}
 	
 	private ItemStack getLevelItemProb(Level level) {
-		ItemStack i = new ItemStack(ITEM_PROB);
+		ItemStack i = new ItemStack(ITEM_PROB_UNACCESSED);
 		
 		boolean accessed = false;
 		boolean oneAbove = false;
@@ -97,6 +98,8 @@ public class GUI {
 		ItemMeta meta = i.getItemMeta();
 		meta.setDisplayName("§f§nWahrscheinlichkeiten:");
 		if(accessed || oneAbove) {
+			if(accessed)
+				i.setType(ITEM_PROB_ACCESSED);
 			meta.setLore(getPropabilities(level));
 		} else {
 			List<String> lore = new ArrayList<String>();
@@ -131,6 +134,8 @@ public class GUI {
 		//TODO auch farbsetup
 		List<String> ret = new ArrayList<String>();
 		LevelRequirements lr = LevelRequirements.fromLevel(level.getLevel());
+		if(level.getLevel() > 1)
+			ret.add("§7- §fVoriges Level");
 		for(ItemStack i : lr.getRequirememts()) {
 			ret.add("§7- §f" + i.getType() + "§7, §a" + i.getAmount() + "x");
 		}

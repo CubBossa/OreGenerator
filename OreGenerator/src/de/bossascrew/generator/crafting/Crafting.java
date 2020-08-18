@@ -13,7 +13,7 @@ import de.tr7zw.nbtapi.NBTItem;
 
 public class Crafting {
 
-	public static ItemStack getGeneratorItem(String uuid, int level) {
+	public static ItemStack getGeneratorItem(int id, String uuid, int level) {
 		
 		ItemStack generator = new ItemStack(Material.BLAST_FURNACE);
 		ItemMeta genMeta = generator.getItemMeta();
@@ -21,22 +21,23 @@ public class Crafting {
 		generator.setItemMeta(genMeta);
 		
 		NBTItem nbt = new NBTItem(generator);
+		nbt.setInteger(Generator.NBT_GENERATORID_KEY, id);
 		nbt.setInteger(Generator.NBT_LEVEL_KEY, level);
 		nbt.setString(Generator.NBT_OWNER_UUID_KEY, uuid.toString());
 		return nbt.getItem();
 	}
 	
 	public static ItemStack getGeneratorItem(UUID uuid) {
-		return getGeneratorItem(uuid.toString(), -1);
+		return getGeneratorItem(0, uuid.toString(), -1);
 	}
 	
 	public static void registerGeneratorCrafting() {
 		
-		ItemStack generator = getGeneratorItem(Generator.NBT_OWNER_NONE_VALUE, -1);
+		ItemStack generator = getGeneratorItem(0, Generator.NBT_OWNER_NONE_VALUE, -1);
 		NamespacedKey key = new NamespacedKey(Generator.getInstance(), "oreGenerator");
 		ShapedRecipe genRecipe = new ShapedRecipe(key, generator);
 		
-		genRecipe.shape("%  "," % ","  %");
+		genRecipe.shape("   "," % ","   ");
 		genRecipe.setIngredient('%', Material.DIRT);
 		
 		Generator.getInstance().getServer().addRecipe(genRecipe);

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public enum LevelRequirements {
 
-	ONE(1, new ItemStack(Material.MUSIC_DISC_PIGSTEP, 64)),
+	ONE(1, new ItemStack(Material.MUSIC_DISC_PIGSTEP, 1)),
 	TWO(2, new ItemStack(Material.POISONOUS_POTATO, 64)),
 	THREE(3, new ItemStack(Material.TRIDENT, 1)),
 	FOUR(4, new ItemStack(Material.NETHER_STAR, 1)),

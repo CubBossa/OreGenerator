@@ -19,6 +19,8 @@ public class Generator extends JavaPlugin {
 	public static final String GENERATOR_NAME = "§a§f§g§fErze-Generator";
 	public static final String GUI_TITLE = "§9Erze Generator";
 	public static final String USE_GUI_TO_DROP = PREFIX + " §7Benutze das Menü des Generators, um ihn zu droppen!";
+	public static final String CANT_AFFORD_LEVEL = "Viel zu teuer bruh";
+	
 	public static final int USE_GUI_TO_DROP_DELAY = 5;
 	
 	public static final String NBT_GENERATORID_KEY = "generatorID";
