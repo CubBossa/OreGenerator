@@ -31,14 +31,6 @@ public enum LevelRequirements {
 		return level;
 	}
 	
-	public boolean canBuy(Inventory inv) {
-		boolean canBuy = true;
-		for(ItemStack i : requirements) {
-			if(!inv.contains(i)) canBuy = false;
-		}
-		return canBuy;
-	}
-	
 	public List<ItemStack> getRequirememts() {
 		return this.requirements;
 	}

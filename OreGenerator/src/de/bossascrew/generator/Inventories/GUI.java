@@ -122,12 +122,12 @@ public class GUI {
 		List<String> ret = new ArrayList<String>();
 		ret.add("§7Oberwelt:");
 		for(Ore o : level.getOres(Dimension.OVERWORLD)) {
-			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.prob * 100 + "§7%");
+			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.getFriendlyProb() + "§7%");
 		}
 		ret.add("");
 		ret.add("§7Im Nether:");
 		for(Ore o : level.getOres(Dimension.NETHER)) {
-			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.prob * 100 + "§7%");
+			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.getFriendlyProb() + "§7%");
 		}
 		return ret;
 	}

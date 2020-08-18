@@ -58,6 +58,7 @@ public class DataManager {
 	public void savePlayer(UUID uuid) {
 		for(GeneratorObject g : getGenerators(uuid)) {
 			if(MySQLManager.getInstance().saveGenerator(g)) {
+				System.out.println("Saving Generator: " + g.getId());
 				generators.remove(g);
 			}
 		}

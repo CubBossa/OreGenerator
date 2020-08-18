@@ -36,12 +36,8 @@ public class BlockPlaceListener implements Listener {
 			}
 			if(!p.getUniqueId().equals(owner)) return;
 			
-			if(p.getGameMode() == GameMode.CREATIVE) {
-				if(p.getInventory().getItemInMainHand().getType() == Material.BLAST_FURNACE) {
-					p.getInventory().getItemInMainHand().setType(null);
-				} else {
-					p.getInventory().getItemInOffHand().setType(null);
-				}
+			if(p.getGameMode().equals(GameMode.CREATIVE)) {
+				event.getItemInHand().setType(Material.AIR);
 			}
 			
 			int level = nbt.getInteger(Generator.NBT_LEVEL_KEY);

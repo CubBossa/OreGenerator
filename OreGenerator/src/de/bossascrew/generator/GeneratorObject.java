@@ -42,66 +42,52 @@ public class GeneratorObject {
 	}
 	
 	public boolean removeItems(int level) {
-		if(canUpgrade(level)) {
-			LevelRequirements lr = LevelRequirements.fromLevel(level);
+		LevelRequirements lr = LevelRequirements.fromLevel(level);
 
-			Player p = Bukkit.getPlayer(ownerUUID);
-			boolean ret = false;
-			for(ItemStack req : lr.getRequirememts()) {
-				if(p.getInventory().contains(req)) {
-					int counter = 0;
-					List<Integer> slotsToClear = new ArrayList<Integer>();
-					for(int x = 0; x < p.getInventory().getSize(); x++) {
-						ItemStack given = p.getInventory().getItem(x);
-						if(given != null && given.getType() == req.getType()) {
-							if(given.getAmount() > req.getAmount()) {
-								given.setAmount(given.getAmount() - req.getAmount());
-								ret = true;
-								System.out.println(given.getAmount() + " > " + req.getAmount());
-								break;
-							} else if(given.getAmount() == req.getAmount()) {
-								p.getInventory().setItem(x, null);
-								ret = true;
-								System.out.println(given.getAmount() + " = " + req.getAmount());
-								break;
-							} else {
-								counter += given.getAmount();
-								slotsToClear.add(x);
-								System.out.println(given.getAmount() + " < " + req.getAmount());
-								if(counter > req.getAmount()) break;
-							}
-						}
-					}
-					if(counter > req.getAmount()) {
-						for(int i = 0; i < slotsToClear.size()-1; i++) {
-							p.getInventory().setItem(slotsToClear.get(i), null);
-						}
-						p.getInventory().getItem(slotsToClear.get(slotsToClear.size()-1)).setAmount(counter-req.getAmount());;
+		Player p = Bukkit.getPlayer(ownerUUID);
+		boolean ret = false;
+		for(ItemStack req : lr.getRequirememts()) {
+			int counter = 0;
+			List<Integer> slotsToClear = new ArrayList<Integer>();
+			System.out.println("Der check beginnt");
+			for(int x = 0; x < p.getInventory().getSize(); x++) {
+				ItemStack given = p.getInventory().getItem(x);
+				if(given != null && given.getType() == req.getType()) {
+					if(given.getAmount() > req.getAmount()) {
+						given.setAmount(given.getAmount() - req.getAmount());
 						ret = true;
-					} else if(counter == req.getAmount()) {
-						for(int i : slotsToClear) {
-							p.getInventory().setItem(i, null);
-						}
+						System.out.println(given.getAmount() + " > " + req.getAmount());
+						break;
+					} else if(given.getAmount() == req.getAmount()) {
+						p.getInventory().setItem(x, null);
 						ret = true;
+						System.out.println(given.getAmount() + " = " + req.getAmount());
+						break;
+					} else {
+						counter += given.getAmount();
+						slotsToClear.add(x);
+						System.out.println(given.getAmount() + " < " + req.getAmount());
+						if(counter > req.getAmount()) break;
 					}
 				}
 			}
-			return ret;
-		}
-		return false;
-	}
-	
-	private boolean canUpgrade(int level) {
-		boolean ret = false;
-		LevelRequirements lr = LevelRequirements.fromLevel(level);
-		if(lr.canBuy(Bukkit.getPlayer(ownerUUID).getInventory())) {
-			ret = true;
+			if(counter > req.getAmount()) {
+				for(int i = 0; i < slotsToClear.size()-1; i++) {
+					p.getInventory().setItem(slotsToClear.get(i), null);
+				}
+				p.getInventory().getItem(slotsToClear.get(slotsToClear.size()-1)).setAmount(counter-req.getAmount());;
+				ret = true;
+			} else if(counter == req.getAmount()) {
+				for(int i : slotsToClear) {
+					p.getInventory().setItem(i, null);
+				}
+				ret = true;
+			}
 		}
 		return ret;
 	}
 	
 	public void refreshGUI() {
-		gui = new GUI(id);
 		this.gui.refresh();
 	}
 	

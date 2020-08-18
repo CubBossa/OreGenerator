@@ -14,13 +14,17 @@ public class ConfigFile {
 	File file;
 	FileConfiguration cfg;
 	
+	int maximumGeneratorCount = 0;
+	
 	public ConfigFile(String path, String name, String fileResource) {
 		this.fileResource = fileResource;
 		this.file = new File(path, name);
 		this.cfg = YamlConfiguration.loadConfiguration(file);
 
-		if(file != null)
+		if(file != null) {
 			setup();
+			load();
+		}
 	}
 	
 	void setup() {
@@ -45,6 +49,15 @@ public class ConfigFile {
 			Generator.printToConsole("Config.yml existiert bereits und wird nicht generiert!");
 		}
 	}
+	
+	public int getMaximumGeneratorCount() {
+		return maximumGeneratorCount;
+	}
+	
+	private void load() {
+		maximumGeneratorCount = cfg.getInt("general.maximumgenerators");
+	}
+	
 	
 	public void save() {
 		try {

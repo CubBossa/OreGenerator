@@ -1,5 +1,6 @@
 package de.bossascrew.generator.listener;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,7 +18,7 @@ public class InventoryInteractListener implements Listener {
 
 		if(e.getCurrentItem() == null) return;
 		if(e.getView().getTitle() != null && !e.getView().getTitle().equals(Generator.GUI_TITLE)) return;
-		
+		if(!(e.getView().getPlayer() instanceof Player)) return;
 		e.setCancelled(true);
 		
 		NBTItem item = new NBTItem(e.getCurrentItem());
@@ -33,12 +34,10 @@ public class InventoryInteractListener implements Listener {
 					if(g.tryUpgrade(clickedLevel)) {
 						g.refreshGUI();
 					} else {
-						//TODO Villager sound
-						e.getView().getPlayer().sendMessage(Generator.CANT_AFFORD_LEVEL);
+						deny((Player) e.getView().getPlayer());
 					}
 				} else {
-					//TODO Villager sound
-					e.getView().getPlayer().sendMessage(Generator.CANT_AFFORD_LEVEL);
+					deny((Player) e.getView().getPlayer());
 				}
 			}
 			break;
@@ -46,5 +45,10 @@ public class InventoryInteractListener implements Listener {
 			g.drop();
 			break;
 		}
+	}
+	
+	public void deny(Player p) {
+		//TODO Villager sound
+		p.sendMessage(Generator.CANT_AFFORD_LEVEL);
 	}
 }

@@ -1,5 +1,7 @@
 package de.bossascrew.generator.utils;
 
+import java.text.DecimalFormat;
+
 import org.bukkit.Material;
 
 public class Ore {
@@ -20,5 +22,11 @@ public class Ore {
 		this.friendlyName = friendlyName;
 		this.mat = mat;
 		this.d = d;
+	}
+	
+	public String getFriendlyProb() {
+		double ret = prob;
+		DecimalFormat df = new DecimalFormat("#.#####");
+		return df.format(ret * 100).toString();
 	}
 }

@@ -14,6 +14,7 @@ public class ItemDeathListener implements Listener {
 	@EventHandler
 	public void onDeath(EntityDeathEvent event) {
 		if(event.getEntityType() == EntityType.DROPPED_ITEM) {
+			System.out.println("Reached something though");
 			ItemStack i = (ItemStack) event.getEntity();
 			NBTItem ib = new NBTItem(i);
 			if(!ib.hasNBTData()) return;
