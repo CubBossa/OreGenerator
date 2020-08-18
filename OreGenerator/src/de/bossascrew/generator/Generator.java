@@ -15,6 +15,8 @@ public class Generator extends JavaPlugin {
 	
 	EventManager events;
 	
+	//TODO Messages in Messages verschieben
+	
 	public static final String PREFIX = "§6Jeff §>";
 	public static final String GENERATOR_NAME = "§a§f§g§fErze-Generator";
 	public static final String GUI_TITLE = "§9Erze Generator";

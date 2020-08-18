@@ -2,6 +2,7 @@ package de.bossascrew.generator;
 
 import java.beans.ParameterDescriptor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,42 +31,56 @@ public class GeneratorObject {
 	}
 
 	public boolean tryUpgrade(int level) {
-		if(canUpgrade(level)) {
-			LevelRequirements lr = LevelRequirements.fromLevel(level);
+		if(removeItems(level)) {
 			//TODO upgrade sound
 			//TODO partikel
+			this.level++;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean removeItems(int level) {
+		if(canUpgrade(level)) {
+			LevelRequirements lr = LevelRequirements.fromLevel(level);
+
 			Player p = Bukkit.getPlayer(ownerUUID);
 			boolean ret = false;
 			for(ItemStack req : lr.getRequirememts()) {
 				if(p.getInventory().contains(req)) {
 					int counter = 0;
-					List<ItemStack> slotsToClear = new ArrayList<ItemStack>();
-					for(ItemStack given : p.getInventory()) {
+					List<Integer> slotsToClear = new ArrayList<Integer>();
+					for(int x = 0; x < p.getInventory().getSize(); x++) {
+						ItemStack given = p.getInventory().getItem(x);
 						if(given != null && given.getType() == req.getType()) {
 							if(given.getAmount() > req.getAmount()) {
 								given.setAmount(given.getAmount() - req.getAmount());
 								ret = true;
+								System.out.println(given.getAmount() + " > " + req.getAmount());
 								break;
 							} else if(given.getAmount() == req.getAmount()) {
-								given.setType(Material.AIR);
+								p.getInventory().setItem(x, null);
 								ret = true;
+								System.out.println(given.getAmount() + " = " + req.getAmount());
 								break;
 							} else {
 								counter += given.getAmount();
-								slotsToClear.add(given);
+								slotsToClear.add(x);
+								System.out.println(given.getAmount() + " < " + req.getAmount());
 								if(counter > req.getAmount()) break;
 							}
 						}
 					}
 					if(counter > req.getAmount()) {
 						for(int i = 0; i < slotsToClear.size()-1; i++) {
-							slotsToClear.get(i).setType(Material.AIR);
+							p.getInventory().setItem(slotsToClear.get(i), null);
 						}
-						slotsToClear.get(slotsToClear.size()-1).setAmount(counter-req.getAmount());
+						p.getInventory().getItem(slotsToClear.get(slotsToClear.size()-1)).setAmount(counter-req.getAmount());;
 						ret = true;
 					} else if(counter == req.getAmount()) {
-						for(ItemStack i : slotsToClear) {
-							i.setType(Material.AIR);
+						for(int i : slotsToClear) {
+							p.getInventory().setItem(i, null);
 						}
 						ret = true;
 					}

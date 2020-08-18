@@ -31,7 +31,6 @@ public class InventoryInteractListener implements Listener {
 			if(clickedLevel > g.getLevel()) {
 				if(clickedLevel == g.getLevel()+1) {
 					if(g.tryUpgrade(clickedLevel)) {
-						System.out.println("Sind wir also hier?");
 						g.refreshGUI();
 					} else {
 						//TODO Villager sound

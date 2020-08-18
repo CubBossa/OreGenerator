@@ -22,7 +22,8 @@ import de.tr7zw.nbtapi.NBTItem;
 
 public class GUI {
 
-	public static final Material ITEM_REQ = Material.NAME_TAG;
+	public static final Material ITEM_REQ_ACCESSED = Material.ENCHANTED_BOOK;
+	public static final Material ITEM_REQ_UNACCESSED = Material.BOOK;
 	public static final Material ITEM_PROB_ACCESSED = Material.MAP;
 	public static final Material ITEM_PROB_UNACCESSED = Material.PAPER;
 	public static final Material ITEM_DROP = Material.HOPPER;
@@ -67,7 +68,7 @@ public class GUI {
 	}
 	
 	private ItemStack getLevelItemReq(Level level) {
-		ItemStack i = new ItemStack(ITEM_REQ);
+		ItemStack i = new ItemStack(ITEM_REQ_UNACCESSED);
 		
 		boolean accessed = false;
 		if(level.getLevel() <= generator.getLevel()) accessed = true;
@@ -76,6 +77,7 @@ public class GUI {
 		if(!accessed) {
 			meta.setLore(getRequirements(level));
 		} else {
+			i.setType(ITEM_REQ_ACCESSED);
 			i = glowItem(i);
 		}
 		i.setItemMeta(meta);
