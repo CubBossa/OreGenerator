@@ -51,6 +51,8 @@ public class DataManager {
 			}
 			if(!isSet) {
 				generators.add(g);
+				System.out.println("Generator geladen: " + g.getId());
+				System.out.println("Ist plaziert: " + g.isPlaced());
 			}
 		}
 	}
@@ -59,6 +61,7 @@ public class DataManager {
 		for(GeneratorObject g : getGenerators(uuid)) {
 			if(MySQLManager.getInstance().saveGenerator(g)) {
 				System.out.println("Saving Generator: " + g.getId());
+				System.out.println("Ist plaziert: " + g.isPlaced());
 				generators.remove(g);
 			}
 		}

@@ -149,7 +149,8 @@ public class MySQLManager {
 			PreparedStatement ps = con.prepareStatement(statement);
 			
 			ps.setInt(1, g.getLevel());
-			ps.setBoolean(2, g.isPlaced());
+			System.out.println("Das hier ist der scheinbar faule wert: " + g.isPlaced());
+			ps.setInt(2, g.isPlaced() ? 1 : 0);
 			if(g.isPlaced()) {
 				ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
 				ps.setInt(4, g.getFurnace().getLocation().getBlockX());
@@ -189,7 +190,7 @@ public class MySQLManager {
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
 				
-				boolean placed = result.getBoolean("isPlaced");
+				boolean placed = result.getInt("isPlaced") == 1;
 				Location loc;
 				BlastFurnace furnace = null;
 				if(placed) {

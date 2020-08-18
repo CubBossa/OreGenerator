@@ -36,10 +36,6 @@ public class BlockPlaceListener implements Listener {
 			}
 			if(!p.getUniqueId().equals(owner)) return;
 			
-			if(p.getGameMode().equals(GameMode.CREATIVE)) {
-				event.getItemInHand().setType(Material.AIR);
-			}
-			
 			int level = nbt.getInteger(Generator.NBT_LEVEL_KEY);
 			GeneratorObject go;
 			if(level == -1) {
@@ -53,6 +49,10 @@ public class BlockPlaceListener implements Listener {
 			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced().getState();
 			bf.setCustomName(Generator.GENERATOR_NAME);
 			go.place(bf);
+			
+			if(p.getGameMode().equals(GameMode.CREATIVE)) {
+				p.getInventory().setItem(event.getHand(), null);
+			}
 		}
 	}
 }
