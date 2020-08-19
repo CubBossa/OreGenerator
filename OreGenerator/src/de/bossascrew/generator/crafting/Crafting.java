@@ -21,6 +21,7 @@ public class Crafting {
 		generator.setItemMeta(genMeta);
 		
 		NBTItem nbt = new NBTItem(generator);
+		nbt.setString(Generator.NBT_TYPE_KEY, Generator.NBT_TYPE_VALUE_GENERATOR);
 		nbt.setInteger(Generator.NBT_GENERATORID_KEY, id);
 		nbt.setInteger(Generator.NBT_LEVEL_KEY, level);
 		nbt.setString(Generator.NBT_OWNER_UUID_KEY, uuid.toString());

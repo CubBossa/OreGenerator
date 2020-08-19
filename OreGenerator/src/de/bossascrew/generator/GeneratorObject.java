@@ -39,6 +39,7 @@ public class GeneratorObject {
 
 	public boolean tryUpgrade(int level) {
 		if(removeItems(level)) {
+			System.out.println("Test2");
 			//TODO upgrade sound
 			//TODO item dissapear plop sound
 			//TODO partikel
@@ -51,6 +52,7 @@ public class GeneratorObject {
 	
 	public boolean removeItems(int level) {
 		LevelRequirements lr = LevelRequirements.fromLevel(level);
+		System.out.println("Test1");
 
 		Player p = Bukkit.getPlayer(ownerUUID);
 		boolean ret = false;

@@ -14,6 +14,7 @@ import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
 import de.bossascrew.generator.data.DataManager;
 import de.bossascrew.generator.data.Message;
+import de.bossascrew.generator.data.Permission;
 import de.tr7zw.nbtapi.NBTItem;
 
 public class BlockPlaceListener implements Listener {
@@ -29,17 +30,23 @@ public class BlockPlaceListener implements Listener {
 
 			Player p = event.getPlayer();
 
-			if(DataManager.getInstance().getGenerators(p.getUniqueId()).size() >= Generator.getInstance().getCfg().getMaximumGeneratorCount()) {
-				//TODO bypasspermission
+			NBTItem nbt = new NBTItem(event.getItemInHand());
+			if(!nbt.getString(Generator.NBT_TYPE_KEY).equals(Generator.NBT_TYPE_VALUE_GENERATOR)) {
+				return;
+			}
+			
+			if(!p.hasPermission(Permission.PLACE_GENERATOR)) {
+				p.sendMessage(Message.NO_PERMISSION);
+				return;
+			}
+			if(DataManager.getInstance().getGenerators(p.getUniqueId()).size() >= Generator.getInstance().getCfg().getMaximumGeneratorCount() && !p.hasPermission(Permission.BYPASS_PLACELIMIT)) {
 				p.sendMessage(Message.MAXIMUM_GENERATORS_PLACED);
 				event.setCancelled(true);
 				return;
 			} else {
 				//TODO spieler sagen wie viele er noch setzen kann
-				
 			}
-			
-			NBTItem nbt = new NBTItem(event.getItemInHand());
+
 			String ownerString = nbt.getString(Generator.NBT_OWNER_UUID_KEY);
 			UUID owner;
 			if(ownerString.equals(Generator.NBT_OWNER_NONE_VALUE)) {

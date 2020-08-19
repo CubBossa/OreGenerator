@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
 import de.bossascrew.generator.data.DataManager;
+import de.bossascrew.generator.data.Message;
 
 public class BlockBreakListener implements Listener {
 
@@ -37,7 +38,7 @@ public class BlockBreakListener implements Listener {
 	private void informPlayerOnDrop(Player p) {
 		if(isInformed.contains(p.getUniqueId())) return;
 		
-		p.sendMessage(Generator.USE_GUI_TO_DROP);
+		p.sendMessage(Message.USE_GUI_TO_DROP);
 		isInformed.add(p.getUniqueId());
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Generator.getInstance(), new Runnable() {

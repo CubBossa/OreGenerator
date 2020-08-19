@@ -19,6 +19,7 @@ public class ConfirmGUI {
 	
 	public ConfirmGUI(GeneratorObject g, int level) {
 		inv = Bukkit.createInventory(null, InventoryType.HOPPER, Generator.GUI_CONFIRM_TITLE);
+		this.level = level;
 		this.g = g;
 	}
 
@@ -28,6 +29,7 @@ public class ConfirmGUI {
 	}
 	
 	public Inventory getInv() {
+		refresh();
 		return inv;
 	}
 	
