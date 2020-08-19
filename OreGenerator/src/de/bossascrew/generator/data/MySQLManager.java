@@ -107,6 +107,38 @@ public class MySQLManager {
 		return ret;
 	}
 	
+	public boolean reRegisterGenerator(GeneratorObject g) {
+		Connection con = connect();
+		boolean ret = false;
+		if(con == null) return ret;
+		
+		try {
+			String statement = "INSERT INTO " + TABLE_NAME + " (id, uuid, level, isPlaced, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement ps = con.prepareStatement(statement);
+			ps.setInt(1, g.getId());
+			ps.setString(2, g.getOwnerUUID().toString());
+			ps.setInt(3, g.getLevel());
+			ps.setBoolean(4, g.isPlaced());
+			ps.setString(5, g.getFurnace().getLocation().getWorld().getName());
+			ps.setInt(6, g.getFurnace().getLocation().getBlockX());
+			ps.setInt(7, g.getFurnace().getLocation().getBlockY());
+			ps.setInt(8, g.getFurnace().getLocation().getBlockZ());
+			
+			ps.executeUpdate();
+			ps.close();
+			ret = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
 	public boolean registerGenerator(GeneratorObject g) {
 		Connection con = connect();
 		boolean ret = false;
@@ -143,13 +175,14 @@ public class MySQLManager {
 		Connection con = connect();
 		boolean ret = false;
 		if(con == null) return ret;
+		if(g.isPlaced()) return ret;
 		
 		try {
 			String statement = "UPDATE " + TABLE_NAME + " SET level = ?, isPlaced = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
 			PreparedStatement ps = con.prepareStatement(statement);
 			
 			ps.setInt(1, g.getLevel());
-			ps.setBoolean(2, g.isPlaced());
+			ps.setInt(2, g.isPlaced() ? 1 : 0);
 			if(g.isPlaced()) {
 				ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
 				ps.setInt(4, g.getFurnace().getLocation().getBlockX());
@@ -189,7 +222,7 @@ public class MySQLManager {
 			ResultSet result = ps.executeQuery();
 			while(result.next()) {
 				
-				boolean placed = result.getBoolean("isPlaced");
+				boolean placed = result.getInt("isPlaced") == 1;
 				Location loc;
 				BlastFurnace furnace = null;
 				if(placed) {
@@ -200,6 +233,7 @@ public class MySQLManager {
 				}
 				GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
 				go.setId(result.getInt("id"));
+				go.setPlaced(placed);
 				ret.add(go);
 			}
 			result.close();
@@ -250,6 +284,25 @@ public class MySQLManager {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+	
+	public void removeGenerator(int id) {
+		Connection con = connect();
+		if(con == null) return;
+		try {
+			String statement = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
+			PreparedStatement ps = con.prepareStatement(statement);
+			ps.setInt(1, id);
+			ps.executeUpdate();
+			ps.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static MySQLManager getInstance() {

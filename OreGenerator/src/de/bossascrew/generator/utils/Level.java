@@ -7,12 +7,14 @@ import org.bukkit.Material;
 
 public enum Level {
 
+	//TODO Richtige werte setzen
+	
 	ZERO(0, 0.004f, 0.009f, 0, 0, 0, 0, 0, 0, 0, 0),
 	ONE(1, 0.0033f, 0.0111f, 0.01f, 0, 0, 0, 0, 0, 0.001f, 0),
-	TWO(2, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
-	THREE(3, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
-	FOUR(4, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
-	FIVE(5, 0.002f, 0.0133f, 0.0111f,  0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0);
+	TWO(2, 0.002f, 0.0133f, 0.0111f, 0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
+	THREE(3, 0.002f, 0.0133f, 0.0111f, 0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
+	FOUR(4, 0.002f, 0.0133f, 0.0111f, 0.00125f, 0.00166f, 0, 0, 0, 0.00133f, 0),
+	FIVE(5, 0.002f, 0.0133f, 0.0111f, 0.0125f, 0.0166f, 0.01f, 0.01f, 0.01f, 0.133f, 0);
 	
 	int level;
 	
@@ -57,10 +59,10 @@ public enum Level {
 		}
 		switch (d) {
 		case OVERWORLD:
-			ores.add(new Ore(1f-current, "Stein", Material.STONE));
+			ret.add(new Ore(1f-current, "Stein", Material.STONE));
 			break;
 		case NETHER:
-			ores.add(new Ore(1f-current, "Schwarzstein", Material.BLACKSTONE, Dimension.NETHER));
+			ret.add(new Ore(1f-current, "Schwarzstein", Material.BLACKSTONE, Dimension.NETHER));
 			break;
 		}
 		return ret;		

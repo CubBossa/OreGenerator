@@ -10,3 +10,7 @@ database:
   username: root
   password: supersafe1234
   tablename: oregenerators
+
+general:
+  maximumgenerators: 2
+  generatorrange: 2

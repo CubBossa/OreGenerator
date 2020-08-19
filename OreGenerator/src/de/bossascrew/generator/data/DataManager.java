@@ -32,6 +32,15 @@ public class DataManager {
 		}, 20, 1*60*20);
 	}
 	
+	public GeneratorObject recreateGenerator(int id, UUID uuid, Location loc, int level) {
+		GeneratorObject g = new GeneratorObject(id, uuid, (BlastFurnace) loc.getBlock().getState(), level);
+		g.setPlaced(true);
+		MySQLManager.getInstance().reRegisterGenerator(g);
+		
+		loadPlayer(g.getOwnerUUID());
+		return getGenerator(g.getOwnerUUID(), g.getFurnace().getLocation());
+	}
+	
 	public GeneratorObject createGenerator(UUID uuid, Location loc, int level) {
 		GeneratorObject go = new GeneratorObject(uuid, (BlastFurnace) loc.getBlock().getState(), level);
 		go.setPlaced(true);
@@ -47,6 +56,7 @@ public class DataManager {
 			for(GeneratorObject gg : generators) {
 				if(g.getId() == gg.getId()) {
 					isSet = true;
+					generators.set(generators.indexOf(gg), g);
 				}
 			}
 			if(!isSet) {
@@ -85,7 +95,7 @@ public class DataManager {
 	public GeneratorObject getGenerator(Location loc) {
 		GeneratorObject g = null;
 		for(GeneratorObject go : generators) {
-			if(go.getFurnace().getLocation() == loc) {
+			if(go.getFurnace().getLocation().equals(loc)) {
 				g = go;
 			}
 		}
@@ -104,6 +114,10 @@ public class DataManager {
 			}
 		}
 		return null;
+	}
+	
+	public void dropGenerator(int id) {
+		MySQLManager.getInstance().removeGenerator(id);
 	}
 	
 	public static DataManager getInstance() {

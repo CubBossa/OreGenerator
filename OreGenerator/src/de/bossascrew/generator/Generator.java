@@ -15,12 +15,14 @@ public class Generator extends JavaPlugin {
 	
 	EventManager events;
 	
-	public static final String PREFIX = "§6Jeff §>";
+	//TODO Messages in Messages verschieben
+	
 	public static final String GENERATOR_NAME = "§a§f§g§fErze-Generator";
-	public static final String GUI_TITLE = "§9Erze Generator";
-	public static final String USE_GUI_TO_DROP = PREFIX + " §7Benutze das Menü des Generators, um ihn zu droppen!";
+	
 	public static final int USE_GUI_TO_DROP_DELAY = 5;
 	
+	public static final String NBT_TYPE_KEY = "itemtyp";
+	public static final String NBT_TYPE_VALUE_GENERATOR = "oregenerator";
 	public static final String NBT_GENERATORID_KEY = "generatorID";
 	public static final String NBT_LEVEL_KEY = "level";
 	public static final String NBT_OWNER_UUID_KEY = "ownerUUID";
@@ -28,6 +30,8 @@ public class Generator extends JavaPlugin {
 	public static final String NBT_ACTION_KEY = "action";
 	public static final String NBT_ACTION_VALUE_DROP = "drop";
 	public static final String NBT_ACTION_VALUE_LEVELINFO = "levelinform";
+	public static final String NBT_ACTION_VALUE_CONFIRM = "confirm";
+	public static final String NBT_ACTION_VALUE_DENY = "deny";
 	
 	ConfigFile config;
 	
@@ -77,5 +81,9 @@ public class Generator extends JavaPlugin {
 	
 	public static Generator getInstance() {
 		return instance;
+	}
+	
+	public ConfigFile getCfg() {
+		return config;
 	}
 }
