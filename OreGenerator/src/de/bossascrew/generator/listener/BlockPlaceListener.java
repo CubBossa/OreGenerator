@@ -13,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
 import de.bossascrew.generator.data.DataManager;
+import de.bossascrew.generator.data.Message;
 import de.tr7zw.nbtapi.NBTItem;
 
 public class BlockPlaceListener implements Listener {
@@ -27,6 +28,17 @@ public class BlockPlaceListener implements Listener {
 		if(event.getBlock().getType() == Material.BLAST_FURNACE) {
 
 			Player p = event.getPlayer();
+
+			if(DataManager.getInstance().getGenerators(p.getUniqueId()).size() >= Generator.getInstance().getCfg().getMaximumGeneratorCount()) {
+				//TODO bypasspermission
+				p.sendMessage(Message.MAXIMUM_GENERATORS_PLACED);
+				event.setCancelled(true);
+				return;
+			} else {
+				//TODO spieler sagen wie viele er noch setzen kann
+				
+			}
+			
 			NBTItem nbt = new NBTItem(event.getItemInHand());
 			String ownerString = nbt.getString(Generator.NBT_OWNER_UUID_KEY);
 			UUID owner;
@@ -44,14 +56,21 @@ public class BlockPlaceListener implements Listener {
 			} else {
 				NBTItem i = new NBTItem(event.getItemInHand());
 				int id = i.getInteger(Generator.NBT_GENERATORID_KEY);
-				go = DataManager.getInstance().getGenerator(id);
+				String uuid = i.getString(Generator.NBT_OWNER_UUID_KEY);
+				int l = i.getInteger(Generator.NBT_LEVEL_KEY);
+				go = DataManager.getInstance().recreateGenerator(id, UUID.fromString(uuid), event.getBlock().getLocation(), l);
+				System.out.println(go);
 			}
 			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced().getState();
 			bf.setCustomName(Generator.GENERATOR_NAME);
 			go.place(bf);
 			
 			if(p.getGameMode().equals(GameMode.CREATIVE)) {
-				p.getInventory().setItem(event.getHand(), null);
+				if(event.getItemInHand().getAmount() > 1) {
+					event.getItemInHand().setAmount(event.getItemInHand().getAmount()-1);
+				} else {
+					p.getInventory().setItem(event.getHand(), null);
+				}
 			}
 		}
 	}

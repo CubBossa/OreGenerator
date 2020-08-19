@@ -26,14 +26,13 @@ public class DataManager {
 			@Override
 			public void run() {
                 for(GeneratorObject g : generators) {
-                	Bukkit.broadcastMessage("Speicherroutine");
                 	MySQLManager.getInstance().saveGenerator(g);
                 }
 			}
 		}, 20, 1*60*20);
 	}
 	
-	public GeneratorObject createGenerator(int id, UUID uuid, Location loc, int level) {
+	public GeneratorObject recreateGenerator(int id, UUID uuid, Location loc, int level) {
 		GeneratorObject g = new GeneratorObject(id, uuid, (BlastFurnace) loc.getBlock().getState(), level);
 		g.setPlaced(true);
 		MySQLManager.getInstance().reRegisterGenerator(g);
@@ -57,6 +56,7 @@ public class DataManager {
 			for(GeneratorObject gg : generators) {
 				if(g.getId() == gg.getId()) {
 					isSet = true;
+					generators.set(generators.indexOf(gg), g);
 				}
 			}
 			if(!isSet) {

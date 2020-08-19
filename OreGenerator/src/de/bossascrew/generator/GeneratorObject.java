@@ -40,6 +40,7 @@ public class GeneratorObject {
 	public boolean tryUpgrade(int level) {
 		if(removeItems(level)) {
 			//TODO upgrade sound
+			//TODO item dissapear plop sound
 			//TODO partikel
 			this.level++;
 			return true;

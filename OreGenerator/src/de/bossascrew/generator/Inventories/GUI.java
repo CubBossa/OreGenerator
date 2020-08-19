@@ -24,8 +24,8 @@ public class GUI {
 
 	public static final Material ITEM_REQ_ACCESSED = Material.ENCHANTED_BOOK;
 	public static final Material ITEM_REQ_UNACCESSED = Material.BOOK;
-	public static final Material ITEM_PROB_ACCESSED = Material.MAP;
-	public static final Material ITEM_PROB_UNACCESSED = Material.PAPER;
+	public static final Material ITEM_PROB_ACCESSED = Material.PAPER;
+	public static final Material ITEM_PROB_UNACCESSED = Material.MAP;
 	public static final Material ITEM_DROP = Material.HOPPER;
 	public static final Integer[] LEVEL_SLOTS = {0,1,2,3,4,5};
 	

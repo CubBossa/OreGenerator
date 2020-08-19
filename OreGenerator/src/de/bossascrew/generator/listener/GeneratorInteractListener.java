@@ -23,7 +23,7 @@ public class GeneratorInteractListener implements Listener {
 				Player p = event.getPlayer();
 				GeneratorObject g = DataManager.getInstance().getGenerator(p.getUniqueId(), bf.getLocation());
 				if(g != null) {
-					if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+					if(event.getAction() == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
 						event.setCancelled(true);
 						g.open(p);
 					}
