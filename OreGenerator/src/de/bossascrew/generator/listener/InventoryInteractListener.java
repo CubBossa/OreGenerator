@@ -1,6 +1,7 @@
 package de.bossascrew.generator.listener;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +30,7 @@ public class InventoryInteractListener implements Listener {
 		
 		Player p = (Player) e.getView().getPlayer();
 		
-		if(e.getView().getTitle() != null && e.getView().getTitle().equals(Generator.GUI_TITLE)) {
+		if(e.getView().getTitle() != null && e.getView().getTitle().equals(Message.GUI_TITLE)) {
 			e.setCancelled(true);
 
 			String action = item.getString(Generator.NBT_ACTION_KEY);
@@ -56,7 +57,7 @@ public class InventoryInteractListener implements Listener {
 				}
 				break;
 			}
-		} else if(e.getView().getTitle() != null && e.getView().getTitle().equals(Generator.GUI_CONFIRM_TITLE)) {
+		} else if(e.getView().getTitle() != null && e.getView().getTitle().equals(Message.GUI_CONFIRM_TITLE)) {
 			e.setCancelled(true);
 			p.closeInventory();
 			g.open(p);
@@ -71,14 +72,14 @@ public class InventoryInteractListener implements Listener {
 				}
 				break;
 			case Generator.NBT_ACTION_VALUE_DENY:
-				//TODO play sound hewwwww
+				p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
 				break;
 			}				
 		}
 	}
 	
 	public void deny(Player p) {
-		//TODO Villager sound
+		p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
 		p.sendMessage(Message.CANT_AFFORD_LEVEL);
 	}
 }

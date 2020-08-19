@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
 import de.bossascrew.generator.data.DataManager;
+import de.bossascrew.generator.data.Message;
 import de.bossascrew.generator.utils.Dimension;
 import de.bossascrew.generator.utils.Level;
 import de.bossascrew.generator.utils.LevelRequirements;
@@ -34,7 +35,7 @@ public class GUI {
 	
 	public GUI(int generatorID) {
 		this.generator = DataManager.getInstance().getGenerator(generatorID);
-		inv = Bukkit.createInventory(null, 3 * 9, Generator.GUI_TITLE);
+		inv = Bukkit.createInventory(null, 3 * 9, Message.GUI_TITLE);
 	}
 	
 	public Inventory getInventory() {
@@ -54,11 +55,10 @@ public class GUI {
 	private ItemStack getDropItem() {
 		ItemStack i = new ItemStack(ITEM_DROP);
 		ItemMeta m = i.getItemMeta();
-		m.setDisplayName("§nGenerator abbauen");
+		m.setDisplayName(Message.GUI_DROP_TITLE);
 		List<String> lore = new ArrayList<String>();
-		//TODO schicken machen
-		lore.add("Klick hier zu dropp");
-		lore.add("Zeile 2");
+		lore.add(Message.GUI_DROP_LORE1);
+		lore.add(Message.GUI_DROP_LORE2);
 		m.setLore(lore);
 		i.setItemMeta(m);
 		NBTItem inbt = new NBTItem(i);
@@ -73,7 +73,7 @@ public class GUI {
 		boolean accessed = false;
 		if(level.getLevel() <= generator.getLevel()) accessed = true;
 		ItemMeta meta = i.getItemMeta();
-		meta.setDisplayName("§f§nLevel " + level.getLevel());
+		meta.setDisplayName(Message.GUI_REQUIREMENTS_TITLE.replace("[level]", "" + level.getLevel()));
 		if(!accessed) {
 			meta.setLore(getRequirements(level));
 		} else {
@@ -98,15 +98,15 @@ public class GUI {
 		else if(level.getLevel() == generator.getLevel()+1) oneAbove = true;
 		
 		ItemMeta meta = i.getItemMeta();
-		meta.setDisplayName("§f§nWahrscheinlichkeiten:");
+		meta.setDisplayName(Message.GUI_PROBABILITY_PROBS);
 		if(accessed || oneAbove) {
 			if(accessed)
 				i.setType(ITEM_PROB_ACCESSED);
 			meta.setLore(getPropabilities(level));
 		} else {
 			List<String> lore = new ArrayList<String>();
-			lore.add("§8Schalte erst das vorige");
-			lore.add("§8Level frei!");
+			lore.add(Message.GUI_REQUIREMENTS_LORE1);
+			lore.add(Message.GUI_REQUIREMENTS_LORE2);
 			meta.setLore(lore);
 		}
 		i.setItemMeta(meta);
@@ -120,14 +120,14 @@ public class GUI {
 	private List<String> getPropabilities(Level level) {
 		//TODO Farbsetup, evtl auch als Message format auslagern
 		List<String> ret = new ArrayList<String>();
-		ret.add("§7Oberwelt:");
+		ret.add(Message.GUI_PROBABILITY_OVERWORLD);
 		for(Ore o : level.getOres(Dimension.OVERWORLD)) {
-			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.getFriendlyProb() + "§7%");
+			ret.add(Message.GUI_PROBABILITY_FORMAT.replace("[name]", o.friendlyName).replace("[probability]", o.getFriendlyProb()));
 		}
 		ret.add("");
-		ret.add("§7Im Nether:");
+		ret.add(Message.GUI_PROBABILITY_NETHER);
 		for(Ore o : level.getOres(Dimension.NETHER)) {
-			ret.add("§7- §f" + o.friendlyName + "§7: §a" + o.getFriendlyProb() + "§7%");
+			ret.add(Message.GUI_PROBABILITY_FORMAT.replace("[name]", o.friendlyName).replace("[probability]", o.getFriendlyProb()));
 		}
 		return ret;
 	}
@@ -137,9 +137,9 @@ public class GUI {
 		List<String> ret = new ArrayList<String>();
 		LevelRequirements lr = LevelRequirements.fromLevel(level.getLevel());
 		if(level.getLevel() > 1)
-			ret.add("§7- §fVoriges Level");
+			ret.add(Message.GUI_REQUIREMENTS_LEVEL);
 		for(ItemStack i : lr.getRequirememts()) {
-			ret.add("§7- §f" + i.getType() + "§7, §a" + i.getAmount() + "x");
+			ret.add(Message.GUI_REQUIREMENTS_FORMAT.replace("[item]", i.getType() + "").replace("[amount]", i.getAmount() + ""));
 		}
 		return ret;
 	}

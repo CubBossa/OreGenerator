@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
+import de.bossascrew.generator.data.Message;
 import de.tr7zw.nbtapi.NBTItem;
 
 public class ConfirmGUI {
@@ -18,14 +19,14 @@ public class ConfirmGUI {
 	GeneratorObject g;
 	
 	public ConfirmGUI(GeneratorObject g, int level) {
-		inv = Bukkit.createInventory(null, InventoryType.HOPPER, Generator.GUI_CONFIRM_TITLE);
+		inv = Bukkit.createInventory(null, InventoryType.HOPPER, Message.GUI_CONFIRM_TITLE);
 		this.level = level;
 		this.g = g;
 	}
 
 	public void refresh() {
-		inv.setItem(1, createItem(Material.MELON, "§f§nIst mir bewusst", 1, Generator.NBT_ACTION_VALUE_CONFIRM));
-		inv.setItem(3, createItem(Material.RED_MUSHROOM_BLOCK, "§f§nKreisch ernsthaft?! ABBRUCH", 1, Generator.NBT_ACTION_VALUE_DENY));
+		inv.setItem(1, createItem(Material.MELON, Message.GUI_CONFIRM_CONFIRM, 1, Generator.NBT_ACTION_VALUE_CONFIRM));
+		inv.setItem(3, createItem(Material.RED_MUSHROOM_BLOCK, Message.GUI_CONFIRM_DENY, 1, Generator.NBT_ACTION_VALUE_DENY));
 	}
 	
 	public Inventory getInv() {

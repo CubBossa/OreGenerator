@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -111,12 +112,14 @@ public class GeneratorObject {
 	}
 	
 	public void drop() {
-		//TODO Sound & Partikel
+		Player p = Bukkit.getPlayer(ownerUUID);
+		p.playSound(furnace.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+		//TODO Partikel
 		
-		Bukkit.getPlayer(ownerUUID).closeInventory();
+		p.closeInventory();
 		this.furnace.getBlock().setType(Material.AIR);
 		this.furnace = null;
-		Bukkit.getPlayer(ownerUUID).getInventory().addItem(Crafting.getGeneratorItem(id, ownerUUID.toString(), level));
+		p.getInventory().addItem(Crafting.getGeneratorItem(id, ownerUUID.toString(), level));
 		this.isPlaced = false;
 		DataManager.getInstance().dropGenerator(id);
 	}

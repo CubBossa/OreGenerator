@@ -39,12 +39,13 @@ public class BlockPlaceListener implements Listener {
 				p.sendMessage(Message.NO_PERMISSION);
 				return;
 			}
-			if(DataManager.getInstance().getGenerators(p.getUniqueId()).size() >= Generator.getInstance().getCfg().getMaximumGeneratorCount() && !p.hasPermission(Permission.BYPASS_PLACELIMIT)) {
+			int size = DataManager.getInstance().getGenerators(p.getUniqueId()).size();
+			if(size >= Generator.getInstance().getCfg().getMaximumGeneratorCount() && !p.hasPermission(Permission.BYPASS_PLACELIMIT)) {
 				p.sendMessage(Message.MAXIMUM_GENERATORS_PLACED);
 				event.setCancelled(true);
 				return;
 			} else {
-				//TODO spieler sagen wie viele er noch setzen kann
+				p.sendMessage(Message.OUT_OF_PLACED.replace("[placed]", size + "").replace("[maximum]", "" + Generator.getInstance().getCfg().getMaximumGeneratorCount()));
 			}
 
 			String ownerString = nbt.getString(Generator.NBT_OWNER_UUID_KEY);
