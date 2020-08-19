@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
-import de.bossascrew.generator.Inventories.confirmGUI;
+import de.bossascrew.generator.Inventories.ConfirmGUI;
 import de.bossascrew.generator.data.DataManager;
 import de.tr7zw.nbtapi.NBTItem;
 
@@ -35,7 +35,7 @@ public class InventoryInteractListener implements Listener {
 			case Generator.NBT_ACTION_VALUE_LEVELINFO:
 				if(clickedLevel > g.getLevel()) {
 					if(clickedLevel == g.getLevel()+1) {
-						p.openInventory(new confirmGUI(g, clickedLevel).getInv());
+						p.openInventory(new ConfirmGUI(g, clickedLevel).getInv());
 					} else {
 						deny(p);
 					}

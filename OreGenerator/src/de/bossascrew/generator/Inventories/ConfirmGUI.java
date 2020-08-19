@@ -11,13 +11,13 @@ import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
 import de.tr7zw.nbtapi.NBTItem;
 
-public class confirmGUI {
+public class ConfirmGUI {
 
 	int level = 0;
 	Inventory inv = null;
 	GeneratorObject g;
 	
-	public confirmGUI(GeneratorObject g, int level) {
+	public ConfirmGUI(GeneratorObject g, int level) {
 		inv = Bukkit.createInventory(null, InventoryType.HOPPER, Generator.GUI_CONFIRM_TITLE);
 		this.g = g;
 	}
