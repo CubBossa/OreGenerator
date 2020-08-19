@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -32,20 +34,25 @@ public class BlockFormListener implements Listener {
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
             if(setRandomOres(to.getLocation())) {
-            	System.out.println("Fall1 und lava: " + lava);
-            	event.setCancelled(true);
+            	System.out.println("Fall 1 und lava: " + lava);
             }
             return;
         } else {
             BlockFace[] nesw = {/*BlockFace.DOWN, */BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
             for (BlockFace face : nesw) {
                 if (generates(event.getBlock(), to.getRelative(face))) {
-                    if(setRandomOres(lava ? event.getBlock().getLocation() : to.getLocation())) {
-                    	System.out.println("Fall2");
-                    	event.setCancelled(true);
+                    if(setRandomOres(!lava ? to.getRelative(face).getLocation() : to.getLocation())) {
+                    	System.out.println("Fall 2 und lava: " + lava);
                     }
                     return;
                 }
+            }
+            if(generates(event.getBlock(), to.getRelative(BlockFace.DOWN))) {
+            	if(to.getRelative(BlockFace.DOWN).isLiquid() && ((Levelled) to.getRelative(BlockFace.DOWN).getBlockData()).getLevel() != 0) {
+            		if(setRandomOres(to.getRelative(BlockFace.DOWN).getLocation())) {
+            			System.out.println("Fall 3");
+            		}
+            	}
             }
         }
 	}
