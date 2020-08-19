@@ -31,15 +31,17 @@ public class BlockFormListener implements Listener {
 		
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
-            if(setRandomOres(lava ? event.getBlock().getLocation() : to.getLocation())) {
+            if(setRandomOres(to.getLocation())) {
+            	System.out.println("Fall1 und lava: " + lava);
             	event.setCancelled(true);
             }
             return;
         } else {
-            BlockFace[] nesw = {BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+            BlockFace[] nesw = {/*BlockFace.DOWN, */BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
             for (BlockFace face : nesw) {
                 if (generates(event.getBlock(), to.getRelative(face))) {
-                    if(setRandomOres(to.getLocation())) {
+                    if(setRandomOres(lava ? event.getBlock().getLocation() : to.getLocation())) {
+                    	System.out.println("Fall2");
                     	event.setCancelled(true);
                     }
                     return;

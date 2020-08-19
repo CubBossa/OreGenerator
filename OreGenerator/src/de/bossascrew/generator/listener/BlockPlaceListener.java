@@ -20,6 +20,7 @@ public class BlockPlaceListener implements Listener {
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event) {
 		
+		if(event.isCancelled()) return;
 		if(event.getPlayer() == null) return;
 		if(event.getBlockPlaced() == null) return; 
 		
@@ -40,7 +41,6 @@ public class BlockPlaceListener implements Listener {
 			GeneratorObject go;
 			if(level == -1) {
 				go = DataManager.getInstance().createGenerator(event.getPlayer().getUniqueId(), event.getBlock().getLocation(), 0);
-				System.out.println(go);
 			} else {
 				NBTItem i = new NBTItem(event.getItemInHand());
 				int id = i.getInteger(Generator.NBT_GENERATORID_KEY);

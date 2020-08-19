@@ -3,15 +3,18 @@ package de.bossascrew.generator.listener;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class FluidPlaceListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlaceFluid(PlayerInteractEvent event) {
+    	if(event.useItemInHand() == Result.DENY) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         Material type;
         if (event.getItem() == null) return;
