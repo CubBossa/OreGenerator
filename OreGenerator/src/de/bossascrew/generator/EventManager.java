@@ -8,7 +8,6 @@ import de.bossascrew.generator.listener.BlockFormListener;
 import de.bossascrew.generator.listener.BlockPlaceListener;
 import de.bossascrew.generator.listener.GeneratorInteractListener;
 import de.bossascrew.generator.listener.InventoryInteractListener;
-import de.bossascrew.generator.listener.OreGenerationListener;
 import de.bossascrew.generator.listener.PlayerJoinListener;
 import de.bossascrew.generator.listener.PlayerQuitListener;
 import de.bossascrew.generator.listener.PrepareItemCraftListener;
@@ -29,6 +28,5 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new PrepareItemCraftListener(), Generator.getInstance());
         Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), Generator.getInstance());
         Bukkit.getPluginManager().registerEvents(new BlockBreakNaturallyListener(), Generator.getInstance());
-        Bukkit.getPluginManager().registerEvents(new OreGenerationListener(), Generator.getInstance());
     }
 }

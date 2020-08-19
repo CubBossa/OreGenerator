@@ -3,6 +3,7 @@ package de.bossascrew.generator.listener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.block.Block;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.util.Vector;
 
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
@@ -67,11 +69,6 @@ public class BlockFormListener implements Listener {
     }
     
 	public boolean setRandomOres(Location loc) {
-		for(Player p : Bukkit.getOnlinePlayers()) {
-			p.playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 1.0F, 1.0F);
-		}
-		//TODO Partikel
-		
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
@@ -88,9 +85,32 @@ public class BlockFormListener implements Listener {
         
         if(!generateEvent.isCancelled()) {
     		loc.getWorld().getBlockAt(loc).setType(m);
+    		particlesAndSounds(loc, m);
     		return true;
         }
         return false;
+	}
+	
+	private void particlesAndSounds(Location loc, Material m) {
+		
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			p.playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 1.0F, 1.0F);
+			p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 0, 0.0, 0.1, 0.0);
+			if(m != Material.STONE) {
+				p.playSound(loc, Sound.BLOCK_PISTON_EXTEND, 1.0f, 1.0f);
+				p.playSound(loc, Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 1.0f, 1.0f);
+			}
+		}
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Generator.getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				if(m != Material.STONE) {
+					for(Player p : Bukkit.getOnlinePlayers()) {
+						p.playSound(loc, Sound.BLOCK_PISTON_CONTRACT, 1.0f, 1.0f);
+					}
+				}
+			}
+		}, 10L);
 	}
 	
 	private Material calcOres(int level, Dimension d) {
