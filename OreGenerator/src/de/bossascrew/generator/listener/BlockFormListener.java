@@ -1,11 +1,14 @@
 package de.bossascrew.generator.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -36,7 +39,7 @@ public class BlockFormListener implements Listener {
             }
             return;
         } else {
-            BlockFace[] nesw = {/*BlockFace.DOWN, */BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+            BlockFace[] nesw = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
             for (BlockFace face : nesw) {
                 if (generates(event.getBlock(), to.getRelative(face))) {
                     if(setRandomOres(!lava ? to.getRelative(face).getLocation() : to.getLocation())) {
@@ -64,7 +67,11 @@ public class BlockFormListener implements Listener {
     }
     
 	public boolean setRandomOres(Location loc) {
-		//TODO Play zschhh sound
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			p.playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 1.0F, 1.0F);
+		}
+		//TODO Partikel
+		
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;

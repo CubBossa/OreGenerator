@@ -40,9 +40,8 @@ public class GeneratorObject {
 
 	public boolean tryUpgrade(int level) {
 		if(removeItems(level)) {
-			System.out.println("Test2");
-			//TODO upgrade sound
-			//TODO item dissapear plop sound
+			Bukkit.getPlayer(ownerUUID).playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
+			Bukkit.getPlayer(ownerUUID).playSound(furnace.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
 			//TODO partikel
 			this.level++;
 			return true;
@@ -53,7 +52,6 @@ public class GeneratorObject {
 	
 	public boolean removeItems(int level) {
 		LevelRequirements lr = LevelRequirements.fromLevel(level);
-		System.out.println("Test1");
 
 		Player p = Bukkit.getPlayer(ownerUUID);
 		boolean ret = false;
@@ -113,7 +111,7 @@ public class GeneratorObject {
 	
 	public void drop() {
 		Player p = Bukkit.getPlayer(ownerUUID);
-		p.playSound(furnace.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+		p.playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
 		//TODO Partikel
 		
 		p.closeInventory();

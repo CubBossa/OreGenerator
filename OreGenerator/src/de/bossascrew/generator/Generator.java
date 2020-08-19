@@ -15,8 +15,6 @@ public class Generator extends JavaPlugin {
 	
 	EventManager events;
 	
-	//TODO Messages in Messages verschieben
-	
 	public static final String GENERATOR_NAME = "§a§f§g§fErze-Generator";
 	
 	public static final int USE_GUI_TO_DROP_DELAY = 5;
