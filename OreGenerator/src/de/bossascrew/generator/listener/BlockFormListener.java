@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,7 +33,6 @@ public class BlockFormListener implements Listener {
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
             if(setRandomOres(to.getLocation())) {
-            	System.out.println("Fall 1 und lava: " + lava);
             }
             return;
         } else {
@@ -42,7 +40,7 @@ public class BlockFormListener implements Listener {
             for (BlockFace face : nesw) {
                 if (generates(event.getBlock(), to.getRelative(face))) {
                     if(setRandomOres(!lava ? to.getRelative(face).getLocation() : to.getLocation())) {
-                    	System.out.println("Fall 2 und lava: " + lava);
+                    	if(lava) event.setCancelled(true);
                     }
                     return;
                 }
@@ -50,7 +48,6 @@ public class BlockFormListener implements Listener {
             if(generates(event.getBlock(), to.getRelative(BlockFace.DOWN))) {
             	if(to.getRelative(BlockFace.DOWN).isLiquid() && ((Levelled) to.getRelative(BlockFace.DOWN).getBlockData()).getLevel() != 0) {
             		if(setRandomOres(to.getRelative(BlockFace.DOWN).getLocation())) {
-            			System.out.println("Fall 3");
             		}
             	}
             }
@@ -67,6 +64,7 @@ public class BlockFormListener implements Listener {
     }
     
 	public boolean setRandomOres(Location loc) {
+		//TODO Play zschhh sound
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
@@ -104,9 +102,10 @@ public class BlockFormListener implements Listener {
 	}
 	
 	public GeneratorObject seemsGeneratorNear(Location loc) {
-		for(int x = -1; x < 2; x++) {
-			for(int y = -1; y < 2; y++) {
-				for(int z = -1; z < 2; z++) {
+		int generatorRange = Generator.getInstance().getCfg().getGeneratorrange();
+		for(int x = -generatorRange; x <= generatorRange; x++) {
+			for(int y = -generatorRange; y <= generatorRange; y++) {
+				for(int z = -generatorRange; z <= generatorRange; z++) {
 					if(loc.clone().add(x, y, z).getBlock().getType() == Material.BLAST_FURNACE) {
 						GeneratorObject g = isGenerator(loc.clone().add(x,y,z));
 	                    return g;
@@ -125,9 +124,6 @@ public class BlockFormListener implements Listener {
 	public GeneratorObject isGenerator(Location loc) {
 		BlastFurnace b = (BlastFurnace) loc.getBlock().getState();
 		if(b == null) return null;
-		if(b.getCustomName() != null && b.getCustomName().equalsIgnoreCase(Generator.GENERATOR_NAME)) {
-			return DataManager.getInstance().getGenerator(loc);
-		}
-		return null;
+		return DataManager.getInstance().getGenerator(loc);
 	}
 }

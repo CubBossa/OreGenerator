@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.bossascrew.generator.Inventories.GUI;
 import de.bossascrew.generator.crafting.Crafting;
+import de.bossascrew.generator.data.DataManager;
 import de.bossascrew.generator.utils.LevelRequirements;
 
 public class GeneratorObject {
@@ -24,6 +25,14 @@ public class GeneratorObject {
 	GUI gui;
 	
 	public GeneratorObject(UUID ownerUUID, BlastFurnace furnace, int level) {
+		this.level = level;
+		this.ownerUUID = ownerUUID;
+		this.furnace = furnace;
+	}
+	
+	public GeneratorObject(int id, UUID ownerUUID, BlastFurnace furnace, int level) {
+		this.id = id;
+		this.level = level;
 		this.ownerUUID = ownerUUID;
 		this.furnace = furnace;
 	}
@@ -106,6 +115,7 @@ public class GeneratorObject {
 		this.furnace = null;
 		Bukkit.getPlayer(ownerUUID).getInventory().addItem(Crafting.getGeneratorItem(id, ownerUUID.toString(), level));
 		this.isPlaced = false;
+		DataManager.getInstance().dropGenerator(id);
 	}
 	
 	public void open(Player p) {

@@ -15,6 +15,7 @@ public class ConfigFile {
 	FileConfiguration cfg;
 	
 	int maximumGeneratorCount = 0;
+	int generatorrange = 2;
 	
 	public ConfigFile(String path, String name, String fileResource) {
 		this.fileResource = fileResource;
@@ -50,12 +51,17 @@ public class ConfigFile {
 		}
 	}
 	
+	public int getGeneratorrange() {
+		return generatorrange;
+	}
+	
 	public int getMaximumGeneratorCount() {
 		return maximumGeneratorCount;
 	}
 	
 	private void load() {
 		maximumGeneratorCount = cfg.getInt("general.maximumgenerators");
+		generatorrange = cfg.getInt("general.generatorrange");
 	}
 	
 	

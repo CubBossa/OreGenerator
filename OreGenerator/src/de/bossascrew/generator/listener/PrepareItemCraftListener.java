@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
+import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.crafting.Crafting;
 import de.bossascrew.generator.data.DataManager;
 import de.bossascrew.generator.data.Message;
@@ -26,7 +27,7 @@ public class PrepareItemCraftListener implements Listener {
 				if(event.getView().getPlayer() instanceof Player) {
 					Player p = (Player) event.getView().getPlayer();
 					if(p.hasPermission(Permission.CRAFT_GENERATOR)) {
-						if(DataManager.getInstance().getGenerators(p.getUniqueId()).size() < 2) {
+						if(DataManager.getInstance().getGenerators(p.getUniqueId()).size() < Generator.getInstance().getCfg().getMaximumGeneratorCount()) {
 							event.getRecipe().getResult().setItemMeta(Crafting.getGeneratorItem(p.getUniqueId()).getItemMeta());
 						} else {
 							p.sendMessage(Message.MAXIMUM_GENERATORS_CRAFTED);

@@ -3,7 +3,6 @@ package de.bossascrew.generator.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 public class RandomDistribution {

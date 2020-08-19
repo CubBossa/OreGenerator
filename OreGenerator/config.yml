@@ -13,3 +13,4 @@ database:
 
 general:
   maximumgenerators: 2
+  generatorrange: 2

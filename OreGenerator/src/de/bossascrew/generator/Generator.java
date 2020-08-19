@@ -82,4 +82,8 @@ public class Generator extends JavaPlugin {
 	public static Generator getInstance() {
 		return instance;
 	}
+	
+	public ConfigFile getCfg() {
+		return config;
+	}
 }

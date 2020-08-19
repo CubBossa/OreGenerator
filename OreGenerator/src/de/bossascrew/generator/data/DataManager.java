@@ -26,10 +26,20 @@ public class DataManager {
 			@Override
 			public void run() {
                 for(GeneratorObject g : generators) {
+                	Bukkit.broadcastMessage("Speicherroutine");
                 	MySQLManager.getInstance().saveGenerator(g);
                 }
 			}
 		}, 20, 1*60*20);
+	}
+	
+	public GeneratorObject createGenerator(int id, UUID uuid, Location loc, int level) {
+		GeneratorObject g = new GeneratorObject(id, uuid, (BlastFurnace) loc.getBlock().getState(), level);
+		g.setPlaced(true);
+		MySQLManager.getInstance().reRegisterGenerator(g);
+		
+		loadPlayer(g.getOwnerUUID());
+		return getGenerator(g.getOwnerUUID(), g.getFurnace().getLocation());
 	}
 	
 	public GeneratorObject createGenerator(UUID uuid, Location loc, int level) {
@@ -104,6 +114,10 @@ public class DataManager {
 			}
 		}
 		return null;
+	}
+	
+	public void dropGenerator(int id) {
+		MySQLManager.getInstance().removeGenerator(id);
 	}
 	
 	public static DataManager getInstance() {
