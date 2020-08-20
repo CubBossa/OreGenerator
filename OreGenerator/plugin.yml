@@ -8,28 +8,20 @@ api-version: 1.16
 permissions:
   oregenerator.craft:
    description: allows to craft oregenerator
-   default: true
   oregenerator.place:
    description: allows to place oregenerator
-   default: true
   oregenerator.drop:
    description: allows to drop oregenerator
-   default: true
   oregenerator.level.1:
    description: allows to level 1
-   default: true
   oregenerator.level.2:
    description: allows to level 2
-   default: true
   oregenerator.level.3:
    description: allows to level 3
-   default: true
   oregenerator.level.4:
    description: allows to level 4
-   default: true
   oregenerator.level.5:
    description: allows to level 5
-   default: true
   oregenerator.level.*:
    description: allows to level all levels
    children:
@@ -38,6 +30,7 @@ permissions:
      permission.level.3: true
      permission.level.4: true
      permission.level.5: true
+   default: true
   oregenerator.user:
    description: all basic permission 
    children:
@@ -45,6 +38,7 @@ permissions:
      permission.level.drop: true
      permission.level.place: true
      permission.level.level.*: true
+   default: op
   oregenerator.bypass.placelimit:
    description: no restriction
    default: op
