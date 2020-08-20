@@ -6,6 +6,7 @@ import de.bossascrew.generator.listener.BlockBreakListener;
 import de.bossascrew.generator.listener.BlockBreakNaturallyListener;
 import de.bossascrew.generator.listener.BlockFormListener;
 import de.bossascrew.generator.listener.BlockPlaceListener;
+import de.bossascrew.generator.listener.CraftListener;
 import de.bossascrew.generator.listener.GeneratorInteractListener;
 import de.bossascrew.generator.listener.InventoryInteractListener;
 import de.bossascrew.generator.listener.InventoryMoveListener;
@@ -30,5 +31,6 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), Generator.getInstance());
         Bukkit.getPluginManager().registerEvents(new BlockBreakNaturallyListener(), Generator.getInstance());
         Bukkit.getPluginManager().registerEvents(new InventoryMoveListener(), Generator.getInstance());
+        Bukkit.getPluginManager().registerEvents(new CraftListener(), Generator.getInstance());
     }
 }

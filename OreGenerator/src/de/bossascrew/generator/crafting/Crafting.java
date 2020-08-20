@@ -38,8 +38,11 @@ public class Crafting {
 		NamespacedKey key = new NamespacedKey(Generator.getInstance(), "oreGenerator");
 		ShapedRecipe genRecipe = new ShapedRecipe(key, generator);
 		
-		genRecipe.shape("   "," % ","   ");
-		genRecipe.setIngredient('%', Material.DIRT);
+		genRecipe.shape("   ","LCW","III");
+		genRecipe.setIngredient('L', Material.LAVA_BUCKET);
+		genRecipe.setIngredient('C', Material.COBBLESTONE);
+		genRecipe.setIngredient('W', Material.WATER_BUCKET);
+		genRecipe.setIngredient('I', Material.IRON_INGOT);
 		
 		Generator.getInstance().getServer().addRecipe(genRecipe);
 	}

@@ -1,6 +1,6 @@
 package de.bossascrew.generator.listener;
 
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -14,7 +14,7 @@ public class InventoryMoveListener implements Listener {
 	public void onItemMove(InventoryMoveItemEvent e) {
 		
 		if(e.getDestination().getType() == InventoryType.BLAST_FURNACE) {
-			Block b = ((Block)e.getDestination().getHolder());
+			BlockState b = ((BlockState)e.getDestination().getHolder());
 			if(DataManager.getInstance().getGenerator(b.getLocation()) != null) {
 				e.setCancelled(true);
 			}
