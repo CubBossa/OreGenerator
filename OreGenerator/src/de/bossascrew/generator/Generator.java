@@ -66,7 +66,6 @@ public class Generator extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		
 		DataManager.getInstance().saveAll();
 		printToConsole("Plugin heruntergefahren");
 	}

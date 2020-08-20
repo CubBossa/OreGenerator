@@ -29,6 +29,8 @@ public class BlockBreakListener implements Listener {
 				e.setCancelled(true);
 				if(g.getOwnerUUID().equals(e.getPlayer().getUniqueId())) {
 					informPlayerOnDrop(e.getPlayer());
+				} else {
+					e.getPlayer().sendMessage(Message.NO_PERMISSION);
 				}
 			}
 		}
