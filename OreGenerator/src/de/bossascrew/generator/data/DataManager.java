@@ -73,6 +73,14 @@ public class DataManager {
 		}
 	}
 	
+	public void saveAll() {
+		for(GeneratorObject g : generators) {
+			if(MySQLManager.getInstance().saveGenerator(g)) {
+				//generators.remove(g);
+			}
+		}
+	}
+	
 	public List<GeneratorObject> getGenerators(UUID uuid) {
 		List<GeneratorObject> ret = new ArrayList<GeneratorObject>();
 		for(GeneratorObject g : generators) {

@@ -67,9 +67,7 @@ public class Generator extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		
-		for(Player p : Bukkit.getOnlinePlayers()) {
-			DataManager.getInstance().savePlayer(p.getUniqueId());
-		}
+		DataManager.getInstance().saveAll();
 		printToConsole("Plugin heruntergefahren");
 	}
 	
