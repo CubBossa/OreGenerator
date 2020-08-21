@@ -69,6 +69,13 @@ public class BlockFormListener implements Listener {
     }
     
 	public boolean setRandomOres(Location loc) {
+		
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			for(GeneratorObject g : DataManager.getInstance().getGenerators(p.getUniqueId())) {
+				System.out.println("Generator: " + g);
+			}
+		}
+		
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
@@ -95,10 +102,11 @@ public class BlockFormListener implements Listener {
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 1.0F, 1.0F);
-			p.spawnParticle(Particle.SMOKE_LARGE, loc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 0, 0.0, 0.01, 0.0);
-			
+			for(int i = 0; i < 3; i++) {
+				p.spawnParticle(Particle.SMOKE_LARGE, loc.clone().add(new Vector(Math.random(), 1, Math.random())), 0, 0.0, 0.01, 0.0);
+			}
 			if(genLoc != null) 
-				for(int i = 0; i > 3; i++) {
+				for(int i = 0; i < 3; i++) {
 					p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, genLoc.clone().add(new Vector(Math.random(), 1, Math.random())), 0, 0.0, 0.01, 0.0);
 				}
 			if(genLoc != null && m != Material.STONE) {

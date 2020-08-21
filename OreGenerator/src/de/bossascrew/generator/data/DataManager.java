@@ -105,8 +105,10 @@ public class DataManager {
 	public GeneratorObject getGenerator(Location loc) {
 		GeneratorObject g = null;
 		for(GeneratorObject go : generators) {
-			if(go.getFurnace().getLocation().equals(loc)) {
-				g = go;
+			if(go.getFurnace() != null) {
+				if(go.getFurnace().getLocation().equals(loc)) {
+					g = go;
+				}
 			}
 		}
 		if(g == null) g = MySQLManager.getInstance().loadGenerator(loc);
