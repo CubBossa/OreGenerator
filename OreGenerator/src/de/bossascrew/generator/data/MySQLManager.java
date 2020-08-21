@@ -177,9 +177,6 @@ public class MySQLManager {
 		if(con == null) return ret;
 		if(!g.isPlaced()) return ret;
 		
-		System.out.println("Speichere Generator Nr. " + g.getId());
-		System.out.println("Werte [level = " + g.getLevel() +", isPlaced = " + g.isPlaced() + ", Location: " + g.getFurnace().getLocation() + "]");
-		
 		try {
 			String statement = "UPDATE " + TABLE_NAME + " SET level = ?, isPlaced = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
 			PreparedStatement ps = con.prepareStatement(statement);
