@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.util.Vector;
@@ -27,7 +28,7 @@ import de.bossascrew.generator.utils.Ore;
 public class BlockFormListener implements Listener {
 
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onMelt2(BlockFromToEvent event) {
 		
 		if(event.isCancelled()) return;

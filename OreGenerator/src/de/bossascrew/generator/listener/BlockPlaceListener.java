@@ -41,7 +41,10 @@ public class BlockPlaceListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			int size = DataManager.getInstance().getGenerators(p.getUniqueId()).size();
+			int size = 0;
+			for(GeneratorObject g : DataManager.getInstance().getGenerators(p.getUniqueId()))
+				if(g.isPlaced()) size++;
+			
 			if(size >= Generator.getInstance().getCfg().getMaximumGeneratorCount() && !p.hasPermission(Permission.BYPASS_PLACELIMIT)) {
 				p.sendMessage(Message.MAXIMUM_GENERATORS_PLACED);
 				event.setCancelled(true);

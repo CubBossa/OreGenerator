@@ -1,10 +1,13 @@
 package de.bossascrew.generator.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -15,9 +18,9 @@ import de.bossascrew.generator.data.Message;
 public class GeneratorInteractListener implements Listener {
 
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onInteract(PlayerInteractEvent event) {
-		
+		if(event.useInteractedBlock().equals(Result.DENY)) return;
 		if(event.getClickedBlock() != null) {
 			if(event.getClickedBlock().getType() == Material.BLAST_FURNACE) {
 				BlastFurnace bf = (BlastFurnace) event.getClickedBlock().getState();
@@ -30,7 +33,8 @@ public class GeneratorInteractListener implements Listener {
 							g.open(p);
 						}
 					} else {
-						p.sendMessage(Message.NO_PERMISSION);
+						event.setCancelled(true);
+						p.sendMessage(Message.NOT_YOUR_GENERATOR.replace("[player]", Bukkit.getPlayer(g.getOwnerUUID()).getName()));
 					}
 				}
 			}
