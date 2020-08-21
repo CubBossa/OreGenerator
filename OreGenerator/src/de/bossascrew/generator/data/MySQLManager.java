@@ -175,7 +175,7 @@ public class MySQLManager {
 		Connection con = connect();
 		boolean ret = false;
 		if(con == null) return ret;
-		if(g.isPlaced()) return ret;
+		if(!g.isPlaced()) return ret;
 		
 		try {
 			String statement = "UPDATE " + TABLE_NAME + " SET level = ?, isPlaced = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
