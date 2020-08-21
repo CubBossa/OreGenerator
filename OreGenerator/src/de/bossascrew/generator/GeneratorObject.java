@@ -5,14 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
-import org.bukkit.util.Vector;
 
 import de.bossascrew.generator.Inventories.GUI;
 import de.bossascrew.generator.crafting.Crafting;
@@ -116,7 +112,7 @@ public class GeneratorObject {
 		p.playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
 		
 		p.closeInventory();
-		this.furnace.getBlock().setType(Material.AIR);
+		//this.furnace.getBlock().setType(Material.AIR);
 		this.furnace.getBlock().breakNaturally();
 		this.furnace = null;
 		p.getInventory().addItem(Crafting.getGeneratorItem(id, ownerUUID.toString(), level));

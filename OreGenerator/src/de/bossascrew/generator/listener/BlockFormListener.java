@@ -85,7 +85,7 @@ public class BlockFormListener implements Listener {
         
         if(!generateEvent.isCancelled()) {
     		loc.getWorld().getBlockAt(loc).setType(m);
-    		particlesAndSounds(loc, g.getFurnace().getLocation(), m);
+    		particlesAndSounds(loc, g == null ? null : g.getFurnace().getLocation(), m);
     		return true;
         }
         return false;
@@ -95,13 +95,17 @@ public class BlockFormListener implements Listener {
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 1.0F, 1.0F);
-			p.spawnParticle(Particle.SMOKE_NORMAL, loc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 2);
-			p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, genLoc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 0, 0.0, 0.1, 0.0);
-			if(m != Material.STONE) {
+			p.spawnParticle(Particle.SMOKE_LARGE, loc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 0, 0.0, 0.01, 0.0);
+			
+			if(genLoc != null) 
+				for(int i = 0; i > 3; i++) {
+					p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, genLoc.clone().add(new Vector(Math.random(), 1, Math.random())), 0, 0.0, 0.01, 0.0);
+				}
+			if(genLoc != null && m != Material.STONE) {
 				p.playSound(genLoc, Sound.BLOCK_PISTON_EXTEND, 1.0f, 1.0f);
 				p.playSound(genLoc, Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 1.0f, 1.0f);
 			}
-		}
+		}if(genLoc == null) return;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Generator.getInstance(), new Runnable() {
 			@Override
 			public void run() {
