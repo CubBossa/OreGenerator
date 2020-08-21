@@ -2,11 +2,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>OreGenerator</groupId>
-	<artifactId>OreGenerator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>de.bossascrew</groupId>
+	<artifactId>oregenerator</artifactId>
+	<version>1.1.2</version>
+	<packaging>jar</packaging>
+	<name>OreGenerator</name>
+	<description>Adds an ore generation to simple cobble generators</description>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -17,6 +20,18 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>OreGenerator</finalName>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+				<includes>
+					<include>plugin.yml</include>
+					<include>config.yml</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 	<repositories>
 		<repository>
@@ -40,6 +55,7 @@
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api-plugin</artifactId>
 			<version>2.5.0</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>
