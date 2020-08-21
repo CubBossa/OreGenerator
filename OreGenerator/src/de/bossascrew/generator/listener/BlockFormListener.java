@@ -71,12 +71,6 @@ public class BlockFormListener implements Listener {
     
 	public boolean setRandomOres(Location loc) {
 		
-		for(Player p : Bukkit.getOnlinePlayers()) {
-			for(GeneratorObject g : DataManager.getInstance().getGenerators(p.getUniqueId())) {
-				System.out.println("Generator: " + g);
-			}
-		}
-		
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
