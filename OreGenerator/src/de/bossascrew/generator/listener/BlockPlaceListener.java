@@ -44,8 +44,6 @@ public class BlockPlaceListener implements Listener {
 				p.sendMessage(Message.MAXIMUM_GENERATORS_PLACED);
 				event.setCancelled(true);
 				return;
-			} else {
-				p.sendMessage(Message.OUT_OF_PLACED.replace("[placed]", size + "").replace("[maximum]", "" + Generator.getInstance().getCfg().getMaximumGeneratorCount()));
 			}
 
 			String ownerString = nbt.getString(Generator.NBT_OWNER_UUID_KEY);
@@ -80,6 +78,8 @@ public class BlockPlaceListener implements Listener {
 					p.getInventory().setItem(event.getHand(), null);
 				}
 			}
+			int sizeAfter = DataManager.getInstance().getGenerators(p.getUniqueId()).size();
+			p.sendMessage(Message.OUT_OF_PLACED.replace("[placed]", sizeAfter + "").replace("[maximum]", "" + Generator.getInstance().getCfg().getMaximumGeneratorCount()));
 		}
 	}
 }

@@ -85,20 +85,21 @@ public class BlockFormListener implements Listener {
         
         if(!generateEvent.isCancelled()) {
     		loc.getWorld().getBlockAt(loc).setType(m);
-    		particlesAndSounds(loc, m);
+    		particlesAndSounds(loc, g.getFurnace().getLocation(), m);
     		return true;
         }
         return false;
 	}
 	
-	private void particlesAndSounds(Location loc, Material m) {
+	private void particlesAndSounds(Location loc, Location genLoc, Material m) {
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 1.0F, 1.0F);
-			p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 0, 0.0, 0.1, 0.0);
+			p.spawnParticle(Particle.SMOKE_NORMAL, loc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 2);
+			p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, genLoc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 0, 0.0, 0.1, 0.0);
 			if(m != Material.STONE) {
-				p.playSound(loc, Sound.BLOCK_PISTON_EXTEND, 1.0f, 1.0f);
-				p.playSound(loc, Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 1.0f, 1.0f);
+				p.playSound(genLoc, Sound.BLOCK_PISTON_EXTEND, 1.0f, 1.0f);
+				p.playSound(genLoc, Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 1.0f, 1.0f);
 			}
 		}
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Generator.getInstance(), new Runnable() {
@@ -106,7 +107,7 @@ public class BlockFormListener implements Listener {
 			public void run() {
 				if(m != Material.STONE) {
 					for(Player p : Bukkit.getOnlinePlayers()) {
-						p.playSound(loc, Sound.BLOCK_PISTON_CONTRACT, 1.0f, 1.0f);
+						p.playSound(genLoc, Sound.BLOCK_PISTON_CONTRACT, 1.0f, 1.0f);
 					}
 				}
 			}

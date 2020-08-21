@@ -63,7 +63,6 @@ public class InventoryInteractListener implements Listener {
 			g.open(p);
 			switch(item.getString(Generator.NBT_ACTION_KEY)) {
 			case Generator.NBT_ACTION_VALUE_CONFIRM:
-				System.out.println(item.getInteger(Generator.NBT_LEVEL_KEY));
 				if(g.tryUpgrade(item.getInteger(Generator.NBT_LEVEL_KEY))) {
 					g.refreshGUI();
 				} else {

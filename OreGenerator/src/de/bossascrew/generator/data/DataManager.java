@@ -76,7 +76,6 @@ public class DataManager {
 	public void saveAll() {
 		System.out.println("Saving all!");
 		for(GeneratorObject g : generators) {
-			System.out.println("One Generator there: " + g.getLevel());
 			if(MySQLManager.getInstance().saveGenerator(g)) {
 				//generators.remove(g);
 			}
