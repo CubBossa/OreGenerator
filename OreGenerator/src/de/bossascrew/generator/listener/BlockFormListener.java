@@ -69,6 +69,13 @@ public class BlockFormListener implements Listener {
     }
     
 	public boolean setRandomOres(Location loc) {
+		
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			for(GeneratorObject g : DataManager.getInstance().getGenerators(p.getUniqueId())) {
+				System.out.println("Generator: " + g);
+			}
+		}
+		
 		Dimension d = Dimension.OVERWORLD;
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
@@ -85,28 +92,34 @@ public class BlockFormListener implements Listener {
         
         if(!generateEvent.isCancelled()) {
     		loc.getWorld().getBlockAt(loc).setType(m);
-    		particlesAndSounds(loc, m);
+    		particlesAndSounds(loc, g == null ? null : g.getFurnace().getLocation(), m);
     		return true;
         }
         return false;
 	}
 	
-	private void particlesAndSounds(Location loc, Material m) {
+	private void particlesAndSounds(Location loc, Location genLoc, Material m) {
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 1.0F, 1.0F);
-			p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc.clone().add(new Vector(0.35 + Math.random() * 0.3, 1, 0.35 + Math.random() * 0.3)), 0, 0.0, 0.1, 0.0);
-			if(m != Material.STONE) {
-				p.playSound(loc, Sound.BLOCK_PISTON_EXTEND, 1.0f, 1.0f);
-				p.playSound(loc, Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 1.0f, 1.0f);
+			for(int i = 0; i < 3; i++) {
+				p.spawnParticle(Particle.SMOKE_LARGE, loc.clone().add(new Vector(Math.random(), 1, Math.random())), 0, 0.0, 0.01, 0.0);
 			}
-		}
+			if(genLoc != null) 
+				for(int i = 0; i < 3; i++) {
+					p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, genLoc.clone().add(new Vector(Math.random(), 1, Math.random())), 0, 0.0, 0.01, 0.0);
+				}
+			if(genLoc != null && m != Material.STONE) {
+				p.playSound(genLoc, Sound.BLOCK_PISTON_EXTEND, 1.0f, 1.0f);
+				p.playSound(genLoc, Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 1.0f, 1.0f);
+			}
+		}if(genLoc == null) return;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Generator.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				if(m != Material.STONE) {
 					for(Player p : Bukkit.getOnlinePlayers()) {
-						p.playSound(loc, Sound.BLOCK_PISTON_CONTRACT, 1.0f, 1.0f);
+						p.playSound(genLoc, Sound.BLOCK_PISTON_CONTRACT, 1.0f, 1.0f);
 					}
 				}
 			}

@@ -2,6 +2,7 @@ package de.bossascrew.generator.listener;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
@@ -37,6 +38,7 @@ public class BlockPlaceListener implements Listener {
 			
 			if(!p.hasPermission(Permission.PLACE_GENERATOR)) {
 				p.sendMessage(Message.NO_PERMISSION);
+				event.setCancelled(true);
 				return;
 			}
 			int size = DataManager.getInstance().getGenerators(p.getUniqueId()).size();
@@ -44,8 +46,6 @@ public class BlockPlaceListener implements Listener {
 				p.sendMessage(Message.MAXIMUM_GENERATORS_PLACED);
 				event.setCancelled(true);
 				return;
-			} else {
-				p.sendMessage(Message.OUT_OF_PLACED.replace("[placed]", size + "").replace("[maximum]", "" + Generator.getInstance().getCfg().getMaximumGeneratorCount()));
 			}
 
 			String ownerString = nbt.getString(Generator.NBT_OWNER_UUID_KEY);
@@ -55,7 +55,11 @@ public class BlockPlaceListener implements Listener {
 			} else {
 				owner = UUID.fromString(ownerString);
 			}
-			if(!p.getUniqueId().equals(owner)) return;
+			if(!p.getUniqueId().equals(owner)) {
+				p.sendMessage(Message.NOT_YOUR_GENERATOR.replace("[player]", Bukkit.getPlayer(owner).getName()));
+				event.setCancelled(true);
+				return;
+			}
 			
 			int level = nbt.getInteger(Generator.NBT_LEVEL_KEY);
 			GeneratorObject go;
@@ -80,6 +84,9 @@ public class BlockPlaceListener implements Listener {
 					p.getInventory().setItem(event.getHand(), null);
 				}
 			}
+			int sizeAfter = DataManager.getInstance().getGenerators(p.getUniqueId()).size();
+			if(!p.hasPermission(Permission.BYPASS_PLACELIMIT))
+				p.sendMessage(Message.OUT_OF_PLACED.replace("[placed]", sizeAfter + "").replace("[maximum]", "" + Generator.getInstance().getCfg().getMaximumGeneratorCount()));
 		}
 	}
 }

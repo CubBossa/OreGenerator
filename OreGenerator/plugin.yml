@@ -1,6 +1,6 @@
 name: OreGenerator
 author: [CubBossa, qpray]
-version: 1.0
+version: 1.1.1
 main: de.bossascrew.generator.Generator
 
 api-version: 1.16

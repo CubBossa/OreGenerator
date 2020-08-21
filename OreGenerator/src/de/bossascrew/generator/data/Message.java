@@ -10,6 +10,7 @@ public class Message {
 	public static final String USE_GUI_TO_DROP = PREFIX + "Benutze das Menü des Generators, um ihn zu droppen!";
 	public static final String CANT_AFFORD_LEVEL = PREFIX + "Das kannst du dir so nicht leisten. Dir fehlen noch Items!";
 	public static final String OUT_OF_PLACED = PREFIX + "Du hast [placed]/[maximum] Generatoren gesetzt!";
+	public static final String NOT_YOUR_GENERATOR = PREFIX + "§7Das ist nicht dein Generator. Er gehört §e[Player]§7!";	
 	
 	public static final String GUI_TITLE = "§9Erze Generator";
 	

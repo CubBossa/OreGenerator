@@ -76,7 +76,6 @@ public class DataManager {
 	public void saveAll() {
 		System.out.println("Saving all!");
 		for(GeneratorObject g : generators) {
-			System.out.println("One Generator there: " + g.getLevel());
 			if(MySQLManager.getInstance().saveGenerator(g)) {
 				//generators.remove(g);
 			}
@@ -106,8 +105,10 @@ public class DataManager {
 	public GeneratorObject getGenerator(Location loc) {
 		GeneratorObject g = null;
 		for(GeneratorObject go : generators) {
-			if(go.getFurnace().getLocation().equals(loc)) {
-				g = go;
+			if(go.getFurnace() != null) {
+				if(go.getFurnace().getLocation().equals(loc)) {
+					g = go;
+				}
 			}
 		}
 		if(g == null) g = MySQLManager.getInstance().loadGenerator(loc);
