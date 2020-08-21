@@ -9,11 +9,11 @@
 	<name>OreGenerator</name>
 	<description>Adds an ore generation to simple cobble generators</description>
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
+		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
-                <artifactId>maven-compile-plugin</artifactId>
-				<version>3.8.4</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -25,7 +25,7 @@
 			<resource>
 				<targetPath>.</targetPath>
 				<filtering>true</filtering>
-				<directory>${basedir}/src/main/resources/</directory>
+				<directory>${basedir}/src/</directory>
 				<includes>
 					<include>plugin.yml</include>
 					<include>config.yml</include>
