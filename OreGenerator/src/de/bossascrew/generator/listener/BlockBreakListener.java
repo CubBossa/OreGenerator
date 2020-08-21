@@ -30,7 +30,7 @@ public class BlockBreakListener implements Listener {
 				if(g.getOwnerUUID().equals(event.getPlayer().getUniqueId())) {
 					informPlayerOnDrop(event.getPlayer());
 				} else {
-					event.getPlayer().sendMessage(Message.NOT_YOUR_GENERATOR.replace("[player]", Bukkit.getPlayer(g.getOwnerUUID()).getName()));
+					event.getPlayer().sendMessage(Message.NOT_YOUR_GENERATOR);
 				}
 			}
 		}

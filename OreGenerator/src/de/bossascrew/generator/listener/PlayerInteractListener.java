@@ -1,6 +1,5 @@
 package de.bossascrew.generator.listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
 import org.bukkit.entity.Player;
@@ -33,7 +32,7 @@ public class PlayerInteractListener implements Listener {
 						}
 					} else {
 						event.setCancelled(true);
-						p.sendMessage(Message.NOT_YOUR_GENERATOR.replace("[player]", Bukkit.getPlayer(g.getOwnerUUID()).getName()));
+						p.sendMessage(Message.NOT_YOUR_GENERATOR);
 					}
 				}
 			}
