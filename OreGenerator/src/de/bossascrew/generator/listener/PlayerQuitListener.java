@@ -9,7 +9,7 @@ import de.bossascrew.generator.data.DataManager;
 public class PlayerQuitListener implements Listener {
 
 	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
-		DataManager.getInstance().savePlayer(e.getPlayer().getUniqueId());
+	public void onQuit(PlayerQuitEvent event) {
+		DataManager.getInstance().savePlayer(event.getPlayer().getUniqueId());
 	}
 }

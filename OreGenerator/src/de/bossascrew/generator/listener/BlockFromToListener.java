@@ -25,7 +25,7 @@ import de.bossascrew.generator.utils.RandomDistribution;
 import de.bossascrew.generator.utils.Level;
 import de.bossascrew.generator.utils.Ore;
 
-public class BlockFormListener implements Listener {
+public class BlockFromToListener implements Listener {
 
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

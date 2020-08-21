@@ -15,23 +15,23 @@ import de.bossascrew.generator.data.Message;
 import de.bossascrew.generator.data.Permission;
 import de.tr7zw.nbtapi.NBTItem;
 
-public class InventoryInteractListener implements Listener {
+public class InventoryClickListener implements Listener {
 
 	
 	@EventHandler
-	public void invClick(InventoryClickEvent e) {
+	public void invClick(InventoryClickEvent event) {
 
-		if(e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
-		if(!(e.getView().getPlayer() instanceof Player)) return;
+		if(event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
+		if(!(event.getView().getPlayer() instanceof Player)) return;
 		
-		NBTItem item = new NBTItem(e.getCurrentItem());
+		NBTItem item = new NBTItem(event.getCurrentItem());
 		int generatorId = item.getInteger(Generator.NBT_GENERATORID_KEY);
 		GeneratorObject g = DataManager.getInstance().getGenerator(generatorId);
 		
-		Player p = (Player) e.getView().getPlayer();
+		Player p = (Player) event.getView().getPlayer();
 		
-		if(e.getView().getTitle() != null && e.getView().getTitle().equals(Message.GUI_TITLE)) {
-			e.setCancelled(true);
+		if(event.getView().getTitle() != null && event.getView().getTitle().equals(Message.GUI_TITLE)) {
+			event.setCancelled(true);
 
 			String action = item.getString(Generator.NBT_ACTION_KEY);
 			int clickedLevel = item.getInteger(Generator.NBT_LEVEL_KEY);
@@ -57,8 +57,8 @@ public class InventoryInteractListener implements Listener {
 				}
 				break;
 			}
-		} else if(e.getView().getTitle() != null && e.getView().getTitle().equals(Message.GUI_CONFIRM_TITLE)) {
-			e.setCancelled(true);
+		} else if(event.getView().getTitle() != null && event.getView().getTitle().equals(Message.GUI_CONFIRM_TITLE)) {
+			event.setCancelled(true);
 			p.closeInventory();
 			g.open(p);
 			switch(item.getString(Generator.NBT_ACTION_KEY)) {

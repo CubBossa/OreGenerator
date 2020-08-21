@@ -15,9 +15,8 @@ import de.bossascrew.generator.GeneratorObject;
 import de.bossascrew.generator.data.DataManager;
 import de.bossascrew.generator.data.Message;
 
-public class GeneratorInteractListener implements Listener {
+public class PlayerInteractListener implements Listener {
 
-	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onInteract(PlayerInteractEvent event) {
 		if(event.useInteractedBlock().equals(Result.DENY)) return;
