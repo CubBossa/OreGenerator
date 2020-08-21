@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.bossascrew.generator.GeneratorObject;
 import de.bossascrew.generator.data.DataManager;
+import de.bossascrew.generator.data.Message;
 
 public class GeneratorInteractListener implements Listener {
 
@@ -21,11 +22,15 @@ public class GeneratorInteractListener implements Listener {
 			if(event.getClickedBlock().getType() == Material.BLAST_FURNACE) {
 				BlastFurnace bf = (BlastFurnace) event.getClickedBlock().getState();
 				Player p = event.getPlayer();
-				GeneratorObject g = DataManager.getInstance().getGenerator(p.getUniqueId(), bf.getLocation());
+				GeneratorObject g = DataManager.getInstance().getGenerator(bf.getLocation());
 				if(g != null) {
-					if(event.getAction() == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
-						event.setCancelled(true);
-						g.open(p);
+					if(g.getOwnerUUID().equals(p.getUniqueId())) {
+						if(event.getAction() == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
+							event.setCancelled(true);
+							g.open(p);
+						}
+					} else {
+						p.sendMessage(Message.NO_PERMISSION);
 					}
 				}
 			}

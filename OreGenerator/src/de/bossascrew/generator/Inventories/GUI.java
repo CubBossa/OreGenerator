@@ -118,7 +118,6 @@ public class GUI {
 	}
 	
 	private List<String> getPropabilities(Level level) {
-		//TODO Farbsetup, evtl auch als Message format auslagern
 		List<String> ret = new ArrayList<String>();
 		ret.add(Message.GUI_PROBABILITY_OVERWORLD);
 		for(Ore o : level.getOres(Dimension.OVERWORLD)) {
@@ -133,7 +132,6 @@ public class GUI {
 	}
 	
 	private List<String> getRequirements(Level level) {
-		//TODO auch farbsetup
 		List<String> ret = new ArrayList<String>();
 		LevelRequirements lr = LevelRequirements.fromLevel(level.getLevel());
 		if(level.getLevel() > 1)

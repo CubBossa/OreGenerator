@@ -175,12 +175,12 @@ public class MySQLManager {
 		Connection con = connect();
 		boolean ret = false;
 		if(con == null) return ret;
-		if(g.isPlaced()) return ret;
+		if(!g.isPlaced()) return ret;
 		
 		try {
 			String statement = "UPDATE " + TABLE_NAME + " SET level = ?, isPlaced = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
 			PreparedStatement ps = con.prepareStatement(statement);
-			
+			System.out.println("Speichere generator mit level: " + g.getLevel());
 			ps.setInt(1, g.getLevel());
 			ps.setInt(2, g.isPlaced() ? 1 : 0);
 			if(g.isPlaced()) {

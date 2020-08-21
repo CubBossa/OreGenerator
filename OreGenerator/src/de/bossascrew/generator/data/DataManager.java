@@ -68,7 +68,17 @@ public class DataManager {
 	public void savePlayer(UUID uuid) {
 		for(GeneratorObject g : getGenerators(uuid)) {
 			if(MySQLManager.getInstance().saveGenerator(g)) {
-				generators.remove(g);
+				//generators.remove(g);
+			}
+		}
+	}
+	
+	public void saveAll() {
+		System.out.println("Saving all!");
+		for(GeneratorObject g : generators) {
+			System.out.println("One Generator there: " + g.getLevel());
+			if(MySQLManager.getInstance().saveGenerator(g)) {
+				//generators.remove(g);
 			}
 		}
 	}
@@ -84,12 +94,13 @@ public class DataManager {
 	}
 	
 	public GeneratorObject getGenerator(int id) {
-		for(GeneratorObject g : generators) {
-			if(g.getId() == id) {
-				return g;
+		GeneratorObject g = null;
+		for(GeneratorObject go : generators) {
+			if(go.getId() == id) {
+				return go;
 			}
 		}
-		return null;
+		return g;
 	}
 	
 	public GeneratorObject getGenerator(Location loc) {
@@ -106,11 +117,11 @@ public class DataManager {
 	public GeneratorObject getGenerator(UUID uuid, Location loc) {
 		for(GeneratorObject g : generators) {
 			if(g.getOwnerUUID().equals(uuid) && g.getFurnace() != null && g.getFurnace().getLocation().equals(loc)) {
-				//if(g.isPlaced()) {
+				if(g.isPlaced()) {
 					return g;
-				//} else {
-					//return null;
-				//}
+				} else {
+					return null;
+				}
 			}
 		}
 		return null;
