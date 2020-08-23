@@ -40,8 +40,10 @@ public class GeneratorObject {
 
 	public boolean tryUpgrade(int level) {
 		if(removeItems(level)) {
-			Bukkit.getPlayer(ownerUUID).playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
-			Bukkit.getPlayer(ownerUUID).playSound(furnace.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+			Player p = Bukkit.getPlayer(ownerUUID);
+			System.out.println("Erzgenerator > " + p.getName() + " hat seinen Generator ID " + id + " auf Level " + level);
+			p.playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
+			p.playSound(furnace.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
 			this.level++;
 			return true;
 		} else {
