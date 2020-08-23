@@ -39,6 +39,8 @@ public class BlockFromToListener implements Listener {
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
             if(setRandomOres(to.getLocation())) {
+            	//eingefügt
+            	if(lava) event.setCancelled(true);
             }
             return;
         } else {
@@ -61,12 +63,21 @@ public class BlockFromToListener implements Listener {
 	}
 	
 	public boolean generates(Block from, Block to) {
-        if (!to.isLiquid()) return false;
-        return generates(from.getType(), to.getType());
+        if (to.isLiquid()) {
+        	if(!Dimension.OVERWORLD.isDimension(from.getWorld().getName())) return false;
+            return generates(from.getType(), to.getType());
+        } else {
+        	if(!Dimension.NETHER.isDimension(from.getWorld().getName())) return false;
+        	return generatesNether(from.getType(), to.getType());
+        }
 	}
 
     private boolean generates(Material from, Material to) {
         return from != to;
+    }
+
+    private boolean generatesNether(Material from, Material to) {
+        return from == Material.LAVA && (to == Material.BLUE_ICE || to == Material.PACKED_ICE);
     }
     
 	public boolean setRandomOres(Location loc) {

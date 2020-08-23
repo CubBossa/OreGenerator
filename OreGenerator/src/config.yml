@@ -1,5 +1,5 @@
 #
-# ____Erzgenerator____
+# ____OreGenerator____
 #       Config
 #
 
@@ -14,3 +14,13 @@ database:
 general:
   maximumgenerators: 2
   generatorrange: 2
+
+# overworlds: generators produce overworld ores in those worlds
+  overworlds:
+  - "world"
+  - "bskyblock_world"
+
+# netherworlds: generators produce nether ores in those worlds
+  netherworlds:
+  - "world_nether"
+  - "bskyblock_nether"

@@ -2,6 +2,8 @@ package de.bossascrew.generator.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,12 +18,17 @@ public class ConfigFile {
 	
 	int maximumGeneratorCount = 0;
 	int generatorrange = 2;
+	List<String> overWorld;
+	List<String> netherWorld;
 	
 	public ConfigFile(String path, String name, String fileResource) {
 		this.fileResource = fileResource;
 		this.file = new File(path, name);
 		this.cfg = YamlConfiguration.loadConfiguration(file);
 
+		overWorld = new ArrayList<String>();
+		netherWorld = new ArrayList<String>();
+		
 		if(file != null) {
 			setup();
 			load();
@@ -59,9 +66,19 @@ public class ConfigFile {
 		return maximumGeneratorCount;
 	}
 	
+	public List<String> getOverworlds() {
+		return this.overWorld;
+	}
+	
+	public List<String> getNetherworlds() {
+		return this.netherWorld;
+	}
+	
 	private void load() {
 		maximumGeneratorCount = cfg.getInt("general.maximumgenerators");
 		generatorrange = cfg.getInt("general.generatorrange");
+		overWorld = cfg.getStringList("general.overworlds");
+		netherWorld = cfg.getStringList("general.netherworlds");
 	}
 	
 	
