@@ -21,16 +21,16 @@ public class BlockBreakListener implements Listener {
 	List<UUID> isInformed = new ArrayList<UUID>();
 	
 	@EventHandler
-	public void onBreak(BlockBreakEvent e) {
+	public void onBreak(BlockBreakEvent event) {
 		
-		if(e.getBlock() != null && e.getBlock().getType() == Material.BLAST_FURNACE) {
-			GeneratorObject g = DataManager.getInstance().getGenerator(e.getBlock().getLocation());
+		if(event.getBlock() != null && event.getBlock().getType() == Material.BLAST_FURNACE) {
+			GeneratorObject g = DataManager.getInstance().getGenerator(event.getBlock().getLocation());
 			if(g != null) {
-				e.setCancelled(true);
-				if(g.getOwnerUUID().equals(e.getPlayer().getUniqueId())) {
-					informPlayerOnDrop(e.getPlayer());
+				event.setCancelled(true);
+				if(g.getOwnerUUID().equals(event.getPlayer().getUniqueId())) {
+					informPlayerOnDrop(event.getPlayer());
 				} else {
-					e.getPlayer().sendMessage(Message.NO_PERMISSION);
+					event.getPlayer().sendMessage(Message.NOT_YOUR_GENERATOR);
 				}
 			}
 		}

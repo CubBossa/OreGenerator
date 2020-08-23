@@ -2,7 +2,6 @@ package de.bossascrew.generator.listener;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlastFurnace;
@@ -41,7 +40,10 @@ public class BlockPlaceListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			int size = DataManager.getInstance().getGenerators(p.getUniqueId()).size();
+			int size = 0;
+			for(GeneratorObject g : DataManager.getInstance().getGenerators(p.getUniqueId()))
+				if(g.isPlaced()) size++;
+			
 			if(size >= Generator.getInstance().getCfg().getMaximumGeneratorCount() && !p.hasPermission(Permission.BYPASS_PLACELIMIT)) {
 				p.sendMessage(Message.MAXIMUM_GENERATORS_PLACED);
 				event.setCancelled(true);
@@ -56,7 +58,7 @@ public class BlockPlaceListener implements Listener {
 				owner = UUID.fromString(ownerString);
 			}
 			if(!p.getUniqueId().equals(owner)) {
-				p.sendMessage(Message.NOT_YOUR_GENERATOR.replace("[player]", Bukkit.getPlayer(owner).getName()));
+				p.sendMessage(Message.NOT_YOUR_GENERATOR);
 				event.setCancelled(true);
 				return;
 			}

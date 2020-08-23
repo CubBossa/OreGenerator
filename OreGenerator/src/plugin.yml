@@ -1,6 +1,6 @@
 name: OreGenerator
 author: CubBossa
-version: 1.1.2
+version: 1.2.0
 main: de.bossascrew.generator.Generator
 dependencies: [NBTAPI]
 
@@ -8,38 +8,42 @@ api-version: 1.16
 
 permissions:
   oregenerator.craft:
-   description: allows to craft oregenerator
+    description: allows to craft oregenerator
   oregenerator.place:
-   description: allows to place oregenerator
+    description: allows to place oregenerator
   oregenerator.drop:
-   description: allows to drop oregenerator
+    description: allows to drop oregenerator
   oregenerator.level.1:
-   description: allows to level 1
+    description: allows to level 1
   oregenerator.level.2:
-   description: allows to level 2
+    description: allows to level 2
   oregenerator.level.3:
-   description: allows to level 3
+    description: allows to level 3
   oregenerator.level.4:
-   description: allows to level 4
+    description: allows to level 4
   oregenerator.level.5:
-   description: allows to level 5
+    description: allows to level 5
   oregenerator.level.*:
-   description: allows to level all levels
-   children:
-     permission.level.1: true
-     permission.level.2: true
-     permission.level.3: true
-     permission.level.4: true
-     permission.level.5: true
-   default: true
+    description: allows to level all levels
+    children:
+      oregenerator.level.1: true
+      oregenerator.level.2: true
+      oregenerator.level.3: true
+      oregenerator.level.4: true
+      oregenerator.level.5: true
+    default: true
   oregenerator.user:
-   description: all basic permission 
-   children:
-     permission.level.craft: true
-     permission.level.drop: true
-     permission.level.place: true
-     permission.level.level.*: true
-   default: op
+    description: all basic permission 
+    children:
+      oregenerator.craft: true
+      oregenerator.drop: true
+      oregenerator.place: true
+      oregenerator.level.*: true
+    default: op
   oregenerator.bypass.placelimit:
-   description: no restriction
-   default: op
+    description: no restriction
+    default: op
+  oregenerator.admin:
+    description: all admin permissions
+    children:
+      oregenerator.bypass.placelimit: true

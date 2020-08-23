@@ -9,7 +9,7 @@ import de.bossascrew.generator.data.DataManager;
 public class PlayerJoinListener implements Listener {
 
 	@EventHandler
-	public void onJoin(PlayerJoinEvent e) {
-		DataManager.getInstance().loadPlayer(e.getPlayer().getUniqueId());
+	public void onJoin(PlayerJoinEvent event) {
+		DataManager.getInstance().loadPlayer(event.getPlayer().getUniqueId());
 	}
 }

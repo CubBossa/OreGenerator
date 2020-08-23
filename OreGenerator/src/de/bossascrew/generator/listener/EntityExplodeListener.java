@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 import de.bossascrew.generator.data.DataManager;
 
-public class BlockBreakNaturallyListener implements Listener {
+public class EntityExplodeListener implements Listener {
 
 	@EventHandler
 	public void onBreak(EntityExplodeEvent event) {

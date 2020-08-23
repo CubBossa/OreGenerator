@@ -8,15 +8,15 @@ import org.bukkit.event.inventory.InventoryType;
 
 import de.bossascrew.generator.data.DataManager;
 
-public class InventoryMoveListener implements Listener {
+public class InventoryMoveItemListener implements Listener {
 
 	@EventHandler
-	public void onItemMove(InventoryMoveItemEvent e) {
+	public void onItemMove(InventoryMoveItemEvent event) {
 		
-		if(e.getDestination().getType() == InventoryType.BLAST_FURNACE) {
-			BlockState b = ((BlockState)e.getDestination().getHolder());
+		if(event.getDestination().getType() == InventoryType.BLAST_FURNACE) {
+			BlockState b = ((BlockState)event.getDestination().getHolder());
 			if(DataManager.getInstance().getGenerator(b.getLocation()) != null) {
-				e.setCancelled(true);
+				event.setCancelled(true);
 			}
 		}
 	}

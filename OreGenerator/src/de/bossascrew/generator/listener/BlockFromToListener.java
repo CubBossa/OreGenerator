@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.util.Vector;
@@ -24,10 +25,10 @@ import de.bossascrew.generator.utils.RandomDistribution;
 import de.bossascrew.generator.utils.Level;
 import de.bossascrew.generator.utils.Ore;
 
-public class BlockFormListener implements Listener {
+public class BlockFromToListener implements Listener {
 
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onMelt2(BlockFromToEvent event) {
 		
 		if(event.isCancelled()) return;
@@ -38,6 +39,8 @@ public class BlockFormListener implements Listener {
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
             if(setRandomOres(to.getLocation())) {
+            	//eingefügt
+            	if(lava) event.setCancelled(true);
             }
             return;
         } else {
@@ -60,12 +63,21 @@ public class BlockFormListener implements Listener {
 	}
 	
 	public boolean generates(Block from, Block to) {
-        if (!to.isLiquid()) return false;
-        return generates(from.getType(), to.getType());
+        if (to.isLiquid()) {
+        	if(!Dimension.OVERWORLD.isDimension(from.getWorld().getName())) return false;
+            return generates(from.getType(), to.getType());
+        } else {
+        	if(!Dimension.NETHER.isDimension(from.getWorld().getName())) return false;
+        	return generatesNether(from.getType(), to.getType());
+        }
 	}
 
     private boolean generates(Material from, Material to) {
         return from != to;
+    }
+
+    private boolean generatesNether(Material from, Material to) {
+        return from == Material.LAVA && (to == Material.BLUE_ICE || to == Material.PACKED_ICE);
     }
     
 	public boolean setRandomOres(Location loc) {
