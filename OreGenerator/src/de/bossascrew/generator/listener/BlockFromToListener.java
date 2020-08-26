@@ -86,6 +86,7 @@ public class BlockFromToListener implements Listener {
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
 		}
+		//Liste ausgeben
 		GeneratorObject g = seemsGeneratorNear(loc);
 		Material m = Material.STONE;
 		if(g == null) {
