@@ -168,8 +168,9 @@ public class BlockFromToListener implements Listener {
 			ores = levelValues.get(i).addOres(d, ores);
 		}	
 		for(Ore o : ores) {
-			if(o.prob != 0)
+			if(o.prob != 0) {
 				randGen.addNumber(o.mat, o.prob);
+			}
 		}
 		return randGen.getDistributedRandomNumber();
 	}
