@@ -86,9 +86,14 @@ public class BlockPlaceListener implements Listener {
 					p.getInventory().setItem(event.getHand(), null);
 				}
 			}
-			int sizeAfter = DataManager.getInstance().getGenerators(p.getUniqueId()).size();
+			int sizeAfterFixed = 0;
+			for(int i = 0; i < DataManager.getInstance().getGenerators(p.getUniqueId()).size(); i++) {
+				if(DataManager.getInstance().getGenerators(p.getUniqueId()).get(i).isPlaced()) {
+					sizeAfterFixed++;
+				}
+			}
 			if(!p.hasPermission(Permission.BYPASS_PLACELIMIT))
-				p.sendMessage(Message.OUT_OF_PLACED.replace("[placed]", sizeAfter + "").replace("[maximum]", "" + Generator.getInstance().getCfg().getMaximumGeneratorCount()));
+				p.sendMessage(Message.OUT_OF_PLACED.replace("[placed]", sizeAfterFixed + "").replace("[maximum]", "" + Generator.getInstance().getCfg().getMaximumGeneratorCount()));
 		}
 	}
 }

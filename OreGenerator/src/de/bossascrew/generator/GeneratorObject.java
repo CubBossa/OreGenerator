@@ -29,6 +29,7 @@ public class GeneratorObject {
 		this.level = level;
 		this.ownerUUID = ownerUUID;
 		this.furnace = furnace;
+		if(furnace != null) isPlaced = true;
 	}
 	
 	public GeneratorObject(int id, UUID ownerUUID, BlastFurnace furnace, int level) {
@@ -36,6 +37,7 @@ public class GeneratorObject {
 		this.level = level;
 		this.ownerUUID = ownerUUID;
 		this.furnace = furnace;
+		if(furnace != null) isPlaced = true;
 	}
 
 	public boolean tryUpgrade(int level) {
