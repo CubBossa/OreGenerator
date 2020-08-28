@@ -1,5 +1,8 @@
 package de.bossascrew.generator.listener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -86,31 +89,44 @@ public class BlockFromToListener implements Listener {
 		for(Dimension dd : Dimension.values()) {
 			if(dd.getWorlds().contains(loc.getWorld().getName())) d = dd;
 		}
-		GeneratorObject g = seemsGeneratorNear(loc);
+		//Liste ausgeben
+		List<GeneratorObject> glist = seemsGeneratorNear(loc);
 		Material m = Material.STONE;
-		if(g == null) {
-			m = calcOres(0, d);
+		if(glist.isEmpty()) {
+			m = calcOres(d, 0);
 		} else {
-			m = calcOres(g.getLevel(), d);
+			List<Integer> levels = new ArrayList<Integer>();
+			for(GeneratorObject go : glist) {
+				levels.add(go.getLevel());
+			}			
+			m = calcOres(d, levels);
 		}
-        OreGenerationEvent generateEvent = new OreGenerationEvent(g == null ? null : g.getFurnace().getLocation(), m, g);
+        OreGenerationEvent generateEvent = new OreGenerationEvent(loc, m, glist);
         Generator.getInstance().getServer().getPluginManager().callEvent(generateEvent);
         
         if(!generateEvent.isCancelled()) {
     		loc.getWorld().getBlockAt(loc).setType(m);
-    		particlesAndSounds(loc, g == null ? null : g.getFurnace().getLocation(), m);
+    		
+    		particlesAndSoundsOre(loc, m);
+    		for(GeneratorObject g : glist) {
+        		particlesAndSoundsGenerator(g == null ? null : g.getFurnace().getLocation(), m);
+    		}
     		return true;
         }
         return false;
 	}
 	
-	private void particlesAndSounds(Location loc, Location genLoc, Material m) {
-		
+	private void particlesAndSoundsOre(Location loc, Material m) {
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			p.playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 1.0F, 1.0F);
 			for(int i = 0; i < 3; i++) {
 				p.spawnParticle(Particle.SMOKE_LARGE, loc.clone().add(new Vector(Math.random(), 1, Math.random())), 0, 0.0, 0.01, 0.0);
 			}
+		}
+	}
+	
+	private void particlesAndSoundsGenerator(Location genLoc, Material m) {
+		for(Player p : Bukkit.getOnlinePlayers()) {
 			if(genLoc != null) 
 				for(int i = 0; i < 3; i++) {
 					p.spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, genLoc.clone().add(new Vector(Math.random(), 1, Math.random())), 0, 0.0, 0.01, 0.0);
@@ -132,34 +148,47 @@ public class BlockFromToListener implements Listener {
 		}, 10L);
 	}
 	
-	private Material calcOres(int level, Dimension d) {
-		Level levelValue = null;
+	private Material calcOres(Dimension d, Integer level) {
+		List<Integer> temp = new ArrayList<Integer>(); temp.add(level);
+		return calcOres(d, temp);
+	}
+	
+	private Material calcOres(Dimension d, List<Integer> level) {
+		List<Level> levelValues = new ArrayList<Level>();
 		for(Level l : Level.values()) {
-			if(l.getLevel() == level)
-				levelValue = l;
+			for(int ll : level) {
+				if(l.getLevel() == ll)
+					levelValues.add(l);
+			}
 		}
 
 		RandomDistribution randGen = new RandomDistribution();
-		for(Ore o : levelValue.getOres(d)) {
-			if(o.prob != 0)
+		List<Ore> ores = levelValues.get(0).getOres(d);
+		for(int i = 1; i < levelValues.size(); i++) {
+			ores = levelValues.get(i).addOres(d, ores);
+		}	
+		for(Ore o : ores) {
+			if(o.prob != 0) {
 				randGen.addNumber(o.mat, o.prob);
+			}
 		}
 		return randGen.getDistributedRandomNumber();
 	}
 	
-	public GeneratorObject seemsGeneratorNear(Location loc) {
+	public List<GeneratorObject> seemsGeneratorNear(Location loc) {
 		int generatorRange = Generator.getInstance().getCfg().getGeneratorrange();
+		List<GeneratorObject> ret = new ArrayList<GeneratorObject>();
 		for(int x = -generatorRange; x <= generatorRange; x++) {
 			for(int y = -generatorRange; y <= generatorRange; y++) {
 				for(int z = -generatorRange; z <= generatorRange; z++) {
 					if(loc.clone().add(x, y, z).getBlock().getType() == Material.BLAST_FURNACE) {
 						GeneratorObject g = isGenerator(loc.clone().add(x,y,z));
-	                    return g;
+	                    ret.add(g);
 					}
 				}
 			}
 		}
-		return null;
+		return ret;
 	}
 
 	/**

@@ -64,6 +64,19 @@ public enum Level {
 		}
 		return ret;		
 	}
+	
+	public List<Ore> addOres(Dimension d, List<Ore> ores) {
+		List<Ore> ret = new ArrayList<Ore>();
+		for(Ore o : ores) {
+			for(Ore levelO : this.getOres(d)) {
+				if(o.mat.equals(levelO.mat)) {
+					ret.add(new Ore(o.prob + levelO.prob, o.friendlyName, o.mat));
+				}
+			}
+		}
+		return ret;
+		
+	}
 
 	public int getLevel() {
 		return level;
