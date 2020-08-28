@@ -173,32 +173,25 @@ public class MySQLManager {
 	
 	public boolean saveGenerator(GeneratorObject g) {
 		Connection con = connect();
-		boolean ret = false;
-		if(con == null) return ret;
-		if(!g.isPlaced()) return ret;
+		boolean saving = false;
+		if(con == null) return saving;
+		if(!g.isPlaced()) return saving;
 		
 		try {
 			String statement = "UPDATE " + TABLE_NAME + " SET level = ?, isPlaced = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
 			PreparedStatement ps = con.prepareStatement(statement);
 			ps.setInt(1, g.getLevel());
 			ps.setInt(2, g.isPlaced() ? 1 : 0);
-			if(g.isPlaced()) {
-				ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
-				ps.setInt(4, g.getFurnace().getLocation().getBlockX());
-				ps.setInt(5, g.getFurnace().getLocation().getBlockY());
-				ps.setInt(6, g.getFurnace().getLocation().getBlockZ());				
-			} else {
-				ps.setString(3, null);
-				ps.setInt(4, 0);
-				ps.setInt(5, 0);
-				ps.setInt(6, 0);
-			}
+			ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
+			ps.setInt(4, g.getFurnace().getLocation().getBlockX());
+			ps.setInt(5, g.getFurnace().getLocation().getBlockY());
+			ps.setInt(6, g.getFurnace().getLocation().getBlockZ());				
 			ps.setString(7, g.getOwnerUUID().toString());
 			ps.setInt(8, g.getId());
 			
 			ps.executeUpdate();
 			ps.close();
-			ret = true;
+			saving = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return false;
@@ -208,7 +201,7 @@ public class MySQLManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return ret;
+		return saving;
 	}
 
 	public List<GeneratorObject> loadGenerators(UUID uuid) {

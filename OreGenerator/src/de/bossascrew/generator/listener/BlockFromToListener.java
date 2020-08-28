@@ -2,6 +2,7 @@ package de.bossascrew.generator.listener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
