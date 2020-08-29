@@ -26,9 +26,28 @@ public class MySQLManager {
 	static String USERNAME;
 	static String PASSWORD;
 	static String TABLE_NAME;
+
+	private static final String DELETE_BY_ID = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
+	private static final String SELECT_BY_COORDS = "SELECT * FROM " + TABLE_NAME + " WHERE (world = ?) AND (x = ?) AND (y = ?) AND (z = ?)";
+	private static final String SELECT_BY_UUID = "SELECT * FROM " + TABLE_NAME + " WHERE uuid = ?";
+	private static final String UPDATE_BY_UUID_AND_ID = "UPDATE " + TABLE_NAME + " SET level = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
+	private static final String INSERT_GENERATOR_BY_ID = "INSERT INTO " + TABLE_NAME + " (id, uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_GENERATOR = "INSERT INTO " + TABLE_NAME + " (uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)";
+	private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `" + DATABASE +"`.`" + TABLE_NAME + "` (`id` INT NOT NULL AUTO_INCREMENT," + 
+			" `uuid` VARCHAR(36) NULL," + 
+			" `level` INT NULL DEFAULT 0," + 
+			" `world` VARCHAR(45) NULL," + 
+			" `x` INT NULL," + 
+			" `y` INT NULL," + 
+			"  `z` INT NULL," + 
+			" PRIMARY KEY (`id`)," + 
+			" UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);";
+	
+	Connection connection;
 	
 	public MySQLManager() {
 		instance = this;
+		connection = connect();
 	}
 	
 	public boolean setData(String host, String port, String database, String username, String password, String tablename) {
@@ -44,75 +63,19 @@ public class MySQLManager {
 		return true;
 	}
 	
-	public boolean createTable() {
-		Connection con = connect();
-		boolean ret = false;
-		if(con == null) return ret;
-		try {
-			String statement = "CREATE TABLE IF NOT EXISTS `" + DATABASE +"`.`" + TABLE_NAME + "` (`id` INT NOT NULL AUTO_INCREMENT," + 
-					" `uuid` VARCHAR(36) NULL," + 
-					" `level` INT NULL DEFAULT 0," + 
-					" `world` VARCHAR(45) NULL," + 
-					" `x` INT NULL," + 
-					" `y` INT NULL," + 
-					"  `z` INT NULL," + 
-					" PRIMARY KEY (`id`)," + 
-					" UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);";
-			PreparedStatement ps = con.prepareStatement(statement);
+	public void createTable() {
+		checkConnection();
+		try (PreparedStatement ps = connection.prepareStatement(CREATE_TABLE)) {
 			ps.executeUpdate();
-			ps.close();
-			ret = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		try {
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return ret;
 	}
-	
-	public boolean createGenerator(GeneratorObject g) {
-		Connection con = connect();
-		boolean ret = false;
-		if(con == null) return ret;
-		
-		try {
-			String statement = "INSERT INTO " + TABLE_NAME + " (uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps = con.prepareStatement(statement);
 
-			ps.setString(1, g.getOwnerUUID().toString());
-			ps.setInt(2, g.getLevel());
-			ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
-			ps.setInt(4, g.getFurnace().getLocation().getBlockX());
-			ps.setInt(5, g.getFurnace().getLocation().getBlockY());
-			ps.setInt(6, g.getFurnace().getLocation().getBlockZ());
-			
-			ps.executeUpdate();
-			ps.close();
-			ret = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		try {
-			con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return ret;
-	}
-	
 	public boolean reRegisterGenerator(GeneratorObject g) {
-		Connection con = connect();
+		checkConnection();
 		boolean ret = false;
-		if(con == null) return ret;
-		
-		try {
-			String statement = "INSERT INTO " + TABLE_NAME + " (id, uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps = con.prepareStatement(statement);
+		try (PreparedStatement ps = connection.prepareStatement(INSERT_GENERATOR_BY_ID)) {
 			ps.setInt(1, g.getId());
 			ps.setString(2, g.getOwnerUUID().toString());
 			ps.setInt(3, g.getLevel());
@@ -122,28 +85,18 @@ public class MySQLManager {
 			ps.setInt(7, g.getFurnace().getLocation().getBlockZ());
 			
 			ps.executeUpdate();
-			ps.close();
 			ret = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		try {
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			ret = false;
 		}
 		return ret;
 	}
 	
 	public boolean registerGenerator(GeneratorObject g) {
-		Connection con = connect();
-		boolean ret = false;
-		if(con == null) return ret;
-		
-		try {
-			String statement = "INSERT INTO " + TABLE_NAME + " (uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps = con.prepareStatement(statement);
+		checkConnection();
+		boolean ret = false;	
+		try (PreparedStatement ps = connection.prepareStatement(INSERT_GENERATOR)) {
 			ps.setString(1, g.getOwnerUUID().toString());
 			ps.setInt(2, g.getLevel());
 			ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
@@ -152,30 +105,20 @@ public class MySQLManager {
 			ps.setInt(6, g.getFurnace().getLocation().getBlockZ());
 			
 			ps.executeUpdate();
-			ps.close();
 			ret = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		try {
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			ret = false;
 		}
 		return ret;
 	}
 	
 	
 	public boolean saveGenerator(GeneratorObject g) {
-		Connection con = connect();
+		checkConnection();
 		boolean saving = false;
-		if(con == null) return saving;
 		if(!g.isPlaced()) return saving;
-		
-		try {
-			String statement = "UPDATE " + TABLE_NAME + " SET level = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
-			PreparedStatement ps = con.prepareStatement(statement);
+		try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_UUID_AND_ID)) {
 			ps.setInt(1, g.getLevel());
 			ps.setString(2, g.getFurnace().getLocation().getWorld().getName());
 			ps.setInt(3, g.getFurnace().getLocation().getBlockX());
@@ -185,48 +128,35 @@ public class MySQLManager {
 			ps.setInt(7, g.getId());
 			
 			ps.executeUpdate();
-			ps.close();
 			saving = true;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		try {
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			saving = false;
 		}
 		return saving;
 	}
 
 	public List<GeneratorObject> loadGenerators(UUID uuid) {
-		Connection con = connect();
-		if(con == null) return null;
+		checkConnection();
 		List<GeneratorObject> ret = new ArrayList<GeneratorObject>();
-		try {
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE uuid = ?");
+		try (PreparedStatement ps = connection.prepareStatement(SELECT_BY_UUID)) {
 			ps.setString(1, uuid.toString());
-			ResultSet result = ps.executeQuery();
-			while(result.next()) {
-				
-				Location loc;
-				BlastFurnace furnace = null;
-				loc = new Location(Bukkit.getWorld(result.getString("world")), result.getInt("x"), result.getInt("y"), result.getInt("z"));
-				if(loc.getBlock().getType() == Material.BLAST_FURNACE) {
-					furnace = (BlastFurnace) loc.getBlock().getState();
+			try(ResultSet result = ps.executeQuery()) {
+				while(result.next()) {
+					Location loc;
+					BlastFurnace furnace = null;
+					loc = new Location(Bukkit.getWorld(result.getString("world")), result.getInt("x"), result.getInt("y"), result.getInt("z"));
+					if(loc.getBlock().getType() == Material.BLAST_FURNACE) {
+						furnace = (BlastFurnace) loc.getBlock().getState();
+					}
+					GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
+					go.setId(result.getInt("id"));
+					go.setPlaced(true);
+					ret.add(go);
 				}
-				GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
-				go.setId(result.getInt("id"));
-				go.setPlaced(true);
-				ret.add(go);
+			} catch(SQLException e) {
+				e.printStackTrace();
 			}
-			result.close();
-			ps.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		try {
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -234,33 +164,28 @@ public class MySQLManager {
 	}
 	
 	public GeneratorObject loadGenerator(Location location) {
-		Connection con = connect();
-		if(con == null) return null;
+		checkConnection();
 		GeneratorObject ret = null;
 		try {
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE (world = ?) AND (x = ?) AND (y = ?) AND (z = ?)");
+			PreparedStatement ps = connection.prepareStatement(SELECT_BY_COORDS);
 			ps.setString(1, location.getWorld().getName());
 			ps.setInt(2, location.getBlockX());
 			ps.setInt(3, location.getBlockY());
 			ps.setInt(4, location.getBlockZ());
 			
-			ResultSet result = ps.executeQuery();
-			if(result.next()) {
-				BlastFurnace furnace = null;
-				if(location.getBlock().getType() == Material.BLAST_FURNACE) {
-					furnace = (BlastFurnace) location.getBlock().getState();
+			try(ResultSet result = ps.executeQuery()) {
+				if(result.next()) {
+					BlastFurnace furnace = null;
+					if(location.getBlock().getType() == Material.BLAST_FURNACE) {
+						furnace = (BlastFurnace) location.getBlock().getState();
+					}
+					GeneratorObject go = new GeneratorObject(UUID.fromString(result.getString("uuid")), furnace, result.getInt("level"));
+					go.setId(result.getInt("id"));
+					ret = go;
 				}
-				GeneratorObject go = new GeneratorObject(UUID.fromString(result.getString("uuid")), furnace, result.getInt("level"));
-				go.setId(result.getInt("id"));
-				ret = go;
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-			result.close();
-			ps.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		try {
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -268,19 +193,11 @@ public class MySQLManager {
 	}
 	
 	public void removeGenerator(int id) {
-		Connection con = connect();
-		if(con == null) return;
-		try {
-			String statement = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
-			PreparedStatement ps = con.prepareStatement(statement);
+		checkConnection();
+		try (PreparedStatement ps = connection.prepareStatement(DELETE_BY_ID)) {
 			ps.setInt(1, id);
 			ps.executeUpdate();
 			ps.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		try {
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -291,6 +208,12 @@ public class MySQLManager {
 		return instance;
 	}
 	
+	public void checkConnection() {
+		if(connection == null) {
+			connect();
+		}
+	}
+	
 	public Connection connect() {
 		try {
 			return DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE + "?useSSL=false", USERNAME, PASSWORD);
@@ -298,6 +221,5 @@ public class MySQLManager {
 			ex.printStackTrace();
 			return null;
 		}
-		
 	}
 }
