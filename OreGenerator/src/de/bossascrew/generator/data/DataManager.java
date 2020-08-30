@@ -67,18 +67,14 @@ public class DataManager {
 	
 	public void savePlayer(UUID uuid) {
 		for(GeneratorObject g : getGenerators(uuid)) {
-			if(MySQLManager.getInstance().saveGenerator(g)) {
-				//generators.remove(g);
-			}
+			MySQLManager.getInstance().saveGenerator(g);
 		}
 	}
 	
 	public void saveAll() {
 		System.out.println("Saving all!");
 		for(GeneratorObject g : generators) {
-			if(MySQLManager.getInstance().saveGenerator(g)) {
-				//generators.remove(g);
-			}
+			MySQLManager.getInstance().saveGenerator(g);
 		}
 	}
 	
