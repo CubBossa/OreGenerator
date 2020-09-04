@@ -28,19 +28,19 @@ public class MySQLManager {
 	static String PASSWORD;
 	static String TABLE_NAME;
 
-	private static final String DELETE_BY_ID = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
-	private static final String SELECT_BY_COORDS = "SELECT * FROM " + TABLE_NAME + " WHERE (world = ?) AND (x = ?) AND (y = ?) AND (z = ?)";
-	private static final String SELECT_BY_UUID = "SELECT * FROM " + TABLE_NAME + " WHERE uuid = ?";
-	private static final String UPDATE_BY_UUID_AND_ID = "UPDATE " + TABLE_NAME + " SET level = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
-	private static final String INSERT_GENERATOR_BY_ID = "INSERT INTO " + TABLE_NAME + " (id, uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)";
-	private static final String INSERT_GENERATOR = "INSERT INTO " + TABLE_NAME + " (uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)";
-	private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `" + DATABASE +"`.`" + TABLE_NAME + "` (`id` INT NOT NULL AUTO_INCREMENT," + 
+	private String DELETE_BY_ID = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
+	private String SELECT_BY_COORDS = "SELECT * FROM " + TABLE_NAME + " WHERE (world = ?) AND (x = ?) AND (y = ?) AND (z = ?)";
+	private String SELECT_BY_UUID = "SELECT * FROM " + TABLE_NAME + " WHERE uuid = ?";
+	private String UPDATE_BY_UUID_AND_ID = "UPDATE " + TABLE_NAME + " SET level = ?, world = ?, x = ?, y = ?, z = ? WHERE (uuid = ?) AND (id = ?)";
+	private String INSERT_GENERATOR_BY_ID = "INSERT INTO " + TABLE_NAME + " (id, uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	private String INSERT_GENERATOR = "INSERT INTO " + TABLE_NAME + " (uuid, level, world, x, y, z) VALUES (?, ?, ?, ?, ?, ?)";
+	private String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `" + DATABASE + "`.`" + TABLE_NAME + "` (`id` INT NOT NULL AUTO_INCREMENT," + 
 			" `uuid` VARCHAR(36) NULL," + 
 			" `level` INT NULL DEFAULT 0," + 
 			" `world` VARCHAR(45) NULL," + 
 			" `x` INT NULL," + 
 			" `y` INT NULL," + 
-			"  `z` INT NULL," + 
+			" `z` INT NULL," + 
 			" PRIMARY KEY (`id`)," + 
 			" UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);";
 	
@@ -49,11 +49,11 @@ public class MySQLManager {
 	
 	public MySQLManager() {
 		instance = this;
-		connection = connect();
 		lock = new Object();
+		connection = connect();
 	}
 	
-	public boolean setData(String host, String port, String database, String username, String password, String tablename) {
+	public static void setData(String host, String port, String database, String username, String password, String tablename) {
 		HOST = host;
 		PORT = port;
 		DATABASE = database;
@@ -61,9 +61,6 @@ public class MySQLManager {
 		PASSWORD = password;
 		TABLE_NAME = tablename;
 		
-		Connection con = connect();
-		if(con == null) return false;
-		return true;
 	}
 	
 	public void createTable() {

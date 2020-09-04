@@ -44,18 +44,18 @@ public class Generator extends JavaPlugin {
 		Crafting.registerGeneratorCrafting();
 		events = new EventManager();
 		
-		boolean databaseSetup = MySQLManager.getInstance().setData(config.getCfg().getString("database.host"),
+		MySQLManager.setData(config.getCfg().getString("database.host"),
 				config.getCfg().getString("database.port"),
 				config.getCfg().getString("database.database"),
 				config.getCfg().getString("database.username"),
 				config.getCfg().getString("database.password"),
 				config.getCfg().getString("database.tablename"));
+
+//		if(!databaseSetup) {
+//			printToConsole("§4Datenkbankwerte nicht korrekt gesetzt!");
+//			getPluginLoader().disablePlugin(this);
+//		}
 		MySQLManager.getInstance().createTable();
-		
-		if(!databaseSetup) {
-			printToConsole("§4Datenkbankwerte nicht korrekt gesetzt!");
-			getPluginLoader().disablePlugin(this);
-		}
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			DataManager.getInstance().loadPlayer(p.getUniqueId());
