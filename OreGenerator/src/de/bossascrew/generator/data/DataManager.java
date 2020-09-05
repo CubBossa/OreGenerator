@@ -32,22 +32,58 @@ public class DataManager {
 		}, 20, 1*60*20);
 	}
 	
-	public GeneratorObject recreateGenerator(int id, UUID uuid, Location loc, int level) {
-		GeneratorObject g = new GeneratorObject(id, uuid, (BlastFurnace) loc.getBlock().getState(), level);
-		g.setPlaced(true);
-		MySQLManager.getInstance().reRegisterGenerator(g);
-		
-		loadPlayer(g.getOwnerUUID());
-		return getGenerator(g.getOwnerUUID(), g.getFurnace().getLocation());
-	}
+//	public GeneratorObject recreateGenerator(int id, UUID uuid, Location loc, int level) {
+//		GeneratorObject g = new GeneratorObject(id, uuid, (BlastFurnace) loc.getBlock().getState(), level);
+//		g.setPlaced(true);
+//		
+//		System.out.println("Step1: " + g);
+//		
+//		RegisterDoneCallback c;
+//		MySQLManager.getInstance().reRegisterGenerator(g, c = new RegisterDoneCallback() {
+//			@Override
+//			public GeneratorObject onQueryDone() {
+//				System.out.println("Step2: " + g);
+//				loadPlayer(g.getOwnerUUID());
+//				System.out.println("Return inner: " + getGenerator(g.getOwnerUUID(), g.getFurnace().getLocation()));
+//				return getGenerator(g.getOwnerUUID(), g.getFurnace().getLocation());
+//			}
+//		});
+//		System.out.println("Returnvalue: " + c.onQueryDone());
+//		return c.onQueryDone();
+//	}
+//	
+//	public GeneratorObject createGenerator(UUID uuid, BlastFurnace bf, int level) {
+//		GeneratorObject go = new GeneratorObject(uuid, (BlastFurnace) bf.getBlock().getState(), level);
+//		go.setPlaced(true);
+//		
+//		RegisterDoneCallback c;
+//		MySQLManager.getInstance().registerGenerator(go, c = new RegisterDoneCallback() {
+//			@Override
+//			public GeneratorObject onQueryDone() {
+//				loadPlayer(uuid);
+//				return getGenerator(uuid, bf.getLocation());
+//			}
+//		});
+//		return c.onQueryDone();
+//	}
 	
-	public GeneratorObject createGenerator(UUID uuid, Location loc, int level) {
-		GeneratorObject go = new GeneratorObject(uuid, (BlastFurnace) loc.getBlock().getState(), level);
+	public void createGenerator(GeneratorObject go) {
 		go.setPlaced(true);
-		MySQLManager.getInstance().registerGenerator(go);
-		
-		loadPlayer(uuid);
-		return getGenerator(uuid, loc);
+		if(go.getLevel() == -1) {
+			MySQLManager.getInstance().registerGenerator(go, new RegisterDoneCallback() {
+				@Override
+				public void onQueryDone() {
+					go.place(MySQLManager.getInstance().loadID(go.getFurnace().getLocation()));
+				}
+			});
+		} else {
+			MySQLManager.getInstance().registerGenerator(go, new RegisterDoneCallback() {
+				@Override
+				public void onQueryDone() {
+					go.place(MySQLManager.getInstance().loadID(go.getFurnace().getLocation()));
+				}
+			});
+		}
 	}
 	
 	public void loadPlayer(UUID uuid) {

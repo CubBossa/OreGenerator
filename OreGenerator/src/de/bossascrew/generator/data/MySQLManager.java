@@ -72,8 +72,9 @@ public class MySQLManager {
 		}
 	}
 
-	public void reRegisterGenerator(GeneratorObject g) {
+	public void reRegisterGenerator(GeneratorObject g, final RegisterDoneCallback callback) {
 		synchronized (lock) {
+			g.toNonBukkit();
 			Bukkit.getScheduler().runTaskAsynchronously(Generator.getInstance(), new Runnable() {
 				@Override
 				public void run() {
@@ -82,22 +83,24 @@ public class MySQLManager {
 						ps.setInt(1, g.getId());
 						ps.setString(2, g.getOwnerUUID().toString());
 						ps.setInt(3, g.getLevel());
-						ps.setString(4, g.getFurnace().getLocation().getWorld().getName());
-						ps.setInt(5, g.getFurnace().getLocation().getBlockX());
-						ps.setInt(6, g.getFurnace().getLocation().getBlockY());
-						ps.setInt(7, g.getFurnace().getLocation().getBlockZ());
+						ps.setString(4, g.getWorld());
+						ps.setInt(5, g.getPosx());
+						ps.setInt(6, g.getPosy());
+						ps.setInt(7, g.getPosz());
 						
 						ps.executeUpdate();
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
+					callback.onQueryDone();
 				}
 			});
 		}
 	}
 	
-	public void registerGenerator(GeneratorObject g) {
+	public void registerGenerator(GeneratorObject g, final RegisterDoneCallback callback) {
 		synchronized (lock) {
+			g.toNonBukkit();
 			Bukkit.getScheduler().runTaskAsynchronously(Generator.getInstance(), new Runnable() {
 				@Override
 				public void run() {
@@ -105,15 +108,16 @@ public class MySQLManager {
 					try (PreparedStatement ps = connection.prepareStatement(INSERT_GENERATOR)) {
 						ps.setString(1, g.getOwnerUUID().toString());
 						ps.setInt(2, g.getLevel());
-						ps.setString(3, g.getFurnace().getLocation().getWorld().getName());
-						ps.setInt(4, g.getFurnace().getLocation().getBlockX());
-						ps.setInt(5, g.getFurnace().getLocation().getBlockY());
-						ps.setInt(6, g.getFurnace().getLocation().getBlockZ());
+						ps.setString(3, g.getWorld());
+						ps.setInt(4, g.getPosx());
+						ps.setInt(5, g.getPosy());
+						ps.setInt(6, g.getPosz());
 						
 						ps.executeUpdate();
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
+					callback.onQueryDone();
 				}
 			});
 		}
@@ -123,16 +127,17 @@ public class MySQLManager {
 	public void saveGenerator(GeneratorObject g) {
 		if(!g.isPlaced()) return;
 		synchronized (lock) {
+			g.toNonBukkit();
 			checkConnection();
 			Bukkit.getScheduler().runTaskAsynchronously(Generator.getInstance(), new Runnable() {
 				@Override
 				public void run() {
 					try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_UUID_AND_ID)) {
 						ps.setInt(1, g.getLevel());
-						ps.setString(2, g.getFurnace().getLocation().getWorld().getName());
-						ps.setInt(3, g.getFurnace().getLocation().getBlockX());
-						ps.setInt(4, g.getFurnace().getLocation().getBlockY());
-						ps.setInt(5, g.getFurnace().getLocation().getBlockZ());				
+						ps.setString(2, g.getWorld());
+						ps.setInt(3, g.getPosx());
+						ps.setInt(4, g.getPosy());
+						ps.setInt(5, g.getPosz());				
 						ps.setString(6, g.getOwnerUUID().toString());
 						ps.setInt(7, g.getId());
 						
@@ -144,64 +149,83 @@ public class MySQLManager {
 			});
 		}
 	}
-
+	
 	public List<GeneratorObject> loadGenerators(UUID uuid) {
 		List<GeneratorObject> ret = new ArrayList<GeneratorObject>();
-		synchronized (lock) {
-			try (PreparedStatement ps = connection.prepareStatement(SELECT_BY_UUID)) {
-				ps.setString(1, uuid.toString());
-				try(ResultSet result = ps.executeQuery()) {
-					while(result.next()) {
-						Location loc;
-						BlastFurnace furnace = null;
-						loc = new Location(Bukkit.getWorld(result.getString("world")), result.getInt("x"), result.getInt("y"), result.getInt("z"));
-						if(loc.getBlock().getType() == Material.BLAST_FURNACE) {
-							furnace = (BlastFurnace) loc.getBlock().getState();
-						}
-						GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
-						go.setId(result.getInt("id"));
-						go.setPlaced(true);
-						ret.add(go);
+		try (PreparedStatement ps = connection.prepareStatement(SELECT_BY_UUID)) {
+			ps.setString(1, uuid.toString());
+			try(ResultSet result = ps.executeQuery()) {
+				while(result.next()) {
+					Location loc;
+					BlastFurnace furnace = null;
+					loc = new Location(Bukkit.getWorld(result.getString("world")), result.getInt("x"), result.getInt("y"), result.getInt("z"));
+					if(loc.getBlock().getType() == Material.BLAST_FURNACE) {
+						furnace = (BlastFurnace) loc.getBlock().getState();
 					}
-				} catch(SQLException e) {
-					e.printStackTrace();
+					GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
+					go.setId(result.getInt("id"));
+					go.setPlaced(true);
+					ret.add(go);
 				}
-			} catch (SQLException e) {
+			} catch(SQLException e) {
 				e.printStackTrace();
 			}
-			return ret;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return ret;
 	}
 	
 	public GeneratorObject loadGenerator(Location location) {
-		synchronized (lock) {
-			checkConnection();
-			GeneratorObject ret = null;
-			try {
-				PreparedStatement ps = connection.prepareStatement(SELECT_BY_COORDS);
-				ps.setString(1, location.getWorld().getName());
-				ps.setInt(2, location.getBlockX());
-				ps.setInt(3, location.getBlockY());
-				ps.setInt(4, location.getBlockZ());
-				
-				try(ResultSet result = ps.executeQuery()) {
-					if(result.next()) {
-						BlastFurnace furnace = null;
-						if(location.getBlock().getType() == Material.BLAST_FURNACE) {
-							furnace = (BlastFurnace) location.getBlock().getState();
-						}
-						GeneratorObject go = new GeneratorObject(UUID.fromString(result.getString("uuid")), furnace, result.getInt("level"));
-						go.setId(result.getInt("id"));
-						ret = go;
+		checkConnection();
+		GeneratorObject ret = null;
+		try {
+			PreparedStatement ps = connection.prepareStatement(SELECT_BY_COORDS);
+			ps.setString(1, location.getWorld().getName());
+			ps.setInt(2, location.getBlockX());
+			ps.setInt(3, location.getBlockY());
+			ps.setInt(4, location.getBlockZ());
+			
+			try(ResultSet result = ps.executeQuery()) {
+				if(result.next()) {
+					BlastFurnace furnace = null;
+					if(location.getBlock().getType() == Material.BLAST_FURNACE) {
+						furnace = (BlastFurnace) location.getBlock().getState();
 					}
-				} catch (SQLException e) {
-					e.printStackTrace();
+					GeneratorObject go = new GeneratorObject(UUID.fromString(result.getString("uuid")), furnace, result.getInt("level"));
+					go.setId(result.getInt("id"));
+					ret = go;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			return ret;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return ret;
+	}
+	
+	public int loadID(Location location) {
+		checkConnection();
+		int ret = 0;
+		try {
+			PreparedStatement ps = connection.prepareStatement(SELECT_BY_COORDS);
+			ps.setString(1, location.getWorld().getName());
+			ps.setInt(2, location.getBlockX());
+			ps.setInt(3, location.getBlockY());
+			ps.setInt(4, location.getBlockZ());
+			
+			try(ResultSet result = ps.executeQuery()) {
+				if(result.next()) {
+					ret = result.getInt("id");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 	
 	public void removeGenerator(int id) {

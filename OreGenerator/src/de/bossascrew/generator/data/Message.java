@@ -11,6 +11,7 @@ public class Message {
 	public static final String CANT_AFFORD_LEVEL = PREFIX + "Das kannst du dir so nicht leisten. Dir fehlen noch Items!";
 	public static final String OUT_OF_PLACED = PREFIX + "Du hast [placed]/[maximum] Generatoren gesetzt!";
 	public static final String NOT_YOUR_GENERATOR = PREFIX + "§7Dieser Generator gehört dir nicht!";	
+	public static final String GENERATOR_STILL_LOADING = PREFIX + "§cDer Generator läd...";
 	
 	public static final String GUI_TITLE = "§9Erze Generator";
 	

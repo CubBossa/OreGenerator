@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlastFurnace;
@@ -21,7 +22,14 @@ public class GeneratorObject {
 	int id = 0;
 	UUID ownerUUID;
 	BlastFurnace furnace;
+	
+	String world;
+	int posx;
+	int posy;
+	int posz;
+	
 	boolean isPlaced = false;
+	boolean isLoading = true;
 	int level;
 	GUI gui;
 	
@@ -40,6 +48,17 @@ public class GeneratorObject {
 		if(furnace != null) isPlaced = true;
 	}
 
+	public void toNonBukkit() {
+		world = furnace.getLocation().getWorld().getName();
+		posx = furnace.getLocation().getBlockX();
+		posy = furnace.getLocation().getBlockY();
+		posz = furnace.getLocation().getBlockZ();
+	}
+	
+	public void loadFurnaceFromLoc() {
+		furnace = ((BlastFurnace) new Location(Bukkit.getWorld(world), posx, posy, posz).getBlock().getState());
+	}
+	
 	public boolean tryUpgrade(int level) {
 		if(removeItems(level)) {
 			Player p = Bukkit.getPlayer(ownerUUID);
@@ -99,6 +118,10 @@ public class GeneratorObject {
 		this.gui.refresh();
 	}
 	
+	public boolean isLoading() {
+		return isLoading;
+	}
+	
 	public boolean isPlaced() {
 		return isPlaced;
 	}
@@ -107,9 +130,10 @@ public class GeneratorObject {
 		this.isPlaced = placed;
 	}
 	
-	public void place(BlastFurnace furnace) {
-		this.furnace = furnace;
+	public void place(int id) {
+		this.id = id;
 		this.isPlaced = true;
+		this.isLoading = false;
 	}
 	
 	public void drop() {
@@ -158,5 +182,20 @@ public class GeneratorObject {
 	}
 	public void setLoc(BlastFurnace furnace) {
 		this.furnace = furnace;
+	}
+	public String getWorld() {
+		return world;
+	}
+
+	public int getPosx() {
+		return posx;
+	}
+
+	public int getPosy() {
+		return posy;
+	}
+
+	public int getPosz() {
+		return posz;
 	}
 }

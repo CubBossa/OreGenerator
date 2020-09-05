@@ -25,14 +25,19 @@ public class PlayerInteractListener implements Listener {
 				Player p = event.getPlayer();
 				GeneratorObject g = DataManager.getInstance().getGenerator(bf.getLocation());
 				if(g != null) {
-					if(g.getOwnerUUID().equals(p.getUniqueId())) {
-						if(event.getAction() == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
-							event.setCancelled(true);
-							g.open(p);
-						}
-					} else {
+					if(g.isLoading()) {
+						p.sendMessage(Message.GENERATOR_STILL_LOADING);
 						event.setCancelled(true);
-						p.sendMessage(Message.NOT_YOUR_GENERATOR);
+					} else {
+						if(g.getOwnerUUID().equals(p.getUniqueId())) {
+							if(event.getAction() == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
+								event.setCancelled(true);
+								g.open(p);
+							}
+						} else {
+							event.setCancelled(true);
+							p.sendMessage(Message.NOT_YOUR_GENERATOR);
+						}
 					}
 				}
 			}
