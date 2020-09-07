@@ -66,7 +66,7 @@ public class BlockPlaceListener implements Listener {
 			int level = nbt.getInteger(Generator.NBT_LEVEL_KEY);
 			
 			BlastFurnace bf = (BlastFurnace) event.getBlockPlaced().getState();
-			GeneratorObject go = new GeneratorObject(owner, bf, level);
+			GeneratorObject go = new GeneratorObject(owner, bf, level < 0 ? 0 : level);
 			DataManager.getInstance().createGenerator(go);
 	
 			bf.setCustomName(Generator.GENERATOR_NAME);

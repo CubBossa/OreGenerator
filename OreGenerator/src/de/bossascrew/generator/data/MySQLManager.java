@@ -216,8 +216,7 @@ public class MySQLManager {
 	public int loadID(Location location) {
 		checkConnection();
 		int ret = 0;
-		try {
-			PreparedStatement ps = connection.prepareStatement(SELECT_BY_COORDS);
+		try (PreparedStatement ps = connection.prepareStatement(SELECT_BY_COORDS)) {
 			ps.setString(1, location.getWorld().getName());
 			ps.setInt(2, location.getBlockX());
 			ps.setInt(3, location.getBlockY());

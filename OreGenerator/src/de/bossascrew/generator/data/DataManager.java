@@ -39,6 +39,7 @@ public class DataManager {
 				public void onQueryDone() {
 					go.place();
 					generators.add(go);
+					go.setId(MySQLManager.getInstance().loadID(go.getFurnace().getLocation()));
 				}
 			});
 		} else {
@@ -47,6 +48,7 @@ public class DataManager {
 				public void onQueryDone() {
 					go.place();
 					generators.add(go);
+					go.setId(MySQLManager.getInstance().loadID(go.getFurnace().getLocation()));
 				}
 			});
 		}
