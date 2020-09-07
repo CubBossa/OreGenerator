@@ -65,7 +65,8 @@ public class GeneratorObject {
 	}
 	
 	public boolean tryUpgrade(int level) {
-		if(removeItems(level)) {
+		if(hasRequiredItems(level)) {
+			removeItems(level);
 			Player p = Bukkit.getPlayer(ownerUUID);
 			System.out.println("Erzgenerator > " + p.getName() + " upgradet seinen Generator (ID:" + id + ") auf Level " + level);
 			p.playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
@@ -77,11 +78,31 @@ public class GeneratorObject {
 		}
 	}
 	
-	public boolean removeItems(int level) {
+	public boolean hasRequiredItems(int level) {
+		LevelRequirements lr = LevelRequirements.fromLevel(level);
+		
+		Player p = Bukkit.getPlayer(ownerUUID);
+		for(ItemStack req : lr.getRequirememts()) {
+			int counter = 0;
+			for(int x = 0; x < p.getInventory().getSize(); x++) {
+				ItemStack given = p.getInventory().getItem(x);
+				if(given != null && given.getType() == req.getType()) {
+					if(given.getAmount() < req.getAmount()) {
+						counter += given.getAmount();
+					}
+				}
+			} 
+			if(counter >= req.getAmount()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void removeItems(int level) {
 		LevelRequirements lr = LevelRequirements.fromLevel(level);
 
 		Player p = Bukkit.getPlayer(ownerUUID);
-		boolean ret = false;
 		for(ItemStack req : lr.getRequirememts()) {
 			int counter = 0;
 			List<Integer> slotsToClear = new ArrayList<Integer>();
@@ -90,11 +111,9 @@ public class GeneratorObject {
 				if(given != null && given.getType() == req.getType()) {
 					if(given.getAmount() > req.getAmount()) {
 						given.setAmount(given.getAmount() - req.getAmount());
-						ret = true;
 						break;
 					} else if(given.getAmount() == req.getAmount()) {
 						p.getInventory().setItem(x, null);
-						ret = true;
 						break;
 					} else {
 						counter += given.getAmount();
@@ -108,15 +127,12 @@ public class GeneratorObject {
 					p.getInventory().setItem(slotsToClear.get(i), null);
 				}
 				p.getInventory().getItem(slotsToClear.get(slotsToClear.size()-1)).setAmount(counter-req.getAmount());;
-				ret = true;
 			} else if(counter == req.getAmount()) {
 				for(int i : slotsToClear) {
 					p.getInventory().setItem(i, null);
 				}
-				ret = true;
 			}
 		}
-		return ret;
 	}
 	
 	public void refreshGUI() {

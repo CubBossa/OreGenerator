@@ -2,7 +2,6 @@ package de.bossascrew.generator.listener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.ReadWriteLock;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,7 +42,6 @@ public class BlockFromToListener implements Listener {
 		Block to = event.getToBlock();
         if (generates(event.getBlock(), to)) {
             if(setRandomOres(to.getLocation())) {
-            	//eingefügt
             	if(lava) event.setCancelled(true);
             }
             return;
