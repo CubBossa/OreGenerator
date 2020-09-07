@@ -80,19 +80,17 @@ public class GeneratorObject {
 	
 	public boolean hasRequiredItems(int level) {
 		LevelRequirements lr = LevelRequirements.fromLevel(level);
-		
 		Player p = Bukkit.getPlayer(ownerUUID);
+
 		for(ItemStack req : lr.getRequirememts()) {
 			int counter = 0;
 			for(int x = 0; x < p.getInventory().getSize(); x++) {
 				ItemStack given = p.getInventory().getItem(x);
 				if(given != null && given.getType() == req.getType()) {
-					if(given.getAmount() < req.getAmount()) {
-						counter += given.getAmount();
-					}
+					counter += given.getAmount();
 				}
-			} 
-			if(counter >= req.getAmount()) {
+			}
+			if(counter < req.getAmount()) {
 				return false;
 			}
 		}
