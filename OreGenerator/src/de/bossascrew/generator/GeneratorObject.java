@@ -25,7 +25,7 @@ public class GeneratorObject {
 	
 	String world;
 	int posx;
-	int posy;
+	int posy;   
 	int posz;
 	
 	boolean isPlaced = false;
@@ -34,20 +34,25 @@ public class GeneratorObject {
 	GUI gui;
 	
 	public GeneratorObject(UUID ownerUUID, BlastFurnace furnace, int level) {
-		this.level = level;
 		this.ownerUUID = ownerUUID;
-		this.furnace = furnace;
-		if(furnace != null) isPlaced = true;
+		initialize(furnace, level);
 	}
 	
 	public GeneratorObject(int id, UUID ownerUUID, BlastFurnace furnace, int level) {
 		this.id = id;
-		this.level = level;
 		this.ownerUUID = ownerUUID;
-		this.furnace = furnace;
-		if(furnace != null) isPlaced = true;
+		initialize(furnace, level);
 	}
 
+	public void initialize(BlastFurnace furnace, int level) {
+		
+		this.level = level;
+		this.furnace = furnace;
+		
+		if(furnace != null) isPlaced = true;
+		toNonBukkit();
+	}
+	
 	public void toNonBukkit() {
 		world = furnace.getLocation().getWorld().getName();
 		posx = furnace.getLocation().getBlockX();
@@ -56,13 +61,13 @@ public class GeneratorObject {
 	}
 	
 	public void loadFurnaceFromLoc() {
-		furnace = ((BlastFurnace) new Location(Bukkit.getWorld(world), posx, posy, posz).getBlock().getState());
+		furnace = (BlastFurnace) new Location(Bukkit.getWorld(world), posx, posy, posz).getBlock().getState();
 	}
 	
 	public boolean tryUpgrade(int level) {
 		if(removeItems(level)) {
 			Player p = Bukkit.getPlayer(ownerUUID);
-			System.out.println("Erzgenerator > " + p.getName() + " hat seinen Generator ID " + id + " auf Level " + level);
+			System.out.println("Erzgenerator > " + p.getName() + " upgradet seinen Generator (ID:" + id + ") auf Level " + level);
 			p.playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
 			p.playSound(furnace.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
 			this.level++;
@@ -130,28 +135,30 @@ public class GeneratorObject {
 		this.isPlaced = placed;
 	}
 	
-	public void place(int id) {
-		this.id = id;
+	public void place() {
 		this.isPlaced = true;
 		this.isLoading = false;
 	}
+
+	public void setLoading(boolean loading) {
+		this.isLoading = loading;
+	}
 	
 	public void drop() {
+		this.loadFurnaceFromLoc();
 		Player p = Bukkit.getPlayer(ownerUUID);
 		p.playSound(furnace.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
-		
 		p.closeInventory();
 		this.furnace.getBlock().setType(Material.AIR);
-		//this.furnace.getBlock().breakNaturally();
 		this.furnace = null;
 		p.getInventory().addItem(Crafting.getGeneratorItem(id, ownerUUID.toString(), level));
 		this.isPlaced = false;
-		DataManager.getInstance().dropGenerator(id);
+		DataManager.getInstance().dropGenerator(this);
 	}
 	
 	public void open(Player p) {
 		p.closeInventory();
-		gui = new GUI(id);
+		gui = new GUI(this);
 		gui.refresh();
 		p.openInventory(gui.getInventory());
 	}

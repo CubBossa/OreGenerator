@@ -6,6 +6,10 @@ dependencies: [NBTAPI]
 
 api-version: 1.16
 
+commands:
+  debuggenerators:
+    description: diesdas
+
 permissions:
   oregenerator.craft:
     description: allows to craft oregenerator

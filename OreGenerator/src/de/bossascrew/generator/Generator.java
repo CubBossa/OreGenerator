@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.bossascrew.generator.commands.CommandDebug;
 import de.bossascrew.generator.crafting.Crafting;
 import de.bossascrew.generator.data.ConfigFile;
 import de.bossascrew.generator.data.DataManager;
@@ -44,6 +45,9 @@ public class Generator extends JavaPlugin {
 		Crafting.registerGeneratorCrafting();
 		events = new EventManager();
 		
+		CommandDebug debug = new CommandDebug();
+		getCommand("debuggenerators").setExecutor(debug);
+		
 		MySQLManager.setData(config.getCfg().getString("database.host"),
 				config.getCfg().getString("database.port"),
 				config.getCfg().getString("database.database"),
@@ -66,7 +70,7 @@ public class Generator extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		DataManager.getInstance().saveAll();
+		DataManager.getInstance().saveAllSynchronously();
 		printToConsole("Plugin heruntergefahren");
 	}
 	

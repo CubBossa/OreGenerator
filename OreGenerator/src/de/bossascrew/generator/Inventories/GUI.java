@@ -13,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
-import de.bossascrew.generator.data.DataManager;
 import de.bossascrew.generator.data.Message;
 import de.bossascrew.generator.utils.Dimension;
 import de.bossascrew.generator.utils.Level;
@@ -33,8 +32,9 @@ public class GUI {
 	GeneratorObject generator;
 	Inventory inv;
 	
-	public GUI(int generatorID) {
-		this.generator = DataManager.getInstance().getGenerator(generatorID);
+	public GUI(GeneratorObject go) {
+		this.generator = go;
+		
 		inv = Bukkit.createInventory(null, 3 * 9, Message.GUI_TITLE);
 	}
 	

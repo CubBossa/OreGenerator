@@ -17,7 +17,6 @@ import de.tr7zw.nbtapi.NBTItem;
 
 public class InventoryClickListener implements Listener {
 
-	
 	@EventHandler
 	public void invClick(InventoryClickEvent event) {
 
@@ -25,8 +24,8 @@ public class InventoryClickListener implements Listener {
 		if(!(event.getView().getPlayer() instanceof Player)) return;
 		
 		NBTItem item = new NBTItem(event.getCurrentItem());
-		int generatorId = item.getInteger(Generator.NBT_GENERATORID_KEY);
-		GeneratorObject g = DataManager.getInstance().getGenerator(generatorId);
+		int id = item.getInteger(Generator.NBT_GENERATORID_KEY);
+		GeneratorObject g = DataManager.getInstance().getGenerator(id);
 		
 		Player p = (Player) event.getView().getPlayer();
 		

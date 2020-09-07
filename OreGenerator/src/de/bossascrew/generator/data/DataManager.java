@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.BlastFurnace;
 
 import de.bossascrew.generator.Generator;
 import de.bossascrew.generator.GeneratorObject;
@@ -32,55 +31,22 @@ public class DataManager {
 		}, 20, 1*60*20);
 	}
 	
-//	public GeneratorObject recreateGenerator(int id, UUID uuid, Location loc, int level) {
-//		GeneratorObject g = new GeneratorObject(id, uuid, (BlastFurnace) loc.getBlock().getState(), level);
-//		g.setPlaced(true);
-//		
-//		System.out.println("Step1: " + g);
-//		
-//		RegisterDoneCallback c;
-//		MySQLManager.getInstance().reRegisterGenerator(g, c = new RegisterDoneCallback() {
-//			@Override
-//			public GeneratorObject onQueryDone() {
-//				System.out.println("Step2: " + g);
-//				loadPlayer(g.getOwnerUUID());
-//				System.out.println("Return inner: " + getGenerator(g.getOwnerUUID(), g.getFurnace().getLocation()));
-//				return getGenerator(g.getOwnerUUID(), g.getFurnace().getLocation());
-//			}
-//		});
-//		System.out.println("Returnvalue: " + c.onQueryDone());
-//		return c.onQueryDone();
-//	}
-//	
-//	public GeneratorObject createGenerator(UUID uuid, BlastFurnace bf, int level) {
-//		GeneratorObject go = new GeneratorObject(uuid, (BlastFurnace) bf.getBlock().getState(), level);
-//		go.setPlaced(true);
-//		
-//		RegisterDoneCallback c;
-//		MySQLManager.getInstance().registerGenerator(go, c = new RegisterDoneCallback() {
-//			@Override
-//			public GeneratorObject onQueryDone() {
-//				loadPlayer(uuid);
-//				return getGenerator(uuid, bf.getLocation());
-//			}
-//		});
-//		return c.onQueryDone();
-//	}
-	
 	public void createGenerator(GeneratorObject go) {
 		go.setPlaced(true);
 		if(go.getLevel() == -1) {
 			MySQLManager.getInstance().registerGenerator(go, new RegisterDoneCallback() {
 				@Override
 				public void onQueryDone() {
-					go.place(MySQLManager.getInstance().loadID(go.getFurnace().getLocation()));
+					go.place();
+					generators.add(go);
 				}
 			});
 		} else {
 			MySQLManager.getInstance().registerGenerator(go, new RegisterDoneCallback() {
 				@Override
 				public void onQueryDone() {
-					go.place(MySQLManager.getInstance().loadID(go.getFurnace().getLocation()));
+					go.place();
+					generators.add(go);
 				}
 			});
 		}
@@ -89,6 +55,10 @@ public class DataManager {
 	public void loadPlayer(UUID uuid) {
 		for(GeneratorObject g : MySQLManager.getInstance().loadGenerators(uuid)) {
 			boolean isSet = false;
+			if(g.getFurnace() == null) {
+				MySQLManager.getInstance().removeGenerator(g.getId());
+				break;
+			}			
 			for(GeneratorObject gg : generators) {
 				if(g.getId() == gg.getId()) {
 					isSet = true;
@@ -111,6 +81,13 @@ public class DataManager {
 		System.out.println("Saving all!");
 		for(GeneratorObject g : generators) {
 			MySQLManager.getInstance().saveGenerator(g);
+		}
+	}
+	
+	public void saveAllSynchronously() {
+		System.out.println("Saving all!");
+		for(GeneratorObject g : generators) {
+			MySQLManager.getInstance().saveGeneratorSynchronously(g);
 		}
 	}
 	
@@ -143,7 +120,10 @@ public class DataManager {
 				}
 			}
 		}
-		if(g == null) g = MySQLManager.getInstance().loadGenerator(loc);
+		if(g == null) {
+			g = MySQLManager.getInstance().loadGenerator(loc);
+			generators.add(g);
+		}
 		return g;
 	}
 	
@@ -160,8 +140,9 @@ public class DataManager {
 		return null;
 	}
 	
-	public void dropGenerator(int id) {
-		MySQLManager.getInstance().removeGenerator(id);
+	public void dropGenerator(GeneratorObject generatorObject) {
+		MySQLManager.getInstance().removeGenerator(generatorObject.getId());
+		generators.remove(generatorObject);
 	}
 	
 	public static DataManager getInstance() {

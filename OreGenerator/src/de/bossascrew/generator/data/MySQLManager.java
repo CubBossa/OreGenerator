@@ -125,28 +125,34 @@ public class MySQLManager {
 	
 	
 	public void saveGenerator(GeneratorObject g) {
-		if(!g.isPlaced()) return;
 		synchronized (lock) {
 			g.toNonBukkit();
 			checkConnection();
 			Bukkit.getScheduler().runTaskAsynchronously(Generator.getInstance(), new Runnable() {
 				@Override
 				public void run() {
-					try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_UUID_AND_ID)) {
-						ps.setInt(1, g.getLevel());
-						ps.setString(2, g.getWorld());
-						ps.setInt(3, g.getPosx());
-						ps.setInt(4, g.getPosy());
-						ps.setInt(5, g.getPosz());				
-						ps.setString(6, g.getOwnerUUID().toString());
-						ps.setInt(7, g.getId());
-						
-						ps.executeUpdate();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+					saveGeneratorSynchronously(g);
 				}
 			});
+		}
+	}
+	
+	public void saveGeneratorSynchronously(GeneratorObject g) {
+		if(!g.isPlaced()) return;
+		g.toNonBukkit();
+		checkConnection();
+		try (PreparedStatement ps = connection.prepareStatement(UPDATE_BY_UUID_AND_ID)) {
+			ps.setInt(1, g.getLevel());
+			ps.setString(2, g.getWorld());
+			ps.setInt(3, g.getPosx());
+			ps.setInt(4, g.getPosy());
+			ps.setInt(5, g.getPosz());				
+			ps.setString(6, g.getOwnerUUID().toString());
+			ps.setInt(7, g.getId());
+			
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -165,6 +171,7 @@ public class MySQLManager {
 					GeneratorObject go = new GeneratorObject(uuid, furnace, result.getInt("level"));
 					go.setId(result.getInt("id"));
 					go.setPlaced(true);
+					go.setLoading(false);
 					ret.add(go);
 				}
 			} catch(SQLException e) {
@@ -202,6 +209,7 @@ public class MySQLManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		ret.setLoading(false);
 		return ret;
 	}
 	
