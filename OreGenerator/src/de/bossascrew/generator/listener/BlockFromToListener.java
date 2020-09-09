@@ -56,7 +56,7 @@ public class BlockFromToListener implements Listener {
                 }
             }
             if(generates(event.getBlock(), to.getRelative(BlockFace.DOWN))) {
-            	if(to.getRelative(BlockFace.DOWN).isLiquid() && ((Levelled) to.getRelative(BlockFace.DOWN).getBlockData()).getLevel() != 0) {
+            	if(to.getRelative(BlockFace.DOWN).isLiquid() && (to.getType() == Material.KELP_PLANT || ((Levelled) to.getRelative(BlockFace.DOWN).getBlockData()).getLevel() != 0)) {
             		if(setRandomOres(to.getRelative(BlockFace.DOWN).getLocation())) {
             		}
             	}

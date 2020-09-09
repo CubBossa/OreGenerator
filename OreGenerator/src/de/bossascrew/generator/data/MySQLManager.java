@@ -240,7 +240,6 @@ public class MySQLManager {
 		try (PreparedStatement ps = connection.prepareStatement(DELETE_BY_ID)) {
 			ps.setInt(1, id);
 			ps.executeUpdate();
-			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -259,7 +258,7 @@ public class MySQLManager {
 	
 	public Connection connect() {
 		try {
-			return DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE + "?useSSL=false", USERNAME, PASSWORD);
+			return DriverManager.getConnection("jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE + "?autoReconnect=true&useSSL=false", USERNAME, PASSWORD);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
