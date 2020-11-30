@@ -16,7 +16,6 @@ public class EntityExplodeListener implements Listener {
 	public void onBreak(EntityExplodeEvent event) {
         for (Block block : new ArrayList<Block>(event.blockList())) {
 	        if(block.getType() == Material.BLAST_FURNACE){
-	        	System.out.println(block.getLocation());
 	        	if(DataManager.getInstance().getGenerator(block.getLocation()) != null) event.blockList().remove(block);
 	        }
         }
